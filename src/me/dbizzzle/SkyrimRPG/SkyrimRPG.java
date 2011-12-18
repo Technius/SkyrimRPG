@@ -40,12 +40,12 @@ public class SkyrimRPG extends JavaPlugin
 			} 
 			else if (player.hasPermission("skyrimrpg.fireball")) 
 			{
-				if (hasSpell(se, "fireball")) 
+				if (hasSpell(player.getName(), "fireball")) 
 				{
-					final Vector direction = s.getEyeLocation().getDirection().multiply(2);
-					Fireball fireball = s.getWorld().spawn(s.getEyeLocation().add(direction.getX(), direction.getY(), 
+					final Vector direction = player.getEyeLocation().getDirection().multiply(2);
+					Fireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), 
 						direction.getZ()), Fireball.class);
-					fireball.setShooter(s);
+					fireball.setShooter(player);
 				}
 			}
 		}
@@ -90,18 +90,18 @@ public class SkyrimRPG extends JavaPlugin
 					switch (args.length) 
 					{
 						case 0:
-							s.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
+							player.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
 							break;
 							
 						case 1:
-							s.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
+							player.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
 							break;
 							
 						default:
 							String spel = spell.getName();
 							temp.add(args[1]);
 							spells.put(spel, temp);
-							s.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
+							player.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
 							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
 							break;
 					}
@@ -109,7 +109,7 @@ public class SkyrimRPG extends JavaPlugin
 			}
 			else 
 			{
-				s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+				player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 			}
 		}
 		
@@ -144,7 +144,7 @@ public class SkyrimRPG extends JavaPlugin
 					sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 				}
 			} 
-			else if (s.hasPermission("SkyrimRPG.removespell")) 
+			else if (player.hasPermission("SkyrimRPG.removespell")) 
 			{
 				Player spell = getServer().getPlayer(args[0]);
 				if (spell != null) 
@@ -152,29 +152,29 @@ public class SkyrimRPG extends JavaPlugin
 					switch (args.length) 
 					{
 					case 0 :
-						s.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
+						player.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
 						break;
 						
 					case 1:
-						s.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
+						player.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
 						break;
 						
 					default:
 						String spel = spell.getName();
 						temp.remove(args[1]);
-						s.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
+						player.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
 						spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
 						break;
 					}
 				} 
 				else 
 				{
-					s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+					player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 				}
 			} 
 			else 
 			{
-				s.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+				player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
 			}
 		}
 		
@@ -218,7 +218,7 @@ public class SkyrimRPG extends JavaPlugin
 			{
 				if (args.length == 0) 
 				{
-					s.sendMessage(ChatColor.GREEN + "fireball");
+					player.sendMessage(ChatColor.GREEN + "fireball");
 				} 
 				else if (args.length > 0) 
 				{
@@ -229,21 +229,21 @@ public class SkyrimRPG extends JavaPlugin
 						{
 							if (temp.isEmpty()) 
 							{
-								s.sendMessage(ChatColor.GREEN + "This player has no spells.");
+								player.sendMessage(ChatColor.GREEN + "This player has no spells.");
 							} 
 							else 
 							{
-								s.sendMessage(ChatColor.GREEN + temp.toString());
+								player.sendMessage(ChatColor.GREEN + temp.toString());
 							}
 						} 
 						else 
 						{
-							s.sendMessage(ChatColor.RED + "This player has no spells.");
+							player.sendMessage(ChatColor.RED + "This player has no spells.");
 						}
 					} 
 					else 
 					{
-						s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+						player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 					}
 				}
 			} 
