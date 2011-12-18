@@ -5,13 +5,30 @@ main: me.dbizzzle.SkyrimRPG.SkyrimRPG
 commands:
    fireball:
       description: Shoots a fireball
-      usage: /fireball
+      usage: |
+          /fireball
    addspell:
       description: Adds a spell to the specified player
-      usage: /addspell <player> <spell>
+      usage: |
+          /addspell <player> <spell>
    removespell:
       description: Removes a spell from the specified player
-      usage: /removespell <player> <spell>
+      usage: |
+          /removespell <player> <spell>
    listspells:
       description: Lists all your spells
-      usage: /listspells <page>
+      usage: |
+          /listspells [player]
+permissions:
+   SkyrimRPG.*:
+      Description: Implies all.
+      Children:
+         SkyrimRPG.addspell: true
+         SkyrimRPG.removespell: true
+         SkyrimRPG.listspells: true
+   SkyrimRPG.addspell:
+      Description: Give a player a spell.
+   SkyrimRPG.removespell:
+      Description: Take a spell from a player.
+   SkyrimRPG.listspells: 
+      Description: List spells or find out what spells another person has.
