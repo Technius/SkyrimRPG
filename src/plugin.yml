@@ -1,0 +1,17 @@
+name: SkyrimRPG
+version: 0.1
+authors: [dbizzzle, Technius]
+main: me.dbizzzle.SkyrimRPG.SkyrimRPG
+commands:
+   fireball:
+      description: Shoots a fireball
+      usage: /fireball
+   addspell:
+      description: Adds a spell to the specified player
+      usage: /addspell <player> <spell>
+   removespell:
+      description: Removes a spell from the specified player
+      usage: /removespell <player> <spell>
+   listspells:
+      description: Lists all your spells
+      usage: /listspells <page>
