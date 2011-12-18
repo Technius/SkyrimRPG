@@ -127,7 +127,7 @@ public class SkyrimRPG extends JavaPlugin {
 				}
 			} else {
 				Player s = (Player) sender;
-				if (s.hasPermission("SkyrimRPG.addspell")) {
+				if (s.hasPermission("SkyrimRPG.removespell")) {
 					Player spell = getServer().getPlayer(args[0]);
 					if (spell != null) {
 						switch (args.length) {
@@ -148,6 +148,54 @@ public class SkyrimRPG extends JavaPlugin {
 						}
 					} else {
 						s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+					}
+				} else {
+					s.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+				}
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("listspells")) {
+			ArrayList<String> temp = spells.get(args[0]);
+			if (!(sender instanceof Player)) {
+				if (args.length == 0) {
+					sender.sendMessage(ChatColor.GREEN + "fireball");
+				} else if (args.length > 0) {
+					Player spell = getServer().getPlayer(args[0]);
+					if (spell != null) {
+						if (spells.containsKey(spell)) {
+							if (temp.isEmpty()) {
+								sender.sendMessage(ChatColor.GREEN + "This player has no spells.");
+							} else {
+								sender.sendMessage(ChatColor.GREEN + temp.toString());
+							}
+						} else {
+							sender.sendMessage(ChatColor.RED + "This player has no spells.");
+						}
+					} else {
+						sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+					}
+				}
+			} else {
+				Player s = (Player) sender;
+				if (s.hasPermission("SkyrimRPG.listspells")) {
+					if (args.length == 0) {
+						s.sendMessage(ChatColor.GREEN + "fireball");
+					} else if (args.length > 0) {
+						Player spell = getServer().getPlayer(args[0]);
+						if (spell != null) {
+							if (spells.containsKey(spell)) {
+								if (temp.isEmpty()) {
+									s.sendMessage(ChatColor.GREEN + "This player has no spells.");
+								} else {
+									s.sendMessage(ChatColor.GREEN + temp.toString());
+								}
+							} else {
+								s.sendMessage(ChatColor.RED + "This player has no spells.");
+							}
+						} else {
+							s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+						}
 					}
 				} else {
 					s.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
