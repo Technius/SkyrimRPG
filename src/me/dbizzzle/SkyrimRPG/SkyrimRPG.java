@@ -30,92 +30,105 @@ public class SkyrimRPG extends JavaPlugin
 	
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
+		Player player = null;
+		if(sender instanceof Player)player = (Player)sender;
 		
-		if (command.getName().equalsIgnoreCase("fireball")) {
-			if (!(sender instanceof Player)) {
+		if (label.equalsIgnoreCase("fireball")) {
+			if (player == null) 
+			{
 				sender.sendMessage(ChatColor.RED + "Console can not use magic.");
-			} else {
-				Player s = (Player) sender;
-				String se = s.getName();
-				if (s.hasPermission("SkyrimRPG.fireball")) {
-					if (hasSpell(se, "fireball")) {
-						final Vector direction = s.getEyeLocation().getDirection().multiply(2);
-						Fireball fireball = s.getWorld().spawn(s.getEyeLocation().add(direction.getX(), direction.getY(), 
-								direction.getZ()), Fireball.class);
-						fireball.setShooter(s);
-					}
+			} 
+			else if (player.hasPermission("skyrimrpg.fireball")) 
+			{
+				if (hasSpell(se, "fireball")) 
+				{
+					final Vector direction = s.getEyeLocation().getDirection().multiply(2);
+					Fireball fireball = s.getWorld().spawn(s.getEyeLocation().add(direction.getX(), direction.getY(), 
+						direction.getZ()), Fireball.class);
+					fireball.setShooter(s);
 				}
 			}
 		}
 		
-		if (command.getName().equalsIgnoreCase("addspell")) {
+		if (label.equalsIgnoreCase("addspell")) 
+		{
 			ArrayList<String> temp = new ArrayList<String>();
-			if (!(sender instanceof Player)) {
+			if (player == null) 
+			{
 				Player spell = getServer().getPlayer(args[0]);
-				if (spell != null) {
-					switch (args.length) {
+				if (spell != null) 
+				{
+					switch (args.length) 
+					{
 					case 0:
-						sender.sendMessage(ChatColor.RED + "Proper syntax: <player> <spell>");
+						sender.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
 						break;
 						
 					case 1:
-						sender.sendMessage(ChatColor.RED + "Proper syntax: <player> <spell>");
+						sender.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
 						break;
 						
 					default:
 						String spel = spell.getName();
 						temp.add(args[1]);
 						spells.put(spel, temp);
-						sender.sendMessage(ChatColor.GREEN + "You gave the spell " + args[1] + " to " + spel + ".");
+						sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
 						spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
 						break;
 					}
-				} else {
+				} 
+				else 
+				{
 					sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 				}
-			} else {
-				Player s = (Player) sender;
-				if (s.hasPermission("SkyrimRPG.addspell")) {
-					Player spell = getServer().getPlayer(args[0]);
-					if (spell != null) {
-						switch (args.length) {
+			} 
+			else if (player.hasPermission("skyrimrpg.addspell"))
+			{
+				Player spell = getServer().getPlayer(args[0]);
+				if (spell != null) 
+				{
+					switch (args.length) 
+					{
 						case 0:
-							s.sendMessage(ChatColor.RED + "Proper syntax: <player> <spell>");
+							s.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
 							break;
 							
 						case 1:
-							s.sendMessage(ChatColor.RED + "Proper syntax: <player> <spell>");
+							s.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
 							break;
 							
 						default:
 							String spel = spell.getName();
 							temp.add(args[1]);
 							spells.put(spel, temp);
-							s.sendMessage(ChatColor.GREEN + "You gave the spell " + args[1] + " to " + spel + ".");
+							s.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
 							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
 							break;
-						}
-					} else {
-						s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 					}
-				} else {
-					s.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
-				}
+				} 
+			}
+			else 
+			{
+				s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 			}
 		}
 		
-		if (command.getName().equalsIgnoreCase("removespell")) {
+		if (label.equalsIgnoreCase("removespell")) 
+		{
 			ArrayList<String> temp = spells.get(args[0]);
-			if (!(sender instanceof Player)) {
+			if (player == null) 
+			{
 				Player spell = getServer().getPlayer(args[0]);
-				if (spell != null) {
-					switch (args.length) {
+				if (spell != null) 
+				{
+					switch (args.length) 
+					{
 					case 0 :
-						sender.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
+						sender.sendMessage(ChatColor.RED + "Usage: /removespell <player> <spell>");
 						break;
 					
 					case 1:
-						sender.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
+						sender.sendMessage(ChatColor.RED + "Usage: /removespell <player> <spell>");
 						break;
 					
 					default:
@@ -125,98 +138,132 @@ public class SkyrimRPG extends JavaPlugin
 						spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
 						break;
 					}
-				} else {
+				} 
+				else 
+				{
 					sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 				}
-			} else {
-				Player s = (Player) sender;
-				if (s.hasPermission("SkyrimRPG.removespell")) {
-					Player spell = getServer().getPlayer(args[0]);
-					if (spell != null) {
-						switch (args.length) {
-						case 0 :
-							s.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
-							break;
+			} 
+			else if (s.hasPermission("SkyrimRPG.removespell")) 
+			{
+				Player spell = getServer().getPlayer(args[0]);
+				if (spell != null) 
+				{
+					switch (args.length) 
+					{
+					case 0 :
+						s.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
+						break;
 						
-						case 1:
-							s.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
-							break;
+					case 1:
+						s.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
+						break;
 						
-						default:
-							String spel = spell.getName();
-							temp.remove(args[1]);
-							s.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
-							spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
-							break;
-						}
-					} else {
-						s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+					default:
+						String spel = spell.getName();
+						temp.remove(args[1]);
+						s.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
+						spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
+						break;
 					}
-				} else {
-					s.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+				} 
+				else 
+				{
+					s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 				}
+			} 
+			else 
+			{
+				s.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
 			}
 		}
 		
-		if (command.getName().equalsIgnoreCase("listspells")) {
+		if (label.equalsIgnoreCase("listspells")) 
+		{
 			ArrayList<String> temp = spells.get(args[0]);
-			if (!(sender instanceof Player)) {
-				if (args.length == 0) {
-					sender.sendMessage(ChatColor.GREEN + "fireball");
-				} else if (args.length > 0) {
+			if (player == null) 
+			{
+				if (args.length == 0) 
+				{
+					sender.sendMessage("You don't have any spells");
+				} 
+				else if (args.length > 0) 
+				{
 					Player spell = getServer().getPlayer(args[0]);
-					if (spell != null) {
-						if (spells.containsKey(spell)) {
-							if (temp.isEmpty()) {
+					if (spell != null) 
+					{
+						if (spells.containsKey(spell)) 
+						{
+							if (temp.isEmpty()) 
+							{
 								sender.sendMessage(ChatColor.GREEN + "This player has no spells.");
-							} else {
+							} 
+							else 
+							{
 								sender.sendMessage(ChatColor.GREEN + temp.toString());
 							}
-						} else {
+						} 
+						else 
+						{
 							sender.sendMessage(ChatColor.RED + "This player has no spells.");
 						}
-					} else {
+					} 
+					else 
+					{
 						sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 					}
 				}
-			} else {
-				Player s = (Player) sender;
-				if (s.hasPermission("SkyrimRPG.listspells")) {
-					if (args.length == 0) {
-						s.sendMessage(ChatColor.GREEN + "fireball");
-					} else if (args.length > 0) {
-						Player spell = getServer().getPlayer(args[0]);
-						if (spell != null) {
-							if (spells.containsKey(spell)) {
-								if (temp.isEmpty()) {
-									s.sendMessage(ChatColor.GREEN + "This player has no spells.");
-								} else {
-									s.sendMessage(ChatColor.GREEN + temp.toString());
-								}
-							} else {
-								s.sendMessage(ChatColor.RED + "This player has no spells.");
+			} 
+			else if(player.hasPermission("skyrimrpg.listspells"))
+			{
+				if (args.length == 0) 
+				{
+					s.sendMessage(ChatColor.GREEN + "fireball");
+				} 
+				else if (args.length > 0) 
+				{
+					Player spell = getServer().getPlayer(args[0]);
+					if (spell != null) 
+					{
+						if (spells.containsKey(spell)) 
+						{
+							if (temp.isEmpty()) 
+							{
+								s.sendMessage(ChatColor.GREEN + "This player has no spells.");
+							} 
+							else 
+							{
+								s.sendMessage(ChatColor.GREEN + temp.toString());
 							}
-						} else {
-							s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+						} 
+						else 
+						{
+							s.sendMessage(ChatColor.RED + "This player has no spells.");
 						}
+					} 
+					else 
+					{
+						s.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 					}
-				} else {
-					s.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
 				}
+			} 
+			else
+			{
+				player.sendMessage(ChatColor.RED + "You don't have permissions to use this command.");
 			}
 		}
-		return false;
+		return true;
 	}
 	
-	public boolean hasSpell(String player, String spell) {
-		if (spells.containsKey(player)) {
+	public boolean hasSpell(String player, String spell) 
+	{
+		if (spells.containsKey(player)) 
+		{
 			ArrayList<String> temp = spells.get(player);
-			if (!temp.contains(spell)) {
-				return false;
-			} else {
-				return true;
-			}
-		} else {
+			return temp.contains(spell);
+		} 
+		else 
+		{
 			return false;
 		}
 	}
