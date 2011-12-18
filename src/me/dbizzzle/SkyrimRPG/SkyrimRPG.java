@@ -15,9 +15,8 @@ import org.bukkit.util.Vector;
 public class SkyrimRPG extends JavaPlugin 
 {
 	public Logger log = Logger.getLogger("Minecraft");
-	
 	public HashMap<String, ArrayList<String>> spells = new HashMap<String, ArrayList<String>>();
-	
+	SpellManager sm = new SpellManager();
 	public void onEnable() 
 	{
 		log.info("[SkyrimRPG] Plugin enabled.");
@@ -42,10 +41,7 @@ public class SkyrimRPG extends JavaPlugin
 			{
 				if (hasSpell(player.getName(), "fireball")) 
 				{
-					final Vector direction = player.getEyeLocation().getDirection().multiply(2);
-					Fireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), 
-						direction.getZ()), Fireball.class);
-					fireball.setShooter(player);
+					sm.shootFireball(player);
 				}
 			}
 		}
