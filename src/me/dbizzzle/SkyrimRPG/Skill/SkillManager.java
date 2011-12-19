@@ -7,10 +7,20 @@ import org.bukkit.entity.Player;
 public class SkillManager 
 {
 	public static HashMap<Player, HashMap<String, Integer>> skills = new HashMap<Player, HashMap<String, Integer>>();
+	public static HashMap<Player, HashMap<String, Double>> progress = new HashMap<Player, HashMap<String, Double>>();
+	public static HashMap<Player, Integer> level = new HashMap<Player,Integer>();
 	
 	public static HashMap<String, Integer> getSkills (Player player)
 	{
 		return skills.get(player);
+	}
+	public static double getProgress(String skill, Player player)
+	{
+		return progress.get(player).get(skill).doubleValue();
+	}
+	public static int getSkillLevel(String skill, Player player)
+	{
+		return skills.get(player).get(skill).intValue();
 	}
 	public void incrementLevel(String skill, Player player)
 	{
