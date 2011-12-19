@@ -70,6 +70,21 @@ public class SkillManager
 			}
 			return false;
 		}
+		else if(skill.equalsIgnoreCase("Swordsmanship"))
+		{
+			int alevel = SkillManager.getSkillLevel("Swordsmanship", player);
+			int pro = SkillManager.getProgress("Swordsmanship", player);
+			int t = 5;
+			for(int i = 1;i<alevel;i++)
+			{
+				t=t+2;
+			}
+			if(pro >= t)
+			{
+				return true;
+			}
+			return false;
+		}
 		return false;
 	}
 }
