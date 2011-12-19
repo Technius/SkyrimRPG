@@ -28,4 +28,12 @@ public class Archery extends Skill
 	{
 		return new Archery();
 	}
+	public void setLevel()
+	{
+		
+	}
+	public String getName()
+	{
+		return "Archery";
+	}
 }
