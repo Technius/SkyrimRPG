@@ -19,11 +19,14 @@ public class SkyrimRPG extends JavaPlugin
 	SpellManager sm = new SpellManager(this);
 	SpellTimer st = new SpellTimer(this);
 	SRPGPL pl = new SRPGPL(this);
+	SRPGEL el = new SRPGEL();
 	public void onEnable() 
 	{
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pl, Event.Priority.Normal, this);
 		pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, pl, Event.Priority.Highest, this);
+		pm.registerEvent(Event.Type.PLAYER_JOIN, pl, Event.Priority.Highest, this);
+		pm.registerEvent(Event.Type.ENTITY_DAMAGE, el, Event.Priority.High, this);
 		log.info("[SkyrimRPG] Plugin enabled.");
 	}
 	
