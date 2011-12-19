@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -22,17 +24,20 @@ public class SkyrimRPG extends JavaPlugin
 	public Logger log = Logger.getLogger("Minecraft");
 	public HashMap<String, ArrayList<String>> spells = new HashMap<String, ArrayList<String>>();
 	SpellManager sm = new SpellManager(this);
+	SkillManager sk = new SkillManager();
 	SpellTimer st = new SpellTimer(this);
 	SRPGPL pl = new SRPGPL(this);
 	SRPGEL el = new SRPGEL();
 	public void onEnable() 
 	{
+		sk.setPlugin(this);
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pl, Event.Priority.Normal, this);
 		pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, pl, Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, pl, Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, el, Event.Priority.High, this);
 		if(!checkFiles())createFiles();
+		for(Player p: this.getServer().getOnlinePlayers())sk.loadSkills(p);
 		log.info("[SkyrimRPG] Plugin enabled.");
 	}
 	
