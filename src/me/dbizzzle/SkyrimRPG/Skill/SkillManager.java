@@ -129,7 +129,7 @@ public class SkillManager
 	{
 		File plugindir = new File(p.getDataFolder().getPath());
 		File players = new File(plugindir.getPath() + File.separator + "Players");
-		File save = new File(players.getPath() + File.separator + player.getName());
+		File save = new File(players.getPath() + File.separator + player.getName() + ".txt");
 		if(!plugindir.exists())plugindir.mkdir();
 		if(!players.exists())players.mkdir();
 		try
