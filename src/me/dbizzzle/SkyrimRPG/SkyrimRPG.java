@@ -1,5 +1,10 @@
 package me.dbizzzle.SkyrimRPG;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -27,6 +32,7 @@ public class SkyrimRPG extends JavaPlugin
 		pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, pl, Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, pl, Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, el, Event.Priority.High, this);
+		if(!checkFiles())createFiles();
 		log.info("[SkyrimRPG] Plugin enabled.");
 	}
 	
@@ -269,5 +275,42 @@ public class SkyrimRPG extends JavaPlugin
 		{
 			return false;
 		}
+	}
+	public boolean createFiles()
+	{
+		File file = new File(this.getDataFolder().getPath());
+		if(!file.exists())file.mkdir();
+		File players = new File(file.getPath() + File.separator + "Players");
+		if(!players.exists())players.mkdir();
+		File config = new File(file.getPath() + File.separator + "config.txt");
+		try
+		{
+			if(!config.exists())
+			{
+				FileOutputStream fos = new FileOutputStream(config);
+				fos.flush();
+				fos.close();
+				BufferedWriter bw = new BufferedWriter(new FileWriter(config));
+				bw.write("#SkyrimRPG configuration file");
+				bw.newLine();
+				bw.flush();
+				bw.close();
+			}
+			return true;
+		}
+		catch(IOException ioe)
+		{
+			return false;
+		}
+	}
+	public boolean checkFiles()
+	{
+		File file = new File(this.getDataFolder().getPath());
+		if(!file.exists())return false;
+		File players = new File(file.getPath() + File.separator + "Players");
+		if(!players.exists())return false;
+		File config = new File(file.getPath() + File.separator + "config.txt");
+		if(!config.exists())return false;
+		return true;
 	}
 }
