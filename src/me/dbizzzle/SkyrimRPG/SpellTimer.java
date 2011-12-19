@@ -30,7 +30,6 @@ public class SpellTimer
 		if(fireballcharge.contains(player))
 		{
 			int m = ((Calendar.getInstance().get(Calendar.MILLISECOND) + (Calendar.getInstance().get(Calendar.SECOND)*1000)) - fballstart.get(player).intValue())/10;
-			p.log.info("" + m);
 			fireballcharge.remove(player);
 			return m;
 		}

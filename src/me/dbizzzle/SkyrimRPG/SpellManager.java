@@ -18,6 +18,5 @@ public class SpellManager
 			direction.getZ()), Fireball.class);
 		fireball.setShooter(shooter);
 		fireball.setYield(4F*(multiplier/100));
-		p.log.info("" + Float.toString(multiplier/100));
 	}
 }
