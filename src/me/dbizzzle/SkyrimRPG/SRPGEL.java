@@ -15,23 +15,29 @@ public class SRPGEL extends EntityListener
 		if(event instanceof EntityDamageByEntityEvent)
 		{
 			EntityDamageByEntityEvent e = (EntityDamageByEntityEvent)event;
-			if(!(e.getDamager() instanceof Arrow))return;
-			Arrow a = (Arrow)e.getDamager();
-			if(a.getShooter() instanceof Player)
+			if((e.getDamager() instanceof Arrow))
 			{
-				SkillManager sm = new SkillManager();
-				Player shooter = (Player)a.getShooter();
-				int alevel = SkillManager.getSkillLevel("Archery", shooter);
-				e.setDamage(e.getDamage() + (alevel/10));
-				if(sm.processExperience(shooter, "Archery"))
+				Arrow a = (Arrow)e.getDamager();
+				if(a.getShooter() instanceof Player)
 				{
-					sm.incrementLevel("Archery", shooter);
-					SkillManager.progress.get(shooter).put("Archery", 0);
+					SkillManager sm = new SkillManager();
+					Player shooter = (Player)a.getShooter();
+					int alevel = SkillManager.getSkillLevel("Archery", shooter);
+					e.setDamage(e.getDamage() + (alevel/10));
+					if(sm.processExperience(shooter, "Archery"))
+					{
+						sm.incrementLevel("Archery", shooter);
+						SkillManager.progress.get(shooter).put("Archery", 0);
+					}
+					else SkillManager.progress.get(shooter).put("Archery", SkillManager.progress.get(shooter).get("Archery") + 1);
+					//debug message:  shooter.sendMessage("Progress:" + pro + "/" + t);
 				}
-				else SkillManager.progress.get(shooter).put("Archery", SkillManager.progress.get(shooter).get("Archery") + 1);
-				//debug message:  shooter.sendMessage("Progress:" + pro + "/" + t);
+				else return;
 			}
-			else return;
+			else if(e.getDamager() instanceof Player)
+			{
+				Player player = (Player)e.getDamager();
+			}
 		}
 		else
 		{
