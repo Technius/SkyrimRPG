@@ -2,7 +2,6 @@ package me.dbizzzle.SkyrimRPG;
 
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
