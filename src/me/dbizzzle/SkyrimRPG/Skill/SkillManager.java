@@ -36,6 +36,9 @@ public class SkillManager
 	{
 		HashMap<String, Integer> sk = new HashMap<String, Integer>();
 		sk.put("Archery", Integer.valueOf(0));
+		HashMap<String, Double> pr = new HashMap<String,Double>();
+		pr.put("Archery", Double.valueOf(0));
 		skills.put(player, sk);
+		progress.put(player, pr);
 	}
 }
