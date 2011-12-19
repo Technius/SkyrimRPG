@@ -41,4 +41,29 @@ public class SkillManager
 		skills.put(player, sk);
 		progress.put(player, pr);
 	}
+	/**
+	 * Calculates if the player levels up or not
+	 * @param player The player
+	 * @param skill The skill that the player is "practicing"
+	 * @return True if the player is leveling up, otherwise false
+	 */
+	public boolean processExperience(Player player, String skill)
+	{
+		if(skill.equalsIgnoreCase("Archery"))
+		{
+			int alevel = SkillManager.getSkillLevel("Archery", player);
+			int pro = SkillManager.getProgress("Archery", player);
+			int t = 5;
+			for(int i = 1;i<alevel;i++)
+			{
+				t=t+2;
+			}
+			if(pro >= t)
+			{
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
 }
