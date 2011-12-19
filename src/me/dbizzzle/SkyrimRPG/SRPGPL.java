@@ -1,10 +1,14 @@
 package me.dbizzzle.SkyrimRPG;
 
+import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
+
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class SRPGPL extends PlayerListener
 {
@@ -32,5 +36,14 @@ public class SRPGPL extends PlayerListener
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
 		event.setCancelled(true);
+	}
+	public void onPlayerJoin(PlayerJoinEvent event)
+	{
+		SkillManager sm = new SkillManager();
+		sm.resetSkills(event.getPlayer());
+	}
+	public void onPlayerQuit(PlayerQuitEvent event)
+	{
+		
 	}
 }
