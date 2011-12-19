@@ -19,7 +19,11 @@ public class SpellRunnable implements Runnable
 		switch(type)
 		{
 		case 1:
-			if(SpellTimer.fireballcharge.contains(p)) SpellTimer.fireballcharged.add(p);
+			if(SpellTimer.fireballcharge.contains(p))
+			{
+				SpellTimer.fireballcharged.add(p);
+				p.sendMessage("Fireball charged!");
+			}
 			SpellTimer.fireballcharge.remove(p);
 			break;
 		}
