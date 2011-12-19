@@ -27,7 +27,7 @@ public class SRPGEL extends EntityListener
 				int t = 5;
 				for(int i = 1;i<alevel;i++)
 				{
-					t+=2;
+					t=t+2;
 				}
 				if(pro >= t)
 				{
@@ -35,7 +35,7 @@ public class SRPGEL extends EntityListener
 					SkillManager.progress.get(shooter).put("Archery", 0);
 				}
 				else SkillManager.progress.get(shooter).put("Archery", pro=pro+1);
-				shooter.sendMessage("Progress:" + pro + "/" + t);
+				//debug message:  shooter.sendMessage("Progress:" + pro + "/" + t);
 			}
 			else return;
 		}
