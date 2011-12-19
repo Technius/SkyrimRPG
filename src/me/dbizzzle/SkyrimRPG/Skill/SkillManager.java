@@ -11,4 +11,19 @@ public class SkillManager
 	{
 		return skills.get(player);
 	}
+	public void incrementLevel(String skill, Player player)
+	{
+		int l = skills.get(player).get(skill).intValue();
+		skills.get(player).put(skill, Integer.valueOf(l));
+	}
+	public void loadSkills(Player player)
+	{
+		
+	}
+	public void resetSkills(Player player)
+	{
+		HashMap<String, Integer> sk = new HashMap<String, Integer>();
+		sk.put("Archery", Integer.valueOf(0));
+		skills.put(player, sk);
+	}
 }
