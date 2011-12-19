@@ -19,9 +19,11 @@ public class SRPGEL extends EntityListener
 			Arrow a = (Arrow)e.getDamager();
 			if(a.getShooter() instanceof Player)
 			{
+				SkillManager sm = new SkillManager();
 				Player shooter = (Player)a.getServer();
-				int alevel = SkillManager.getSkills(shooter).get("Archery");
+				int alevel = SkillManager.getSkills(shooter).get("Archery").intValue();
 				e.setDamage(e.getDamage() + (alevel/10));
+				sm.incrementLevel("Archery", shooter);
 			}
 			else return;
 		}
