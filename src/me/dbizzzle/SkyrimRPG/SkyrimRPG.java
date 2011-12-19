@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkyrimRPG extends JavaPlugin 
@@ -20,7 +21,9 @@ public class SkyrimRPG extends JavaPlugin
 	SRPGPL pl = new SRPGPL(this);
 	public void onEnable() 
 	{
-		this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, pl, Event.Priority.Normal, this);
+		PluginManager pm = this.getServer().getPluginManager();
+		pm.registerEvent(Event.Type.PLAYER_INTERACT, pl, Event.Priority.Normal, this);
+		pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, pl, Event.Priority.Highest, this);
 		log.info("[SkyrimRPG] Plugin enabled.");
 	}
 	
