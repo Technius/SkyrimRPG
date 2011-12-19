@@ -23,18 +23,12 @@ public class SRPGEL extends EntityListener
 				Player shooter = (Player)a.getShooter();
 				int alevel = SkillManager.getSkillLevel("Archery", shooter);
 				e.setDamage(e.getDamage() + (alevel/10));
-				int pro = SkillManager.getProgress("Archery", shooter);
-				int t = 5;
-				for(int i = 1;i<alevel;i++)
-				{
-					t=t+2;
-				}
-				if(pro >= t)
+				if(sm.processExperience(shooter, "Archery"))
 				{
 					sm.incrementLevel("Archery", shooter);
 					SkillManager.progress.get(shooter).put("Archery", 0);
 				}
-				else SkillManager.progress.get(shooter).put("Archery", pro=pro+1);
+				else SkillManager.progress.get(shooter).put("Archery", SkillManager.progress.get(shooter).get("Archery") + 1);
 				//debug message:  shooter.sendMessage("Progress:" + pro + "/" + t);
 			}
 			else return;
