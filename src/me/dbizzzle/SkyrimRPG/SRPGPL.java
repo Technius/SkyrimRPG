@@ -40,10 +40,13 @@ public class SRPGPL extends PlayerListener
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		SkillManager sm = new SkillManager();
-		sm.resetSkills(event.getPlayer());
+		sm.setPlugin(plugin);
+		sm.loadSkills(event.getPlayer());
 	}
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
-		
+		SkillManager sm = new SkillManager();
+		sm.setPlugin(plugin);
+		sm.saveSkills(event.getPlayer());
 	}
 }
