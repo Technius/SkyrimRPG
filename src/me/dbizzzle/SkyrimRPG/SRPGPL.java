@@ -2,6 +2,7 @@ package me.dbizzzle.SkyrimRPG;
 
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 
@@ -27,5 +28,9 @@ public class SRPGPL extends PlayerListener
 			plugin.sm.shootFireball(event.getPlayer(), m);
 			event.getPlayer().sendMessage("Fireball shot!");
 		}
+	}
+	public void onFoodLevelChange(FoodLevelChangeEvent event)
+	{
+		event.setCancelled(true);
 	}
 }
