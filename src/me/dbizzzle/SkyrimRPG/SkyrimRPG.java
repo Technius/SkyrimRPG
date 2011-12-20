@@ -38,7 +38,7 @@ public class SkyrimRPG extends JavaPlugin
 		pm.registerEvent(Event.Type.PLAYER_JOIN, pl, Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, pl, Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, el, Event.Priority.High, this);
-		pm.registerEvent(Event.Type.ENTITY_EXPLODE, el, Event.Priority.Highest, this);
+		pm.registerEvent(Event.Type.EXPLOSION_PRIME, el, Event.Priority.Highest, this);
 		if(!checkFiles())createFiles();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadSkills(p);
 		log.info("[SkyrimRPG] Plugin enabled.");
