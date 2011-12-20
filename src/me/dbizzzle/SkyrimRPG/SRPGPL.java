@@ -1,10 +1,17 @@
 package me.dbizzzle.SkyrimRPG;
 
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
+import net.minecraft.server.EntityPlayer;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -51,8 +58,8 @@ public class SRPGPL extends PlayerListener {
 				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
 				
 				SkillManager sm = new SkillManager();
-				if (sm.processExperience(se, "Archery")) {
-					sm.incrementLevel("Archery", se);
+				if (sm.processExperience(se, "PickPocket")) {
+					sm.incrementLevel("PickPocket", se);
 					SkillManager.progress.get(se).put("PickPocket", 0);
 				} else {
 					SkillManager.progress.get(se).put("PickPocket", SkillManager.progress.get(se).get("PickPocket") + 1);
