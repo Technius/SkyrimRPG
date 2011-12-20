@@ -84,6 +84,7 @@ public class SRPGEL extends EntityListener
 			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 7+(alevel/10));
 			x.getWorld().createExplosion(f.getLocation(), 0F);
 			x.getServer().getPluginManager().callEvent(e);
+			x.setFireTicks(60);
 			sp = sp+1;
 		}
 		SkillManager sm = new SkillManager();
