@@ -69,6 +69,7 @@ public class SRPGPL extends PlayerListener {
 				    @SuppressWarnings("deprecation")
 					public void run() {
 				    	Player picked = plugin.getServer().getPlayer(ents);
+				    	if(!picked.isOnline())return;
 				        picked.sendMessage(pickpocketed);
 				        picked.updateInventory();
 				    }
