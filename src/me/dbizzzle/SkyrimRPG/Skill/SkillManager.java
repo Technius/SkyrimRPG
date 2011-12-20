@@ -190,11 +190,13 @@ public class SkillManager
 		sk.put("Archery", Integer.valueOf(1));
 		sk.put("Swordsmanship", Integer.valueOf(1));
 		sk.put("Lockpicking", Integer.valueOf(1));
+		sk.put("Destruction", Integer.valueOf(1));
 		HashMap<String, Integer> pr = new HashMap<String,Integer>();
 		pr.put("Archery", Integer.valueOf(0));
-		pr.put("PickPocket", Integer.valueOf(1));
-		pr.put("Swordsmanship", Integer.valueOf(1));
-		pr.put("Lockpicking", Integer.valueOf(1));
+		pr.put("PickPocket", Integer.valueOf(0));
+		pr.put("Swordsmanship", Integer.valueOf(0));
+		pr.put("Lockpicking", Integer.valueOf(0));
+		pr.put("Destruction", Integer.valueOf(0));
 		skills.put(player, sk);
 		progress.put(player, pr);
 	}
@@ -240,6 +242,21 @@ public class SkillManager
 		{
 			int alevel = SkillManager.getSkillLevel("PickPocket", player);
 			int pro = SkillManager.getProgress("PickPocket", player);
+			int t = 5;
+			
+			for(int i = 1;i<alevel;i++) {
+				t=t+2;
+			}
+			
+			if(pro >= t) {
+				return true;
+			}
+			return false;
+		}
+		else if (skill.equalsIgnoreCase("Destruction"))
+		{
+			int alevel = SkillManager.getSkillLevel("Destruction", player);
+			int pro = SkillManager.getProgress("Destruction", player);
 			int t = 5;
 			
 			for(int i = 1;i<alevel;i++) {
