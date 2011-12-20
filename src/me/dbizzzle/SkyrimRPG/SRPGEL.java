@@ -72,6 +72,7 @@ public class SRPGEL extends EntityListener
 	{
 		if(!(event.getEntity() instanceof Fireball))return;
 		Fireball f = (Fireball)event.getEntity();
+		if(!SpellManager.ftracker.contains(f))return;
 		if(!(f.getShooter() instanceof Player))return;
 		Player p = (Player)f.getShooter();
 		List<Entity> tod = f.getNearbyEntities(f.getYield(), f.getYield(), f.getYield());
@@ -81,6 +82,7 @@ public class SRPGEL extends EntityListener
 		for(Entity x:tod)
 		{
 			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 7+(alevel/10));
+			x.getWorld().createExplosion(f.getLocation(), 0F);
 			x.getServer().getPluginManager().callEvent(e);
 			sp = sp+1;
 		}
