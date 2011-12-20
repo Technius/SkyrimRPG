@@ -33,6 +33,7 @@ public class SkyrimRPG extends JavaPlugin
 		sk.setPlugin(this);
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, pl, Event.Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, pl, Event.Priority.Low, this);
 		pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, pl, Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, pl, Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, pl, Event.Priority.Highest, this);
