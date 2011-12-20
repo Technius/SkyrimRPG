@@ -54,7 +54,7 @@ public class SkyrimRPG extends JavaPlugin
 		Player player = null;
 		if(sender instanceof Player)player = (Player)sender;
 		
-		if (label.equalsIgnoreCase("fireball")) {
+		if (command.getName().equalsIgnoreCase("fireball")) {
 			if (player == null) 
 			{
 				sender.sendMessage(ChatColor.RED + "Console can not use magic.");
@@ -68,7 +68,7 @@ public class SkyrimRPG extends JavaPlugin
 			}
 		}
 		
-		if (label.equalsIgnoreCase("addspell")) 
+		if (command.getName().equalsIgnoreCase("addspell")) 
 		{
 			ArrayList<String> temp = new ArrayList<String>();
 			if (player == null) 
@@ -131,7 +131,7 @@ public class SkyrimRPG extends JavaPlugin
 			}
 		}
 		
-		else if (label.equalsIgnoreCase("removespell")) 
+		else if (command.getName().equalsIgnoreCase("removespell")) 
 		{
 			ArrayList<String> temp = spells.get(args[0]);
 			if (player == null) 
@@ -196,7 +196,7 @@ public class SkyrimRPG extends JavaPlugin
 			}
 		}
 		
-		else if (label.equalsIgnoreCase("listspells")) 
+		else if (command.getName().equalsIgnoreCase("listspells")) 
 		{
 			ArrayList<String> temp = spells.get(args[0]);
 			if (player == null) 
@@ -270,7 +270,7 @@ public class SkyrimRPG extends JavaPlugin
 				player.sendMessage(ChatColor.RED + "You don't have permissions to use this command.");
 			}
 		}
-		else if(label.equalsIgnoreCase("skyrimrpg") || label.equalsIgnoreCase("srpg"))
+		else if(command.getName().equalsIgnoreCase("skyrimrpg") || label.equalsIgnoreCase("srpg"))
 		{
 			if(player == null)
 			{
@@ -285,7 +285,7 @@ public class SkyrimRPG extends JavaPlugin
 				player.sendMessage(ChatColor.RED + "/stats <page>" + ChatColor.YELLOW + " - displays your stats");
 			}
 		}
-		else if(label.equalsIgnoreCase("stats"))
+		else if(command.getName().equalsIgnoreCase("stats"))
 		{
 			if(player == null)
 			{
