@@ -8,4 +8,16 @@ public abstract class Skill
 	public static final int BATTLE = 1;
 	public static final int MAGIC = 2;
 	public static final int STEALTH = 3;
+	public enum Battle
+	{
+		SWORDSMANSHIP, ARCHERY;
+	}
+	public enum Magic
+	{
+		DESTRUCTION;
+	}
+	public enum Stealth
+	{
+		PICKPOCKET,LOCKPICKING;
+	}
 }
