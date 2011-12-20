@@ -6,6 +6,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
@@ -62,5 +63,9 @@ public class SRPGEL extends EntityListener
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
 		event.setCancelled(true);
+	}
+	public void onEntityExplode(EntityExplodeEvent event)
+	{
+		
 	}
 }
