@@ -1,8 +1,12 @@
 package me.dbizzzle.SkyrimRPG;
 
+import java.util.List;
+
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -66,6 +70,16 @@ public class SRPGEL extends EntityListener
 	}
 	public void onEntityExplode(EntityExplodeEvent event)
 	{
-		
+		if(!(event.getEntity() instanceof Fireball))return;
+		Fireball f = (Fireball)event.getEntity();
+		if(!(f.getShooter() instanceof Player))return;
+		Player p = (Player)f.getShooter();
+		List<Entity> tod = f.getNearbyEntities(f.getYield(), f.getYield(), f.getYield());
+		event.setCancelled(true);
+		for(Entity x:tod)
+		{
+			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 7);
+			x.getServer().getPluginManager().callEvent(e);
+		}
 	}
 }
