@@ -76,10 +76,20 @@ public class SRPGEL extends EntityListener
 		Player p = (Player)f.getShooter();
 		List<Entity> tod = f.getNearbyEntities(f.getYield(), f.getYield(), f.getYield());
 		event.setCancelled(true);
+		int sp = 0;
+		int alevel = SkillManager.getSkillLevel("Destruction", p);
 		for(Entity x:tod)
 		{
-			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 7);
+			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 7+(alevel/10));
 			x.getServer().getPluginManager().callEvent(e);
+			sp = sp+1;
 		}
+		SkillManager sm = new SkillManager();
+		if(sm.processExperience(p, "Destruction"))
+		{
+			sm.incrementLevel("Destruction", p);
+			SkillManager.progress.get(p).put("Destruction", 0);
+		}
+		else SkillManager.progress.get(p).put("Destruction", SkillManager.progress.get(p).get("Destruction") + sp);
 	}
 }
