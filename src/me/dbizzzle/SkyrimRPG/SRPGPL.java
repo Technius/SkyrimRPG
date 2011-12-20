@@ -10,13 +10,18 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class SRPGPL extends PlayerListener
-{
-	private SkyrimRPG plugin;
-	public SRPGPL(SkyrimRPG p)
-	{
+public class SRPGPL extends PlayerListener {
+	public SkyrimRPG plugin;
+	
+	public SRPGPL(SkyrimRPG p) {
 		plugin = p;
 	}
+	
+	int secondsDelay = 20; //This will be configurable, I just set 20 for now
+	long delay = secondsDelay*20;
+	
+	String pickpocketed = ChatColor.RED + "Somebody has pickpocketed you!"; //Configurable
+	
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		if(event.getPlayer().getItemInHand().getType() != Material.BLAZE_ROD)return;
@@ -33,6 +38,38 @@ public class SRPGPL extends PlayerListener
 			event.getPlayer().sendMessage("Fireball shot!");
 		}
 	}
+	
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+		Player se = event.getPlayer();
+		EntityPlayer s = ((CraftPlayer) event.getPlayer()).getHandle();
+		if (s.isSneaking()) {
+			Entity ent = event.getRightClicked();
+			final String ents = ((HumanEntity) ent).getName();
+			if (ent instanceof Player) {
+				EntityPlayer pick = ((CraftPlayer) plugin.getServer().getPlayer(ents)).getHandle();
+				s.a(pick.inventory);
+				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
+				
+				SkillManager sm = new SkillManager();
+				if (sm.processExperience(se, "Archery")) {
+					sm.incrementLevel("Archery", se);
+					SkillManager.progress.get(se).put("PickPocket", 0);
+				} else {
+					SkillManager.progress.get(se).put("PickPocket", SkillManager.progress.get(se).get("PickPocket") + 1);
+				}
+				
+				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				    @SuppressWarnings("deprecation")
+					public void run() {
+				    	Player picked = plugin.getServer().getPlayer(ents);
+				        picked.sendMessage(pickpocketed);
+				        picked.updateInventory();
+				    }
+				}, delay);
+			}
+		}
+	}
+	
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
 		event.setCancelled(true);
