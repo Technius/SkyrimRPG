@@ -81,7 +81,7 @@ public class SRPGEL extends EntityListener
 		int alevel = SkillManager.getSkillLevel("Destruction", p);
 		for(Entity x:tod)
 		{
-			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 7+(alevel/10));
+			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 3+(alevel/10));
 			x.getWorld().createExplosion(f.getLocation(), 0F);
 			x.getServer().getPluginManager().callEvent(e);
 			x.setFireTicks(60);
