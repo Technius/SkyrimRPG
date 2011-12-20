@@ -130,7 +130,7 @@ public class SkyrimRPG extends JavaPlugin
 			}
 		}
 		
-		if (label.equalsIgnoreCase("removespell")) 
+		else if (label.equalsIgnoreCase("removespell")) 
 		{
 			ArrayList<String> temp = spells.get(args[0]);
 			if (player == null) 
@@ -195,7 +195,7 @@ public class SkyrimRPG extends JavaPlugin
 			}
 		}
 		
-		if (label.equalsIgnoreCase("listspells")) 
+		else if (label.equalsIgnoreCase("listspells")) 
 		{
 			ArrayList<String> temp = spells.get(args[0]);
 			if (player == null) 
@@ -267,6 +267,35 @@ public class SkyrimRPG extends JavaPlugin
 			else
 			{
 				player.sendMessage(ChatColor.RED + "You don't have permissions to use this command.");
+			}
+		}
+		else if(label.equalsIgnoreCase("skyrimrpg") || label.equalsIgnoreCase("srpg"))
+		{
+			if(player == null)
+			{
+				log.info("[SkyrimRPG]SkyrimRPG version " + this.getDescription().getVersion());
+				log.info("[SkyrimRPG]Made by dbizzle and Technius");
+			}
+			else
+			{
+				player.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + this.getDescription().getVersion());
+				player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
+				player.sendMessage("========================");
+				player.sendMessage(ChatColor.RED + "/stats <page>" + ChatColor.YELLOW + " - displays your stats");
+			}
+		}
+		else if(label.equalsIgnoreCase("stats"))
+		{
+			if(player == null)
+			{
+				log.info("[SkyrimRPG]You don't have stats!");
+			}
+			else
+			{
+				player.sendMessage(ChatColor.GOLD + "Stats");
+				player.sendMessage("Archery: Level " + SkillManager.getSkillLevel("Archery", player));
+				player.sendMessage("Swordsmanship: Level " + SkillManager.getSkillLevel("Swordsmanship", player));
+				player.sendMessage("Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
 			}
 		}
 		return true;
