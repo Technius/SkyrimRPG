@@ -19,6 +19,15 @@ commands:
       description: Lists all your spells
       usage: |
           /listspells [player]
+   skyrimrpg:
+      descrption: Displays info about SkyrimRPG
+      aliases: srpg
+      usage: |
+         /srpg <action>
+   stats:
+      description: Displays your skill level
+      usage: |
+         /stats <page>
 permissions:
    SkyrimRPG.*:
       Description: Implies all.
