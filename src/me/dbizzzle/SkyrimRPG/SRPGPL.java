@@ -77,11 +77,6 @@ public class SRPGPL extends PlayerListener {
 			}
 		}
 	}
-	
-	public void onFoodLevelChange(FoodLevelChangeEvent event)
-	{
-		event.setCancelled(true);
-	}
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		SkillManager sm = new SkillManager();
