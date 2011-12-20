@@ -186,13 +186,13 @@ public class SkillManager
 	public void resetSkills(Player player)
 	{
 		HashMap<String, Integer> sk = new HashMap<String, Integer>();
-		sk.put("Pickpocketing", Integer.valueOf(1));
+		sk.put("PickPocket", Integer.valueOf(1));
 		sk.put("Archery", Integer.valueOf(1));
 		sk.put("Swordsmanship", Integer.valueOf(1));
 		sk.put("Lockpicking", Integer.valueOf(1));
 		HashMap<String, Integer> pr = new HashMap<String,Integer>();
 		pr.put("Archery", Integer.valueOf(0));
-		pr.put("Pickpocketing", Integer.valueOf(1));
+		pr.put("PickPocket", Integer.valueOf(1));
 		pr.put("Swordsmanship", Integer.valueOf(1));
 		pr.put("Lockpicking", Integer.valueOf(1));
 		skills.put(player, sk);
