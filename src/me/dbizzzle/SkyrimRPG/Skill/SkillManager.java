@@ -137,6 +137,32 @@ public class SkillManager
 					pr.put("PickPocket", Integer.valueOf(progress));
 					sk.put("PickPocket", Integer.valueOf(level));
 				}
+				if(l.startsWith("Destruction"))
+				{
+					String tokens[] = l.split(delim, 2);
+					if(tokens.length != 2) continue;
+					if(!tokens[0].equalsIgnoreCase("Destruction"))continue;
+					delim = "[ ]+";
+					String[] spaced = tokens[1].split(delim);
+					String x = "";
+					for(String p:spaced)x=x+p;
+					String[] sep = x.split("[,]",2);
+					if(sep.length != 2) continue;
+					int level = 1;
+					int progress = 0;
+					try
+					{
+						level = Integer.parseInt(sep[0]);
+						progress = Integer.parseInt(sep[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						level = 1;
+						progress = 0;
+					}
+					pr.put("Destruction", Integer.valueOf(progress));
+					sk.put("Destruction", Integer.valueOf(level));
+				}
 				skills.put(player, sk);
 				progress.put(player, pr);
 			}
@@ -174,6 +200,8 @@ public class SkillManager
 			bw.write("Swordsmanship: " + getSkillLevel("Swordsmanship", player) + "," + getProgress("Swordsmanship",player));
 			bw.newLine();
 			bw.write("PickPocket: " + getSkillLevel("PickPocket", player) + "," + getProgress("PickPocket", player));
+			bw.newLine();
+			bw.write("Destruction: " + getSkillLevel("Destruction", player) + "," + getProgress("Destruction", player));
 			bw.newLine();
 			bw.flush();
 			bw.close();
