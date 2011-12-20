@@ -111,6 +111,32 @@ public class SkillManager
 					pr.put("Swordsmanship", Integer.valueOf(progress));
 					sk.put("Swordsmanship", Integer.valueOf(level));
 				}
+				if(l.startsWith("PickPocket"))
+				{
+					String tokens[] = l.split(delim, 2);
+					if(tokens.length != 2) continue;
+					if(!tokens[0].equalsIgnoreCase("PickPocket"))continue;
+					delim = "[ ]+";
+					String[] spaced = tokens[1].split(delim);
+					String x = "";
+					for(String p:spaced)x=x+p;
+					String[] sep = x.split("[,]",2);
+					if(sep.length != 2) continue;
+					int level = 1;
+					int progress = 0;
+					try
+					{
+						level = Integer.parseInt(sep[0]);
+						progress = Integer.parseInt(sep[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						level = 1;
+						progress = 0;
+					}
+					pr.put("PickPocket", Integer.valueOf(progress));
+					sk.put("PickPocket", Integer.valueOf(level));
+				}
 				skills.put(player, sk);
 				progress.put(player, pr);
 			}
@@ -147,12 +173,14 @@ public class SkillManager
 			bw.newLine();
 			bw.write("Swordsmanship: " + getSkillLevel("Swordsmanship", player) + "," + getProgress("Swordsmanship",player));
 			bw.newLine();
+			bw.write("PickPocket: " + getSkillLevel("PickPocket", player) + "," + getProgress("PickPocket", player));
+			bw.newLine();
 			bw.flush();
 			bw.close();
 		}
 		catch(IOException ioe)
 		{
-			p.log.severe("[SkyrimRPG]Could not save player data!");
+			p.log.severe("[SkyrimRPG] Could not save player data!");
 		}
 	}
 	public void resetSkills(Player player)
@@ -204,6 +232,21 @@ public class SkillManager
 			}
 			if(pro >= t)
 			{
+				return true;
+			}
+			return false;
+		} 
+		else if (skill.equalsIgnoreCase("PickPocket"))
+		{
+			int alevel = SkillManager.getSkillLevel("PickPocket", player);
+			int pro = SkillManager.getProgress("PickPocket", player);
+			int t = 5;
+			
+			for(int i = 1;i<alevel;i++) {
+				t=t+2;
+			}
+			
+			if(pro >= t) {
 				return true;
 			}
 			return false;
