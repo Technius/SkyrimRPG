@@ -10,8 +10,10 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityListener;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class SRPGEL extends EntityListener
@@ -61,14 +63,15 @@ public class SRPGEL extends EntityListener
 		}
 		else
 		{
-			
+
 		}
+		if(event.getEntity() instanceof Player)System.out.println(event.getCause().toString() + event.getDamage());
 	}
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
 		event.setCancelled(true);
 	}
-	public void onEntityExplode(EntityExplodeEvent event)
+	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if(!(event.getEntity() instanceof Fireball))return;
 		Fireball f = (Fireball)event.getEntity();
@@ -81,8 +84,8 @@ public class SRPGEL extends EntityListener
 		int alevel = SkillManager.getSkillLevel("Destruction", p);
 		for(Entity x:tod)
 		{
-			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 3+(alevel/10));
-			x.getWorld().createExplosion(f.getLocation(), 0F);
+			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 7+(alevel/10));
+			x.getWorld().createExplosion(f.getLocation(), 0);
 			x.getServer().getPluginManager().callEvent(e);
 			x.setFireTicks(60);
 			sp = sp+1;
