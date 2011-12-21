@@ -299,6 +299,8 @@ public class SkyrimRPG extends JavaPlugin
 				player.sendMessage("Archery: Level " + SkillManager.getSkillLevel("Archery", player));
 				player.sendMessage("Swordsmanship: Level " + SkillManager.getSkillLevel("Swordsmanship", player));
 				player.sendMessage("Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
+				player.sendMessage("Lockpicking: Level " + SkillManager.getSkillLevel("Lockpicking", player));
+				player.sendMessage("Destruction: Level " + SkillManager.getSkillLevel("Destruction", player));
 			}
 		}
 		return true;
