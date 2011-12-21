@@ -37,4 +37,8 @@ public class SpellManager
 		zombie.setHealth(zombie.getHealth()/2 + alevel/10);
 		czombie.put(player,zombie);
 	}
+	public enum Spells
+	{
+		RAISE_ZOMBIE,FIREBALL;
+	}
 }
