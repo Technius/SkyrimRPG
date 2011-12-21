@@ -9,14 +9,31 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class SRPGEL extends EntityListener
 {
+	public void onEntityTarget(EntityTargetEvent event)
+	{
+		if(!(event.getEntity() instanceof Zombie))return;
+		Zombie z = (Zombie)event.getEntity();
+		if(!SpellManager.czombie.containsValue(z))return;
+		event.setCancelled(true);
+	}
+	public void onEntityDeath(EntityDeathEvent event)
+	{
+		if(!(event.getEntity() instanceof Zombie))return;
+		Zombie z = (Zombie)event.getEntity();
+		if(!SpellManager.czombie.containsValue(z))return;
+		SpellManager.czombie.remove(z);
+	}
 	public void onEntityDamage(EntityDamageEvent event)
 	{
 		if(event instanceof EntityDamageByEntityEvent)
