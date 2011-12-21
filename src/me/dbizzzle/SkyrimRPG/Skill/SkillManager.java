@@ -351,6 +351,36 @@ public class SkillManager
 			}
 			return false;
 		}
+		else if (skill.equalsIgnoreCase("Conjuration"))
+		{
+			int alevel = SkillManager.getSkillLevel("Conjuration", player);
+			int pro = SkillManager.getProgress("Conjuration", player);
+			int t = 5;
+			
+			for(int i = 1;i<alevel;i++) {
+				t=t+2;
+			}
+			
+			if(pro >= t) {
+				return true;
+			}
+			return false;
+		}
+		else if (skill.equalsIgnoreCase("Lockpicking"))
+		{
+			int alevel = SkillManager.getSkillLevel("Lockpicking", player);
+			int pro = SkillManager.getProgress("Lockpicking", player);
+			int t = 5;
+			
+			for(int i = 1;i<alevel;i++) {
+				t=t+2;
+			}
+			
+			if(pro >= t) {
+				return true;
+			}
+			return false;
+		}
 		return false;
 	}
 }
