@@ -19,6 +19,28 @@ public class SkillManager
 	public static HashMap<Player, HashMap<String, Integer>> progress = new HashMap<Player, HashMap<String, Integer>>();
 	public static HashMap<Player, Integer> level = new HashMap<Player,Integer>();
 	SkyrimRPG p = null;
+	public static int calculateLevel(Player player)
+	{
+		int tot = 0;
+		int cl = level.get(player).intValue();
+		for(String s:skills.get(player).keySet())
+		{
+			tot = tot + skills.get(player).get(s).intValue();
+		}
+		if(tot > cl * 5)level.put(player, new Integer(cl + 1));
+		return level.get(player).intValue();
+	}
+	public static boolean isLevelingUp(Player player)
+	{
+		int tot = 0;
+		int cl = level.get(player).intValue();
+		for(String s:skills.get(player).keySet())
+		{
+			tot = tot + skills.get(player).get(s).intValue();
+		}
+		if(tot > cl * 5)return true;
+		return false;
+	}
 	public static HashMap<String, Integer> getSkills (Player player)
 	{
 		return skills.get(player);
