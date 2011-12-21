@@ -59,9 +59,10 @@ public class SkillManager
 			{
 				if(l.startsWith("#"))continue;
 				String delim = "[:]";
+				String tokens[] = l.split(delim, 2);
+				if(tokens.length != 2) continue;
 				if(l.startsWith("Archery"))
 				{
-					String tokens[] = l.split(delim, 2);
 					if(tokens.length != 2) continue;
 					if(!tokens[0].equalsIgnoreCase("Archery"))continue;
 					delim = "[ ]+";
@@ -87,7 +88,6 @@ public class SkillManager
 				}
 				if(l.startsWith("Swordsmanship"))
 				{
-					String tokens[] = l.split(delim, 2);
 					if(tokens.length != 2) continue;
 					if(!tokens[0].equalsIgnoreCase("Swordsmanship"))continue;
 					delim = "[ ]+";
@@ -113,7 +113,6 @@ public class SkillManager
 				}
 				if(l.startsWith("PickPocket"))
 				{
-					String tokens[] = l.split(delim, 2);
 					if(tokens.length != 2) continue;
 					if(!tokens[0].equalsIgnoreCase("PickPocket"))continue;
 					delim = "[ ]+";
@@ -139,7 +138,6 @@ public class SkillManager
 				}
 				if(l.startsWith("Destruction"))
 				{
-					String tokens[] = l.split(delim, 2);
 					if(tokens.length != 2) continue;
 					if(!tokens[0].equalsIgnoreCase("Destruction"))continue;
 					delim = "[ ]+";
@@ -163,9 +161,60 @@ public class SkillManager
 					pr.put("Destruction", Integer.valueOf(progress));
 					sk.put("Destruction", Integer.valueOf(level));
 				}
+				if(l.startsWith("Conjuration"))
+				{
+					if(tokens.length != 2) continue;
+					if(!tokens[0].equalsIgnoreCase("Conjuration"))continue;
+					delim = "[ ]+";
+					String[] spaced = tokens[1].split(delim);
+					String x = "";
+					for(String p:spaced)x=x+p;
+					String[] sep = x.split("[,]",2);
+					if(sep.length != 2) continue;
+					int level = 1;
+					int progress = 0;
+					try
+					{
+						level = Integer.parseInt(sep[0]);
+						progress = Integer.parseInt(sep[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						level = 1;
+						progress = 0;
+					}
+					pr.put("Conjuration", Integer.valueOf(progress));
+					sk.put("Conjuration", Integer.valueOf(level));
+				}
+				if(l.startsWith("Lockpicking"))
+				{
+					if(tokens.length != 2) continue;
+					if(!tokens[0].equalsIgnoreCase("Lockpicking"))continue;
+					delim = "[ ]+";
+					String[] spaced = tokens[1].split(delim);
+					String x = "";
+					for(String p:spaced)x=x+p;
+					String[] sep = x.split("[,]",2);
+					if(sep.length != 2) continue;
+					int level = 1;
+					int progress = 0;
+					try
+					{
+						level = Integer.parseInt(sep[0]);
+						progress = Integer.parseInt(sep[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						level = 1;
+						progress = 0;
+					}
+					pr.put("Lockpicking", Integer.valueOf(progress));
+					sk.put("Lockpicking", Integer.valueOf(level));
+				}
 				skills.put(player, sk);
 				progress.put(player, pr);
 			}
+			
 			br.close();
 		}
 		catch(IOException ioe)
@@ -203,6 +252,10 @@ public class SkillManager
 			bw.newLine();
 			bw.write("Destruction: " + getSkillLevel("Destruction", player) + "," + getProgress("Destruction", player));
 			bw.newLine();
+			bw.write("Conjuration: " + getSkillLevel("Conjuration", player) + "," + getProgress("Conjuration", player));
+			bw.newLine();
+			bw.write("Lockpicking: " + getSkillLevel("Lockpicking", player) + "," + getProgress("Lockpicking", player));
+			bw.newLine();
 			bw.flush();
 			bw.close();
 		}
@@ -219,12 +272,14 @@ public class SkillManager
 		sk.put("Swordsmanship", Integer.valueOf(1));
 		sk.put("Lockpicking", Integer.valueOf(1));
 		sk.put("Destruction", Integer.valueOf(1));
+		sk.put("Conjuration", Integer.valueOf(1));
 		HashMap<String, Integer> pr = new HashMap<String,Integer>();
 		pr.put("Archery", Integer.valueOf(0));
 		pr.put("PickPocket", Integer.valueOf(0));
 		pr.put("Swordsmanship", Integer.valueOf(0));
 		pr.put("Lockpicking", Integer.valueOf(0));
 		pr.put("Destruction", Integer.valueOf(0));
+		pr.put("Conjuration", Integer.valueOf(0));
 		skills.put(player, sk);
 		progress.put(player, pr);
 	}
