@@ -5,10 +5,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
+import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
 import org.bukkit.ChatColor;
@@ -22,7 +21,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class SkyrimRPG extends JavaPlugin 
 {
 	public Logger log = Logger.getLogger("Minecraft");
-	public HashMap<String, ArrayList<String>> spells = new HashMap<String, ArrayList<String>>();
 	SpellManager sm = new SpellManager(this);
 	SkillManager sk = new SkillManager();
 	SpellTimer st = new SpellTimer(this);
@@ -63,16 +61,12 @@ public class SkyrimRPG extends JavaPlugin
 			} 
 			else if (player.hasPermission("skyrimrpg.fireball")) 
 			{
-				if (hasSpell(player.getName(), "fireball")) 
-				{
-					sm.shootFireball(player, 100);
-				}
+				if(SpellManager.spells.get(player).contains(Spell.FIREBALL))sm.shootFireball(player, 100);
 			}
 		}
 		
 		if (command.getName().equalsIgnoreCase("addspell")) 
 		{
-			ArrayList<String> temp = new ArrayList<String>();
 			if (player == null) 
 			{
 				Player spell = getServer().getPlayer(args[0]);
@@ -90,10 +84,13 @@ public class SkyrimRPG extends JavaPlugin
 						
 					default:
 						String spel = spell.getName();
-						temp.add(args[1]);
-						spells.put(spel, temp);
-						sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
-						spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
+						Spell s = SpellManager.Spell.valueOf(args[1]);
+						if(s == null)sender.sendMessage("No such spell!");
+						else
+						{
+							sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
+							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
+						}
 						break;
 					}
 				} 
@@ -119,10 +116,13 @@ public class SkyrimRPG extends JavaPlugin
 							
 						default:
 							String spel = spell.getName();
-							temp.add(args[1]);
-							spells.put(spel, temp);
-							player.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
-							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
+							Spell s = SpellManager.Spell.valueOf(args[1]);
+							if(s == null)sender.sendMessage("No such spell!");
+							else
+							{
+								sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
+								spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
+							}
 							break;
 					}
 				} 
@@ -135,7 +135,6 @@ public class SkyrimRPG extends JavaPlugin
 		
 		else if (command.getName().equalsIgnoreCase("removespell")) 
 		{
-			ArrayList<String> temp = spells.get(args[0]);
 			if (player == null) 
 			{
 				Player spell = getServer().getPlayer(args[0]);
@@ -153,9 +152,13 @@ public class SkyrimRPG extends JavaPlugin
 					
 					default:
 						String spel = spell.getName();
-						temp.remove(args[1]);
-						sender.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
-						spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
+						Spell s = SpellManager.Spell.valueOf(args[1]);
+						if(s == null)sender.sendMessage("No such spell!");
+						else
+						{
+							sender.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
+							spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
+						}
 						break;
 					}
 				} 
@@ -181,9 +184,13 @@ public class SkyrimRPG extends JavaPlugin
 						
 					default:
 						String spel = spell.getName();
-						temp.remove(args[1]);
-						player.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
-						spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
+						Spell s = SpellManager.Spell.valueOf(args[1]);
+						if(s == null)sender.sendMessage("No such spell!");
+						else
+						{
+							sender.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
+							spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
+						}
 						break;
 					}
 				} 
@@ -200,7 +207,6 @@ public class SkyrimRPG extends JavaPlugin
 		
 		else if (command.getName().equalsIgnoreCase("listspells")) 
 		{
-			ArrayList<String> temp = spells.get(args[0]);
 			if (player == null) 
 			{
 				if (args.length == 0) 
@@ -212,20 +218,20 @@ public class SkyrimRPG extends JavaPlugin
 					Player spell = getServer().getPlayer(args[0]);
 					if (spell != null) 
 					{
-						if (spells.containsKey(spell)) 
+						for(Spell s:SpellManager.spells.get(spell))
 						{
-							if (temp.isEmpty()) 
+							switch(s)
 							{
-								sender.sendMessage(ChatColor.GREEN + "This player has no spells.");
-							} 
-							else 
-							{
-								sender.sendMessage(ChatColor.GREEN + temp.toString());
+							case FIREBALL:
+								sender.sendMessage("Fireball");
+								break;
+							case RAISE_ZOMBIE:
+								sender.sendMessage("Raise Zombie");
+								break;
+							case HEALING:
+								sender.sendMessage("Healing");
+								break;
 							}
-						} 
-						else 
-						{
-							sender.sendMessage(ChatColor.RED + "This player has no spells.");
 						}
 					} 
 					else 
@@ -238,27 +244,41 @@ public class SkyrimRPG extends JavaPlugin
 			{
 				if (args.length == 0) 
 				{
-					player.sendMessage(ChatColor.GREEN + "fireball");
+					for(Spell s:SpellManager.spells.get(player))
+					{
+						switch(s)
+						{
+						case FIREBALL:
+							sender.sendMessage("Fireball");
+							break;
+						case RAISE_ZOMBIE:
+							sender.sendMessage("Raise Zombie");
+							break;
+						case HEALING:
+							sender.sendMessage("Healing");
+							break;
+						}
+					}
 				} 
 				else if (args.length > 0) 
 				{
 					Player spell = getServer().getPlayer(args[0]);
 					if (spell != null) 
 					{
-						if (spells.containsKey(spell)) 
+						for(Spell s:SpellManager.spells.get(player))
 						{
-							if (temp.isEmpty()) 
+							switch(s)
 							{
-								player.sendMessage(ChatColor.GREEN + "This player has no spells.");
-							} 
-							else 
-							{
-								player.sendMessage(ChatColor.GREEN + temp.toString());
+							case FIREBALL:
+								sender.sendMessage("Fireball");
+								break;
+							case RAISE_ZOMBIE:
+								sender.sendMessage("Raise Zombie");
+								break;
+							case HEALING:
+								sender.sendMessage("Healing");
+								break;
 							}
-						} 
-						else 
-						{
-							player.sendMessage(ChatColor.RED + "This player has no spells.");
 						}
 					} 
 					else 
@@ -304,19 +324,6 @@ public class SkyrimRPG extends JavaPlugin
 			}
 		}
 		return true;
-	}
-	
-	public boolean hasSpell(String player, String spell) 
-	{
-		if (spells.containsKey(player)) 
-		{
-			ArrayList<String> temp = spells.get(player);
-			return temp.contains(spell);
-		} 
-		else 
-		{
-			return false;
-		}
 	}
 	public boolean createFiles()
 	{
