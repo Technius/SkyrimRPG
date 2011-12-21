@@ -7,6 +7,7 @@ import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -65,7 +66,6 @@ public class SRPGEL extends EntityListener
 		{
 
 		}
-		if(event.getEntity() instanceof Player)System.out.println(event.getCause().toString() + event.getDamage());
 	}
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
@@ -80,14 +80,16 @@ public class SRPGEL extends EntityListener
 		Player p = (Player)f.getShooter();
 		List<Entity> tod = f.getNearbyEntities(f.getYield(), f.getYield(), f.getYield());
 		event.setCancelled(true);
+		f.setYield(0);
 		int sp = 0;
 		int alevel = SkillManager.getSkillLevel("Destruction", p);
 		for(Entity x:tod)
 		{
-			EntityDamageEvent e = new EntityDamageEvent(x, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, 7+(alevel/10));
-			x.getWorld().createExplosion(f.getLocation(), 0);
-			x.getServer().getPluginManager().callEvent(e);
-			x.setFireTicks(60);
+			if(!(x instanceof LivingEntity))continue;
+			LivingEntity l = (LivingEntity) x;
+			l.damage(7 + (alevel/10));
+			l.getWorld().createExplosion(f.getLocation(), 0);
+			l.setFireTicks(60);
 			sp = sp+1;
 		}
 		SkillManager sm = new SkillManager();
