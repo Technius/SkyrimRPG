@@ -323,6 +323,8 @@ public class SkyrimRPG extends JavaPlugin
 		File players = new File(file.getPath() + File.separator + "Players");
 		if(!players.exists())players.mkdir();
 		File config = new File(file.getPath() + File.separator + "config.txt");
+		File locks = new File(file.getPath() + File.separator + "Locks");
+		if(!locks.exists())locks.mkdir();
 		try
 		{
 			if(!config.exists())
@@ -351,6 +353,8 @@ public class SkyrimRPG extends JavaPlugin
 		if(!players.exists())return false;
 		File config = new File(file.getPath() + File.separator + "config.txt");
 		if(!config.exists())return false;
+		File locks = new File(file.getPath() + File.separator + "Locks");
+		if(!locks.exists())return false;
 		return true;
 	}
 }
