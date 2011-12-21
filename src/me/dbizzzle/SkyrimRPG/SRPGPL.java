@@ -1,9 +1,12 @@
 package me.dbizzzle.SkyrimRPG;
 
+import java.util.Random;
+
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -15,6 +18,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class SRPGPL extends PlayerListener {
 	public SkyrimRPG plugin;
@@ -45,11 +50,11 @@ public class SRPGPL extends PlayerListener {
 				event.getPlayer().sendMessage("Fireball shot!");
 			}
 		}
-		else if (event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH)
+		else if (event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON)
 		{
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
-				if (event.getBlock().getType() == Material.IRON_DOOR)
+				if (event.getClickedBlock().getType() == Material.IRON_DOOR)
 				{
 					Player s = event.getPlayer();
 					Inventory inv = s.getInventory();
@@ -58,15 +63,30 @@ public class SRPGPL extends PlayerListener {
 						if (pickLockSuccess(s, s.getEyeLocation()))
 						{
 							SkillManager sm = new SkillManager();
-							if (sm.processExperience(se, "LockPick"))
+							if (sm.processExperience(s, "Lockpicking"))
 							{
-								sm.incrementLevel("LockPick", se);
-								SkillManager.progress.get(se).put("LockPick", 0);
+								sm.incrementLevel("Lockpicking", s);
+								SkillManager.progress.get(s).put("Lockpicking", 0);
 							}
-							else
+							else SkillManager.progress.get(s).put("Lockpicking", SkillManager.progress.get(s).get("Lockpicking") + 1);
+							s.sendMessage(ChatColor.GREEN + "You picked the lock successfully!");
+						}
+						else
+						{
+							int alevel = SkillManager.getSkillLevel("Lockpicking", s);
+							Random r = new Random();
+							int calc = 20 - (alevel/10);
+							if(r.nextInt(calc + 1) < alevel/10)
 							{
-								SkillManager.progress.get(se).put("LockPick", SkillManager.progress.get(se).get("LockPick") + 1);
+								s.sendMessage(ChatColor.RED + "You failed at picking the lock, and one of your lockpicks broke!");
+								for(ItemStack i:inv.getContents())
+								{
+									if(i.getType() != Material.IRON_INGOT)continue;
+									i.setAmount(i.getAmount() - 1);
+									break;
+								}
 							}
+							else s.sendMessage(ChatColor.RED + "You failed at picking the lock!");
 						}
 					}
 				}
@@ -120,10 +140,12 @@ public class SRPGPL extends PlayerListener {
 	
 	public boolean pickLockSuccess(Player pla, Location loc)
 	{
-		if (loc.getBlock().getType() == Material.IRON_DOOR || Material.CHEST)
+		if (loc.getBlock().getType() == Material.IRON_DOOR || loc.getBlock().getType() == Material.CHEST)
 		{
 			int alevel = SkillManager.getSkillLevel("LockPick", pla);
-			if (Random.nextInt(10) < alevel/10)
+			Random r = new Random();
+			int calc = 10 - (alevel/10);
+			if (r.nextInt(calc + 1) < alevel/10)
 			{
 				return true;
 			}
@@ -132,5 +154,6 @@ public class SRPGPL extends PlayerListener {
 				return false;
 			}
 		} 
+		return false;
 	}
 }
