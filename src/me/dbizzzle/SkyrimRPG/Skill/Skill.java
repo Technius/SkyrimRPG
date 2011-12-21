@@ -14,7 +14,7 @@ public abstract class Skill
 	}
 	public enum Magic
 	{
-		DESTRUCTION;
+		DESTRUCTION,CONJURATION;
 	}
 	public enum Stealth
 	{
