@@ -30,18 +30,47 @@ public class SRPGPL extends PlayerListener {
 	
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		if(event.getPlayer().getItemInHand().getType() != Material.BLAZE_ROD)return;
-		if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+		if(event.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD)
 		{
-			plugin.st.chargeFireball(event.getPlayer());
-			event.getPlayer().sendMessage("Charging fireball...");
+			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+			{
+				plugin.st.chargeFireball(event.getPlayer());
+				event.getPlayer().sendMessage("Charging fireball...");
+			}
+			else if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				int m = plugin.st.unchargeFireball(event.getPlayer());
+				if(m == -1) return;
+				plugin.sm.shootFireball(event.getPlayer(), m);
+				event.getPlayer().sendMessage("Fireball shot!");
+			}
 		}
-		else if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+		else if (event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH)
 		{
-			int m = plugin.st.unchargeFireball(event.getPlayer());
-			if(m == -1) return;
-			plugin.sm.shootFireball(event.getPlayer(), m);
-			event.getPlayer().sendMessage("Fireball shot!");
+			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				if (event.getBlock().getType() == Material.IRON_DOOR)
+				{
+					Player s = event.getPlayer();
+					Inventory inv = s.getInventory();
+					if (inv.contains(Material.IRON_INGOT))
+					{
+						if (pickLockSuccess(s, s.getEyeLocation()))
+						{
+							SkillManager sm = new SkillManager();
+							if (sm.processExperience(se, "LockPick"))
+							{
+								sm.incrementLevel("LockPick", se);
+								SkillManager.progress.get(se).put("LockPick", 0);
+							}
+							else
+							{
+								SkillManager.progress.get(se).put("LockPick", SkillManager.progress.get(se).get("LockPick") + 1);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -87,5 +116,21 @@ public class SRPGPL extends PlayerListener {
 		SkillManager sm = new SkillManager();
 		sm.setPlugin(plugin);
 		sm.saveSkills(event.getPlayer());
+	}
+	
+	public boolean pickLockSuccess(Player pla, Location loc)
+	{
+		if (loc.getBlock().getType() == Material.IRON_DOOR || Material.CHEST)
+		{
+			int alevel = SkillManager.getSkillLevel("LockPick", pla);
+			if (Random.nextInt(10) < alevel/10)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		} 
 	}
 }
