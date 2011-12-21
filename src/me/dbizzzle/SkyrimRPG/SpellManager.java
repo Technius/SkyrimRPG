@@ -1,6 +1,7 @@
 package me.dbizzzle.SkyrimRPG;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
@@ -14,7 +15,7 @@ import org.bukkit.util.Vector;
 public class SpellManager 
 {
 	public static List<Fireball>ftracker = new ArrayList<Fireball>();
-	public static List<Zombie>czombie = new ArrayList<Zombie>();
+	public static HashMap<Player, Zombie>czombie = new HashMap<Player,Zombie>();
 	SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{
@@ -33,6 +34,7 @@ public class SpellManager
 	{
 		Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.ZOMBIE);
 		int alevel = SkillManager.getSkillLevel("Conjuration", player);
-		zombie.setHealth(zombie.getHealth());
+		zombie.setHealth(zombie.getHealth()/2 + alevel/10);
+		czombie.put(player,zombie);
 	}
 }
