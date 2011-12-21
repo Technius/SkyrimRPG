@@ -46,4 +46,8 @@ public class SpellManager
 	{
 		return spells.get(player).contains(spell);
 	}
+	public void resetSpells(Player player)
+	{
+		spells.put(player, new ArrayList<Spell>());
+	}
 }
