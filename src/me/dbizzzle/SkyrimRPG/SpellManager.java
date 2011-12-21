@@ -16,6 +16,7 @@ public class SpellManager
 {
 	public static List<Fireball>ftracker = new ArrayList<Fireball>();
 	public static HashMap<Player, Zombie>czombie = new HashMap<Player,Zombie>();
+	public static HashMap<Player, List<Spell>>spells = new HashMap<Player, List<Spell>>();
 	SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{
@@ -36,5 +37,13 @@ public class SpellManager
 		int alevel = SkillManager.getSkillLevel("Conjuration", player);
 		zombie.setHealth(zombie.getHealth()/2 + alevel/10);
 		czombie.put(player,zombie);
+	}
+	public enum Spell
+	{
+		RAISE_ZOMBIE,FIREBALL,HEALING;
+	}
+	public boolean hasSpell(Player player, Spell spell)
+	{
+		return spells.get(player).contains(spell);
 	}
 }
