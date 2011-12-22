@@ -35,6 +35,7 @@ public class SpellManager
 	}
 	public void raiseZombie(Player player)
 	{
+		if(czombie.containsKey(player))czombie.get(player).remove();
 		Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.ZOMBIE);
 		int alevel = SkillManager.getSkillLevel("Conjuration", player);
 		zombie.setHealth(zombie.getHealth()/2 + alevel/10);
