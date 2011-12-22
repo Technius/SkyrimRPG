@@ -233,6 +233,12 @@ public class SkillManager
 					pr.put("Lockpicking", Integer.valueOf(progress));
 					sk.put("Lockpicking", Integer.valueOf(level));
 				}
+				if(sk.get("Archery")== null)sk.put("Archery", 0);
+				if(sk.get("Swordsmanship")== null)sk.put("Swordsmanship", 0);
+				if(sk.get("Archery")== null)sk.put("Archery", 0);
+				if(sk.get("Archery")== null)sk.put("Archery", 0);
+				if(sk.get("Archery")== null)sk.put("Archery", 0);
+				if(sk.get("Archery")== null)sk.put("Archery", 0);
 				skills.put(player, sk);
 				progress.put(player, pr);
 			}
