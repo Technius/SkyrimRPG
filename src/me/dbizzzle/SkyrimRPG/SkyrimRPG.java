@@ -82,8 +82,9 @@ public class SkyrimRPG extends JavaPlugin
 					if(args[0].equalsIgnoreCase("left"))mode = 1;
 					else if(args[0].equalsIgnoreCase("right"))mode = 2;
 					else if(args[0].equalsIgnoreCase("both"))mode = 3;
-					Spell s = SpellManager.Spell.valueOf(args[1]);
-					if(s == null)sender.sendMessage("No such spell!");
+					Spell s = null;
+					try{s = SpellManager.Spell.valueOf(args[1].toUpperCase());}
+					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");}
 					switch(s)
 					{
 					case FIREBALL:
@@ -98,6 +99,10 @@ public class SkyrimRPG extends JavaPlugin
 						else player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to " + (mode == 1 ? "left" : "right") + " hand");
 					}
 				}
+			}
+			else
+			{
+				player.sendMessage("You don't have magical powers");
 			}
 		}
 		
