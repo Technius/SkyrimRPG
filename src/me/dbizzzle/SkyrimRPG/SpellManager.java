@@ -17,6 +17,8 @@ public class SpellManager
 	public static List<Fireball>ftracker = new ArrayList<Fireball>();
 	public static HashMap<Player, Zombie>czombie = new HashMap<Player,Zombie>();
 	public static HashMap<Player, List<Spell>>spells = new HashMap<Player, List<Spell>>();
+	public static HashMap<Player, Spell>boundleft = new HashMap<Player,Spell>();
+	public static HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
 	SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{
