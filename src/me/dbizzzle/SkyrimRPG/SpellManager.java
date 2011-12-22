@@ -42,7 +42,7 @@ public class SpellManager
 	}
 	public enum Spell
 	{
-		RAISE_ZOMBIE,FIREBALL,HEALING;
+		RAISE_ZOMBIE,FIREBALL,HEALING,UFIREBALL;
 	}
 	public boolean hasSpell(Player player, Spell spell)
 	{
@@ -51,5 +51,27 @@ public class SpellManager
 	public void resetSpells(Player player)
 	{
 		spells.put(player, new ArrayList<Spell>());
+	}
+	public boolean castSpell(Spell spell, Player player)
+	{
+		switch(spell)
+		{
+		case FIREBALL:
+			p.st.chargeFireball(player);
+			player.sendMessage("Charging Fireball...");
+			return true;
+		case RAISE_ZOMBIE:
+			raiseZombie(player);
+			player.sendMessage("You conjure up a zombie follower to fight for you");
+			return true;
+		case UFIREBALL:
+			int m = p.st.unchargeFireball(player);
+			if(m == -1) return false;
+			p.sm.shootFireball(player, m);
+			player.sendMessage("Fireball shot!");
+			return true;
+		default:
+			return false;
+		}
 	}
 }
