@@ -235,10 +235,10 @@ public class SkillManager
 				}
 				if(sk.get("Archery")== null)sk.put("Archery", 0);
 				if(sk.get("Swordsmanship")== null)sk.put("Swordsmanship", 0);
-				if(sk.get("Archery")== null)sk.put("Archery", 0);
-				if(sk.get("Archery")== null)sk.put("Archery", 0);
-				if(sk.get("Archery")== null)sk.put("Archery", 0);
-				if(sk.get("Archery")== null)sk.put("Archery", 0);
+				if(sk.get("PickPocket")== null)sk.put("PickPocket", 0);
+				if(sk.get("Destruction")== null)sk.put("Destruction", 0);
+				if(sk.get("Lockpicking")== null)sk.put("Lockpicking", 0);
+				if(sk.get("Conjuration")== null)sk.put("Conjuration", 0);
 				skills.put(player, sk);
 				progress.put(player, pr);
 			}
