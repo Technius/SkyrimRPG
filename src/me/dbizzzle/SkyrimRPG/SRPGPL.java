@@ -92,7 +92,7 @@ public class SRPGPL extends PlayerListener {
 				}
 			}
 		}
-		else if(event.getPlayer().getInventory().firstEmpty() == 0)
+		else if(event.getPlayer().getItemInHand().getType() == Material.AIR)
 		{
 			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
 			{
