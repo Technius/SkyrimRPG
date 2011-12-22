@@ -28,6 +28,10 @@ commands:
       description: Displays your skill level
       usage: |
          /stats <page>
+   bindspell:
+      description: Binds a spell to left/right hand
+      usage: |
+         /bindspell <left/right/both> <spell>
 permissions:
    SkyrimRPG.*:
       Description: Implies all.
@@ -41,3 +45,5 @@ permissions:
       Description: Take a spell from a player.
    SkyrimRPG.listspells: 
       Description: List spells or find out what spells another person has.
+   SkyrimRPG.bindspell:
+      Description: Binds a spell to left/right/both hands
