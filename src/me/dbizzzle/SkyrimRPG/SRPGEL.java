@@ -25,6 +25,10 @@ public class SRPGEL extends EntityListener
 		if(!(event.getEntity() instanceof Zombie))return;
 		Zombie z = (Zombie)event.getEntity();
 		if(!SpellManager.czombie.containsValue(z))return;
+		if(!(event.getTarget() instanceof Player))return;
+		Player player = (Player)event.getTarget();
+		if(!SpellManager.czombie.containsKey(player))return;
+		if(SpellManager.czombie.get(player) != z)return;
 		event.setCancelled(true);
 	}
 	public void onEntityDeath(EntityDeathEvent event)
