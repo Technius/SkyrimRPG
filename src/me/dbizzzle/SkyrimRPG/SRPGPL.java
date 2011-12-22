@@ -96,12 +96,12 @@ public class SRPGPL extends PlayerListener {
 		{
 			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
 			{
-				if(SpellManager.boundleft == null)return;
+				if(!SpellManager.boundleft.containsKey(event.getPlayer()))return;
 				plugin.sm.castSpell(SpellManager.boundleft.get(event.getPlayer()), event.getPlayer());
 			}
 			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
-				if(SpellManager.boundright == null)return;
+				if(!SpellManager.boundright.containsKey(event.getPlayer()))return;
 				plugin.sm.castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
 			}
 		}
