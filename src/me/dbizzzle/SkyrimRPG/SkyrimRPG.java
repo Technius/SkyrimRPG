@@ -65,6 +65,42 @@ public class SkyrimRPG extends JavaPlugin
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("bindspell")) {
+			if (player == null) 
+			{
+				sender.sendMessage(ChatColor.RED + "Console can not use magic.");
+			} 
+			else if (player.hasPermission("skyrimrpg.bindspell")) 
+			{
+				if(args.length != 2)
+				{
+					player.sendMessage(ChatColor.RED + "Usage: /bindspell <left/right> <spell>");
+				}
+				else
+				{
+					int mode = 1;
+					if(args[0].equalsIgnoreCase("left"))mode = 1;
+					else if(args[0].equalsIgnoreCase("right"))mode = 2;
+					else if(args[0].equalsIgnoreCase("both"))mode = 3;
+					Spell s = SpellManager.Spell.valueOf(args[1]);
+					if(s == null)sender.sendMessage("No such spell!");
+					switch(s)
+					{
+					case FIREBALL:
+						SpellManager.boundleft.put(player, Spell.FIREBALL);
+						SpellManager.boundright.put(player, Spell.FIREBALL);
+						player.sendMessage(ChatColor.GREEN + "Fireball bound to both hands");
+						break;
+					case RAISE_ZOMBIE:
+						if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, Spell.RAISE_ZOMBIE);
+						if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, Spell.RAISE_ZOMBIE);
+						if(mode == 3)player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to both hands");
+						else player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to " + (mode == 1 ? "left" : "right") + " hand");
+					}
+				}
+			}
+		}
+		
 		if (command.getName().equalsIgnoreCase("addspell")) 
 		{
 			if (player == null) 
