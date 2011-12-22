@@ -92,6 +92,19 @@ public class SRPGPL extends PlayerListener {
 				}
 			}
 		}
+		else if(event.getPlayer().getInventory().firstEmpty() == 0)
+		{
+			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+			{
+				if(SpellManager.boundleft == null)return;
+				plugin.sm.castSpell(SpellManager.boundleft.get(event.getPlayer()), event.getPlayer());
+			}
+			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				if(SpellManager.boundright == null)return;
+				plugin.sm.castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
+			}
+		}
 }
 
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
