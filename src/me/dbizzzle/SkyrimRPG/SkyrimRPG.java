@@ -88,7 +88,7 @@ public class SkyrimRPG extends JavaPlugin
 					{
 					case FIREBALL:
 						SpellManager.boundleft.put(player, Spell.FIREBALL);
-						SpellManager.boundright.put(player, Spell.FIREBALL);
+						SpellManager.boundright.put(player, Spell.UFIREBALL);
 						player.sendMessage(ChatColor.GREEN + "Fireball bound to both hands");
 						break;
 					case RAISE_ZOMBIE:
