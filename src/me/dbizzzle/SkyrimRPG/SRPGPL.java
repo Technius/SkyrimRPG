@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Door;
 
 public class SRPGPL extends PlayerListener {
 	public SkyrimRPG plugin;
@@ -52,6 +53,7 @@ public class SRPGPL extends PlayerListener {
 		}
 		else if (event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON)
 		{
+			//disabling lockpicking for alpha release
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				if (event.getClickedBlock().getType() == Material.IRON_DOOR)
@@ -60,7 +62,7 @@ public class SRPGPL extends PlayerListener {
 					Inventory inv = s.getInventory();
 					if (inv.contains(Material.IRON_INGOT))
 					{
-						if (pickLockSuccess(s, s.getEyeLocation()))
+						if (pickLockSuccess(s, event.getClickedBlock().getLocation()))
 						{
 							SkillManager sm = new SkillManager();
 							if (sm.processExperience(s, "Lockpicking"))
@@ -70,6 +72,8 @@ public class SRPGPL extends PlayerListener {
 							}
 							else SkillManager.progress.get(s).put("Lockpicking", SkillManager.progress.get(s).get("Lockpicking") + 1);
 							s.sendMessage(ChatColor.GREEN + "You picked the lock successfully!");
+							Door d = (Door) event.getClickedBlock().getState();
+							d.setOpen(true);
 						}
 						else
 						{
