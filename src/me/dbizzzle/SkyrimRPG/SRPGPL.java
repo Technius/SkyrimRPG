@@ -126,6 +126,7 @@ public class SRPGPL extends PlayerListener {
 				if (sm.processExperience(se, "PickPocket")) {
 					sm.incrementLevel("PickPocket", se);
 					SkillManager.progress.get(se).put("PickPocket", 0);
+					SkillManager.calculateLevel(se);
 				} else {
 					SkillManager.progress.get(se).put("PickPocket", SkillManager.progress.get(se).get("PickPocket") + 1);
 				}
