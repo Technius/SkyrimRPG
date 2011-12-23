@@ -77,6 +77,7 @@ public class SkillManager
 			String l;
 			HashMap<String, Integer> pr = new HashMap<String, Integer>();
 			HashMap<String, Integer> sk = new HashMap<String, Integer>();
+			int tl = 1;
 			while((l=br.readLine())!= null)
 			{
 				if(l.startsWith("#"))continue;
@@ -233,6 +234,19 @@ public class SkillManager
 					pr.put("Lockpicking", Integer.valueOf(progress));
 					sk.put("Lockpicking", Integer.valueOf(level));
 				}
+				if(l.startsWith("Level"))
+				{
+					if(tokens.length != 2)continue;
+					if(!tokens[0].equalsIgnoreCase("Level"))continue;
+					try
+					{
+						tl = Integer.parseInt(tokens[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						tl = 1;
+					}
+				}
 				if(sk.get("Archery")== null)sk.put("Archery", 0);
 				if(sk.get("Swordsmanship")== null)sk.put("Swordsmanship", 0);
 				if(sk.get("PickPocket")== null)sk.put("PickPocket", 0);
@@ -241,6 +255,7 @@ public class SkillManager
 				if(sk.get("Conjuration")== null)sk.put("Conjuration", 0);
 				skills.put(player, sk);
 				progress.put(player, pr);
+				level.put(player, tl);
 			}
 			
 			br.close();
@@ -270,6 +285,10 @@ public class SkillManager
 				fos.close();
 			}
 			BufferedWriter bw = new BufferedWriter(new FileWriter(save));
+			bw.write("#Level");
+			bw.newLine();
+			bw.write("Level: " + level.get(player));
+			bw.newLine();
 			bw.write("#Skill: level, progress");
 			bw.newLine();
 			bw.write("Archery: " + getSkillLevel("Archery", player) + "," + getProgress("Archery",player));
@@ -310,6 +329,7 @@ public class SkillManager
 		pr.put("Conjuration", Integer.valueOf(0));
 		skills.put(player, sk);
 		progress.put(player, pr);
+		level.put(player, 1);
 	}
 	/**
 	 * Calculates if the player levels up or not
