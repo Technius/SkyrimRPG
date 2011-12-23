@@ -83,12 +83,8 @@ public class SkyrimRPG extends JavaPlugin
 					else if(args[0].equalsIgnoreCase("right"))mode = 2;
 					else if(args[0].equalsIgnoreCase("both"))mode = 3;
 					Spell s = null;
-					if(args[1].toLowerCase().equalsIgnoreCase("raise zombie"))
-					{
-						try{s = SpellManager.Spell.valueOf(args[1].toUpperCase());}
-						catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
-					}
-					else s = Spell.RAISE_ZOMBIE;
+					try{s = SpellManager.Spell.valueOf(args[1].toUpperCase());}
+					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
 					switch(s)
 					{
 					case FIREBALL:
