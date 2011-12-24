@@ -19,6 +19,7 @@ public class SpellManager
 	public static HashMap<Player, List<Spell>>spells = new HashMap<Player, List<Spell>>();
 	public static HashMap<Player, Spell>boundleft = new HashMap<Player,Spell>();
 	public static HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
+	public static HashMap<Player, Integer>magicka = new HashMap<Player,Integer>();
 	SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{
