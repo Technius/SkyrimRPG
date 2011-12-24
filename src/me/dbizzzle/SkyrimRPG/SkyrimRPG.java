@@ -42,6 +42,7 @@ public class SkyrimRPG extends JavaPlugin
 		if(!checkFiles())createFiles();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadSkills(p);
 		log.info("[SkyrimRPG] Plugin enabled.");
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(), 0, 20);
 	}
 	
 	public void onDisable() 
