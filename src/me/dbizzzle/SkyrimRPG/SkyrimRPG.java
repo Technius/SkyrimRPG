@@ -360,6 +360,8 @@ public class SkyrimRPG extends JavaPlugin
 			else
 			{
 				player.sendMessage(ChatColor.GOLD + "Stats");
+				player.sendMessage(ChatColor.GREEN + "Level: " + SkillManager.level.get(player));
+				player.sendMessage(ChatColor.BLUE + "Magicka: " + SpellManager.magicka.get(player));
 				player.sendMessage("Archery: Level " + SkillManager.getSkillLevel("Archery", player));
 				player.sendMessage("Swordsmanship: Level " + SkillManager.getSkillLevel("Swordsmanship", player));
 				player.sendMessage("Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
