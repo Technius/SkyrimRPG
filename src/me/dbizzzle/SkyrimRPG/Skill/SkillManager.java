@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
+import me.dbizzzle.SkyrimRPG.SpellManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -81,6 +82,7 @@ public class SkillManager
 			HashMap<String, Integer> pr = new HashMap<String, Integer>();
 			HashMap<String, Integer> sk = new HashMap<String, Integer>();
 			int tl = 1;
+			int m = 0;
 			while((l=br.readLine())!= null)
 			{
 				if(l.startsWith("#"))continue;
@@ -250,6 +252,19 @@ public class SkillManager
 						tl = 1;
 					}
 				}
+				if(l.startsWith("Magicka"))
+				{
+					if(tokens.length != 2)continue;
+					if(!tokens[0].equalsIgnoreCase("Magicka"))continue;
+					try
+					{
+						m = Integer.parseInt(tokens[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						m = 0;
+					}
+				}
 				if(sk.get("Archery")== null)sk.put("Archery", 0);
 				if(sk.get("Swordsmanship")== null)sk.put("Swordsmanship", 0);
 				if(sk.get("PickPocket")== null)sk.put("PickPocket", 0);
@@ -259,6 +274,7 @@ public class SkillManager
 				skills.put(player, sk);
 				progress.put(player, pr);
 				level.put(player, tl);
+				SpellManager.magicka.put(player, m);
 			}
 			
 			br.close();
@@ -291,6 +307,10 @@ public class SkillManager
 			bw.write("#Level");
 			bw.newLine();
 			bw.write("Level: " + level.get(player));
+			bw.newLine();
+			bw.write("#Magicka");
+			bw.newLine();
+			bw.write("Magicka: " + SpellManager.magicka.get(player));
 			bw.newLine();
 			bw.write("#Skill: level, progress");
 			bw.newLine();
