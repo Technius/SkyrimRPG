@@ -126,12 +126,13 @@ public class SkyrimRPG extends JavaPlugin
 					default:
 						String spel = spell.getName();
 						Spell s = SpellManager.Spell.valueOf(args[1]);
-						if(s == null)sender.sendMessage("No such spell!");
-						else
+						try
 						{
+							s = SpellManager.Spell.valueOf(args[1].toUpperCase());
 							sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
 							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
 						}
+						catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
 						break;
 					}
 				} 
@@ -158,12 +159,13 @@ public class SkyrimRPG extends JavaPlugin
 						default:
 							String spel = spell.getName();
 							Spell s = SpellManager.Spell.valueOf(args[1]);
-							if(s == null)sender.sendMessage("No such spell!");
-							else
+							try
 							{
+								s = SpellManager.Spell.valueOf(args[1].toUpperCase());
 								sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
 								spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
 							}
+							catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
 							break;
 					}
 				} 
