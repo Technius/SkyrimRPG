@@ -20,6 +20,12 @@ public class SpellTimer
 	}
 	public void chargeFireball(Player player)
 	{
+		if(!p.sm.hasEnough(player, 30))
+		{
+			p.sm.magickaWarning(player, "Fireball");
+			return;
+		}
+		else SpellManager.magicka.put(player, SpellManager.magicka.get(player) - 30);
 		if(fireballcharge.contains(player))return;
 		fireballcharge.add(player);
 		p.getServer().getScheduler().scheduleSyncDelayedTask(p, new SpellRunnable("fireball", player), 50);
