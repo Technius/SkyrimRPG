@@ -37,6 +37,12 @@ public class SpellManager
 	}
 	public void raiseZombie(Player player)
 	{
+		if(!hasEnough(player, 60))
+		{
+			magickaWarning(player, "Raise Zombie");
+			return;
+		}
+		else magicka.put(player, magicka.get(player) - 60);
 		if(czombie.containsKey(player))czombie.get(player).remove();
 		Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.ZOMBIE);
 		int alevel = SkillManager.getSkillLevel("Conjuration", player);
