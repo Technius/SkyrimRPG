@@ -6,6 +6,7 @@ import java.util.List;
 
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -75,5 +76,14 @@ public class SpellManager
 		default:
 			return false;
 		}
+	}
+	public void magickaWarning(Player p, String s)
+	{
+		p.sendMessage(ChatColor.RED + "You do not have enough magicka to cast " + s + "!");
+	}
+	public boolean hasEnough(Player p, int magicka)
+	{
+		if(SpellManager.magicka.get(p) >= magicka)return true;
+		return false;
 	}
 }
