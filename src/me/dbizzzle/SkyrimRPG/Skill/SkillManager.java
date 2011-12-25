@@ -30,8 +30,11 @@ public class SkillManager
 		{
 			tot = tot + skills.get(player).get(s).intValue();
 		}
-		if(tot > cl * 5)level.put(player, new Integer(cl + 1));
-		player.sendMessage(ChatColor.GOLD + "You are now level " + level.get(player).intValue());
+		if(tot > cl * 5)
+		{
+			level.put(player, new Integer(cl + 1));
+			player.sendMessage(ChatColor.GOLD + "You are now level " + level.get(player).intValue());
+		}
 		return level.get(player).intValue();
 	}
 	public static boolean isLevelingUp(Player player)
