@@ -242,6 +242,31 @@ public class SkillManager
 					pr.put("Lockpicking", Integer.valueOf(progress));
 					sk.put("Lockpicking", Integer.valueOf(level));
 				}
+				if(l.startsWith("Axecraft"))
+				{
+					if(tokens.length != 2) continue;
+					if(!tokens[0].equalsIgnoreCase("Axecraft"))continue;
+					delim = "[ ]+";
+					String[] spaced = tokens[1].split(delim);
+					String x = "";
+					for(String p:spaced)x=x+p;
+					String[] sep = x.split("[,]",2);
+					if(sep.length != 2) continue;
+					int level = 1;
+					int progress = 0;
+					try
+					{
+						level = Integer.parseInt(sep[0]);
+						progress = Integer.parseInt(sep[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						level = 1;
+						progress = 0;
+					}
+					pr.put("Axecraft", Integer.valueOf(progress));
+					sk.put("Axecraft", Integer.valueOf(level));
+				}
 				if(l.startsWith("Level"))
 				{
 					if(tokens.length != 2)continue;
@@ -274,6 +299,7 @@ public class SkillManager
 				if(sk.get("Destruction")== null)sk.put("Destruction", 0);
 				if(sk.get("Lockpicking")== null)sk.put("Lockpicking", 0);
 				if(sk.get("Conjuration")== null)sk.put("Conjuration", 0);
+				if(sk.get("Axecraft")== null)sk.put("Axecraft", 0);
 				skills.put(player, sk);
 				progress.put(player, pr);
 				level.put(player, tl);
@@ -329,6 +355,8 @@ public class SkillManager
 			bw.newLine();
 			bw.write("Lockpicking: " + getSkillLevel("Lockpicking", player) + "," + getProgress("Lockpicking", player));
 			bw.newLine();
+			bw.write("Axecraft: " + getSkillLevel("Axecraft", player) + "," + getProgress("Axecraft", player));
+			bw.newLine();
 			bw.flush();
 			bw.close();
 		}
@@ -346,6 +374,7 @@ public class SkillManager
 		sk.put("Lockpicking", Integer.valueOf(1));
 		sk.put("Destruction", Integer.valueOf(1));
 		sk.put("Conjuration", Integer.valueOf(1));
+		sk.put("Axecraft", Integer.valueOf(1));
 		HashMap<String, Integer> pr = new HashMap<String,Integer>();
 		pr.put("Archery", Integer.valueOf(0));
 		pr.put("PickPocket", Integer.valueOf(0));
@@ -353,6 +382,7 @@ public class SkillManager
 		pr.put("Lockpicking", Integer.valueOf(0));
 		pr.put("Destruction", Integer.valueOf(0));
 		pr.put("Conjuration", Integer.valueOf(0));
+		pr.put("Axecraft", Integer.valueOf(0));
 		skills.put(player, sk);
 		progress.put(player, pr);
 		level.put(player, 1);
@@ -444,6 +474,21 @@ public class SkillManager
 		{
 			int alevel = SkillManager.getSkillLevel("Lockpicking", player);
 			int pro = SkillManager.getProgress("Lockpicking", player);
+			int t = 5;
+			
+			for(int i = 1;i<alevel;i++) {
+				t=t+2;
+			}
+			
+			if(pro >= t) {
+				return true;
+			}
+			return false;
+		}
+		else if (skill.equalsIgnoreCase("Axecraft"))
+		{
+			int alevel = SkillManager.getSkillLevel("Axecraft", player);
+			int pro = SkillManager.getProgress("Axecraft", player);
 			int t = 5;
 			
 			for(int i = 1;i<alevel;i++) {
