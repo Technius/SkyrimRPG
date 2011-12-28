@@ -293,13 +293,20 @@ public class SkillManager
 						m = 0;
 					}
 				}
-				if(sk.get("Archery")== null)sk.put("Archery", 0);
-				if(sk.get("Swordsmanship")== null)sk.put("Swordsmanship", 0);
-				if(sk.get("PickPocket")== null)sk.put("PickPocket", 0);
-				if(sk.get("Destruction")== null)sk.put("Destruction", 0);
-				if(sk.get("Lockpicking")== null)sk.put("Lockpicking", 0);
-				if(sk.get("Conjuration")== null)sk.put("Conjuration", 0);
-				if(sk.get("Axecraft")== null)sk.put("Axecraft", 0);
+				if(sk.get("Archery")== null)sk.put("Archery", 1);
+				if(sk.get("Swordsmanship")== null)sk.put("Swordsmanship", 1);
+				if(sk.get("PickPocket")== null)sk.put("PickPocket", 1);
+				if(sk.get("Destruction")== null)sk.put("Destruction", 1);
+				if(sk.get("Lockpicking")== null)sk.put("Lockpicking", 1);
+				if(sk.get("Conjuration")== null)sk.put("Conjuration", 1);
+				if(sk.get("Axecraft")== null)sk.put("Axecraft", 1);
+				if(pr.get("Archery")== null)pr.put("Archery", 1);
+				if(pr.get("Swordsmanship")== null)pr.put("Swordsmanship", 0);
+				if(pr.get("PickPocket")== null)pr.put("PickPocket", 0);
+				if(pr.get("Destruction")== null)pr.put("Destruction", 0);
+				if(pr.get("Lockpicking")== null)pr.put("Lockpicking", 0);
+				if(pr.get("Conjuration")== null)pr.put("Conjuration", 0);
+				if(pr.get("Axecraft")== null)pr.put("Axecraft", 0);
 				skills.put(player, sk);
 				progress.put(player, pr);
 				level.put(player, tl);
