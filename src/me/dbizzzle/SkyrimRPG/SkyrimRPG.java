@@ -351,7 +351,7 @@ public class SkyrimRPG extends JavaPlugin
 				player.sendMessage(ChatColor.RED + "/stats <page>" + ChatColor.YELLOW + " - displays your stats");
 			}
 		}
-		else if(command.getName().equalsIgnoreCase("stats"))
+		else if(command.getName().equalsIgnoreCase("skystats"))
 		{
 			if(player == null)
 			{
@@ -364,9 +364,11 @@ public class SkyrimRPG extends JavaPlugin
 				player.sendMessage(ChatColor.BLUE + "Magicka: " + SpellManager.magicka.get(player));
 				player.sendMessage("Archery: Level " + SkillManager.getSkillLevel("Archery", player));
 				player.sendMessage("Swordsmanship: Level " + SkillManager.getSkillLevel("Swordsmanship", player));
+				player.sendMessage("Axecraft: Level " + SkillManager.getSkillLevel("Axecraft", player));
+				player.sendMessage("Destruction: Level " + SkillManager.getSkillLevel("Destruction", player));
+				player.sendMessage("Conjuration: Level " + SkillManager.getSkillLevel("Conjuration", player));
 				player.sendMessage("Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
 				player.sendMessage("Lockpicking: Level " + SkillManager.getSkillLevel("Lockpicking", player));
-				player.sendMessage("Destruction: Level " + SkillManager.getSkillLevel("Destruction", player));
 			}
 		}
 		return true;
