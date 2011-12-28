@@ -393,6 +393,7 @@ public class SkillManager
 		skills.put(player, sk);
 		progress.put(player, pr);
 		level.put(player, 1);
+		SpellManager.magicka.put(player, 0);
 	}
 	/**
 	 * Calculates if the player levels up or not
