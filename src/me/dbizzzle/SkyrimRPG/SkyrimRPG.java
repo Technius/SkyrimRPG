@@ -348,7 +348,7 @@ public class SkyrimRPG extends JavaPlugin
 				player.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + this.getDescription().getVersion());
 				player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
 				player.sendMessage("========================");
-				player.sendMessage(ChatColor.RED + "/stats <page>" + ChatColor.YELLOW + " - displays your stats");
+				player.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
 			}
 		}
 		else if(command.getName().equalsIgnoreCase("skystats"))
