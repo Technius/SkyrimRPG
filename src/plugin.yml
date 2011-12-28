@@ -24,7 +24,7 @@ commands:
       aliases: srpg
       usage: |
          /srpg <action>
-   stats:
+   skystats:
       description: Displays your skill level
       usage: |
          /stats <page>
