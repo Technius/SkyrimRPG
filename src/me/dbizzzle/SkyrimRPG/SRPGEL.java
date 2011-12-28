@@ -1,6 +1,7 @@
 package me.dbizzzle.SkyrimRPG;
 
 import java.util.List;
+import java.util.Random;
 
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
@@ -80,6 +81,19 @@ public class SRPGEL extends EntityListener
 						SkillManager.calculateLevel(player);
 					}
 					else SkillManager.progress.get(player).put("Swordsmanship", SkillManager.progress.get(player).get("Swordsmanship") + 1);
+				}
+				else if(t.equalsIgnoreCase("Axe"))
+				{
+					int alevel = SkillManager.getSkillLevel("Axecraft", player);
+					int crit = new Random().nextInt(99);
+					e.setDamage(e.getDamage() + (alevel/10) * crit<=alevel ? 2 : 1);
+					if(sm.processExperience(player, "Axecraft"))
+					{
+						sm.incrementLevel("Axecraft", player);
+						SkillManager.progress.get(player).put("Axecraft", 0);
+						SkillManager.calculateLevel(player);
+					}
+					else SkillManager.progress.get(player).put("Axecraft", SkillManager.progress.get(player).get("Axecraft") + 1);
 				}
 			}
 		}
