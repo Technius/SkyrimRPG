@@ -30,7 +30,7 @@ public class SkillManager
 		{
 			tot = tot + skills.get(player).get(s).intValue();
 		}
-		if(tot > cl * 5)
+		if(tot > cl * 7)
 		{
 			level.put(player, new Integer(cl + 1));
 			player.sendMessage(ChatColor.GOLD + "You are now level " + level.get(player).intValue());
@@ -45,7 +45,7 @@ public class SkillManager
 		{
 			tot = tot + skills.get(player).get(s).intValue();
 		}
-		if(tot > cl * 5)return true;
+		if(tot > cl * 7)return true;
 		return false;
 	}
 	public static HashMap<String, Integer> getSkills (Player player)
