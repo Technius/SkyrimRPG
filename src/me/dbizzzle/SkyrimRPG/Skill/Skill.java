@@ -10,7 +10,7 @@ public abstract class Skill
 	public static final int STEALTH = 3;
 	public enum Battle
 	{
-		SWORDSMANSHIP, ARCHERY;
+		SWORDSMANSHIP, ARCHERY, AXECRAFT;
 	}
 	public enum Magic
 	{
