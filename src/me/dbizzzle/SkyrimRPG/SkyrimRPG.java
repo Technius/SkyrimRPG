@@ -54,18 +54,6 @@ public class SkyrimRPG extends JavaPlugin
 			String label, String[] args) {
 		Player player = null;
 		if(sender instanceof Player)player = (Player)sender;
-		
-		if (command.getName().equalsIgnoreCase("fireball")) {
-			if (player == null) 
-			{
-				sender.sendMessage(ChatColor.RED + "Console can not use magic.");
-			} 
-			else if (player.hasPermission("skyrimrpg.fireball")) 
-			{
-				if(SpellManager.spells.get(player).contains(Spell.FIREBALL))sm.shootFireball(player, 100);
-			}
-		}
-		
 		if (command.getName().equalsIgnoreCase("bindspell")) {
 			if (player == null) 
 			{
