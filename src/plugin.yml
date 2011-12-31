@@ -3,10 +3,6 @@ version: 0.1.1a
 authors: [dbizzzle, Technius]
 main: me.dbizzzle.SkyrimRPG.SkyrimRPG
 commands:
-   fireball:
-      description: Shoots a fireball
-      usage: |
-          /fireball
    addspell:
       description: Adds a spell to the specified player
       usage: |
