@@ -71,6 +71,14 @@ public class SkyrimRPG extends JavaPlugin
 					if(args[0].equalsIgnoreCase("left"))mode = 1;
 					else if(args[0].equalsIgnoreCase("right"))mode = 2;
 					else if(args[0].equalsIgnoreCase("both"))mode = 3;
+					if(args[1].equalsIgnoreCase("none"))
+					{
+						if(mode == 1 ||mode == 3)SpellManager.boundleft.remove(player);
+						if(mode == 2 ||mode == 3)SpellManager.boundright.remove(player);
+						if(mode == 3)player.sendMessage(ChatColor.GREEN + "Spell bindings removed from both hands");
+						else player.sendMessage(ChatColor.GREEN + "Spell bindings removed from " + (mode == 1 ? "left" : "right") + " hand");
+						return true;
+					}
 					Spell s = null;
 					try{s = SpellManager.Spell.valueOf(args[1].toUpperCase());}
 					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
