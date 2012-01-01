@@ -110,6 +110,23 @@ public class SpellManager
 		saveSpells(p);
 		return spells.get(p).remove(s);
 	}
+	public void useBook(Player p, int id)
+	{
+		Spell s = null;
+		switch(id)
+		{
+		case 1: s = Spell.FIREBALL; break;
+		case 2: s = Spell.RAISE_ZOMBIE; break;
+		}
+		if(s == null)return;
+		if(hasSpell(p, s))
+		{
+			p.sendMessage(ChatColor.RED + "You already know how to cast " + s.toString());
+			return;
+		}
+		addSpell(p, s);
+		p.sendMessage(ChatColor.GREEN + "You have learned how to cast " + s.toString());
+	}
 	public void saveSpells(Player p)
 	{
 		List<Spell> l = spells.get(p);
