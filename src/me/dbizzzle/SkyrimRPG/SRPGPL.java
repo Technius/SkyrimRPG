@@ -153,7 +153,7 @@ public class SRPGPL extends PlayerListener {
 	{
 		SkillManager sm = new SkillManager();
 		sm.setPlugin(plugin);
-		sm.saveSkills(event.getPlayer());
+		sm.saveData(event.getPlayer());
 	}
 
 	public boolean pickLockSuccess(Player pla, Location loc)
