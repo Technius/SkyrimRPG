@@ -103,7 +103,7 @@ public class SkyrimRPG extends JavaPlugin
 			}
 			else
 			{
-				player.sendMessage("You don't have magical powers");
+				player.sendMessage("You aren't allowed to bind spells.");
 			}
 		}
 		
@@ -132,6 +132,7 @@ public class SkyrimRPG extends JavaPlugin
 							s = SpellManager.Spell.valueOf(args[1].toUpperCase());
 							sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
 							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
+							sm.addSpell(spell, s);
 						}
 						catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
 						break;
@@ -231,13 +232,15 @@ public class SkyrimRPG extends JavaPlugin
 						
 					default:
 						String spel = spell.getName();
-						Spell s = SpellManager.Spell.valueOf(args[1]);
-						if(s == null)sender.sendMessage("No such spell!");
-						else
+						Spell s = null;
+						try
 						{
-							sender.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
-							spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
+							s = SpellManager.Spell.valueOf(args[1]);
 						}
+						catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
+						sender.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
+						spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
+						sm.removeSpell(player, s);
 						break;
 					}
 				} 
