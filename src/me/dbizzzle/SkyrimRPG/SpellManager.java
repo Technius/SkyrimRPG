@@ -1,10 +1,13 @@
 package me.dbizzzle.SkyrimRPG;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -135,6 +138,34 @@ public class SpellManager
 		catch(IOException ioe)
 		{
 			this.p.log.severe("[SkyrimRPG]FAILED TO SAVE SPELLS");
+		}
+	}
+	public void loadSpells(Player p)
+	{
+		List<Spell>l = new ArrayList<Spell>();
+		File magic = new File(this.p.getDataFolder().getPath() + File.separator + "Magic");
+		if(!magic.exists())magic.mkdir();
+		File sf = new File(magic.getPath() + File.separator + p.getName() + ".txt");
+		try
+		{
+			if(!sf.exists())
+			{
+				spells.put(p, l);
+				return;
+			}
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(sf)));
+			String s;
+			while((s=br.readLine()) != null)
+			{
+				if(s.startsWith("#"))continue;
+				s.replaceAll(" ", "");
+				l.add(Spell.valueOf(s));
+			}
+			spells.put(p, l);
+		}
+		catch(IOException ioe)
+		{
+			this.p.log.severe("[SkyrimRPG]FAILED TO LOAD SPELLS");
 		}
 	}
 }
