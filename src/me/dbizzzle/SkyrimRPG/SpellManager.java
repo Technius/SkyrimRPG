@@ -92,4 +92,12 @@ public class SpellManager
 		if(SpellManager.magicka.get(p) >= magicka)return true;
 		return false;
 	}
+	public void addSpell(Player p, Spell s)
+	{
+		if(!spells.get(p).contains(s))spells.get(p).add(s);
+	}
+	public boolean removeSpell(Player p, Spell s)
+	{
+		return spells.get(p).remove(s);
+	}
 }
