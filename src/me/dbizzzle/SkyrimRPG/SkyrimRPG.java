@@ -47,7 +47,7 @@ public class SkyrimRPG extends JavaPlugin
 	
 	public void onDisable() 
 	{
-		for(Player p: this.getServer().getOnlinePlayers())sk.saveSkills(p);
+		for(Player p: this.getServer().getOnlinePlayers())sk.saveData(p);
 		log.info("[SkyrimRPG] Plugin disabled.");
 	}
 	public boolean onCommand(CommandSender sender, Command command,
