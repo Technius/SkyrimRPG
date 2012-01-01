@@ -82,6 +82,10 @@ public class SkyrimRPG extends JavaPlugin
 					Spell s = null;
 					try{s = SpellManager.Spell.valueOf(args[1].toUpperCase());}
 					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
+					if(!sm.hasSpell(player, s))
+					{
+						player.sendMessage(ChatColor.RED + "You don't know how to cast this spell.");
+					}
 					switch(s)
 					{
 					case FIREBALL:
