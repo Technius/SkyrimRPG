@@ -356,15 +356,16 @@ public class SkyrimRPG extends JavaPlugin
 			else
 			{
 				player.sendMessage(ChatColor.GOLD + "Stats");
+				player.sendMessage(ChatColor.RED + "Combat" + ChatColor.WHITE + "|" + ChatColor.BLUE + "Magict" + ChatColor.WHITE + "|" + ChatColor.GRAY + "Stealth");
 				player.sendMessage(ChatColor.GREEN + "Level: " + SkillManager.level.get(player));
 				player.sendMessage(ChatColor.BLUE + "Magicka: " + SpellManager.magicka.get(player));
-				player.sendMessage("Archery: Level " + SkillManager.getSkillLevel("Archery", player));
-				player.sendMessage("Swordsmanship: Level " + SkillManager.getSkillLevel("Swordsmanship", player));
-				player.sendMessage("Axecraft: Level " + SkillManager.getSkillLevel("Axecraft", player));
-				player.sendMessage("Destruction: Level " + SkillManager.getSkillLevel("Destruction", player));
-				player.sendMessage("Conjuration: Level " + SkillManager.getSkillLevel("Conjuration", player));
-				player.sendMessage("Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
-				player.sendMessage("Lockpicking: Level " + SkillManager.getSkillLevel("Lockpicking", player));
+				player.sendMessage(ChatColor.RED + "Archery: Level " + SkillManager.getSkillLevel("Archery", player));
+				player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + SkillManager.getSkillLevel("Swordsmanship", player));
+				player.sendMessage(ChatColor.RED + "Axecraft: Level " + SkillManager.getSkillLevel("Axecraft", player));
+				player.sendMessage(ChatColor.BLUE + "Destruction: Level " + SkillManager.getSkillLevel("Destruction", player));
+				player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + SkillManager.getSkillLevel("Conjuration", player));
+				player.sendMessage(ChatColor.GRAY +" Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
+				player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + SkillManager.getSkillLevel("Lockpicking", player));
 			}
 		}
 		return true;
