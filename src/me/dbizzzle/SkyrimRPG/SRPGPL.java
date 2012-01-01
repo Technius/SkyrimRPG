@@ -112,6 +112,17 @@ public class SRPGPL extends PlayerListener {
 				plugin.sm.castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
 			}
 		}
+		else if(event.getPlayer().getItemInHand().getType() == Material.BOOK)
+		{
+			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				ItemStack b = event.getPlayer().getItemInHand();
+				if(b.getDurability() != 0)
+				{
+					plugin.sm.useBook(event.getPlayer(), b.getDurability());
+				}
+			}
+		}
 }
 
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
