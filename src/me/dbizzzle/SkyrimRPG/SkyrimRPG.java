@@ -87,18 +87,21 @@ public class SkyrimRPG extends JavaPlugin
 						player.sendMessage(ChatColor.RED + "You don't know how to cast this spell.");
 						return true;
 					}
-					switch(s)
+					else
 					{
-					case FIREBALL:
-						SpellManager.boundleft.put(player, Spell.FIREBALL);
-						SpellManager.boundright.put(player, Spell.UFIREBALL);
-						player.sendMessage(ChatColor.GREEN + "Fireball bound to both hands");
-						break;
-					case RAISE_ZOMBIE:
-						if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, Spell.RAISE_ZOMBIE);
-						if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, Spell.RAISE_ZOMBIE);
-						if(mode == 3)player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to both hands");
-						else player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to " + (mode == 1 ? "left" : "right") + " hand");
+						switch(s)
+						{
+						case FIREBALL:
+							SpellManager.boundleft.put(player, Spell.FIREBALL);
+							SpellManager.boundright.put(player, Spell.UFIREBALL);
+							player.sendMessage(ChatColor.GREEN + "Fireball bound to both hands");
+							break;
+						case RAISE_ZOMBIE:
+							if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, Spell.RAISE_ZOMBIE);
+							if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, Spell.RAISE_ZOMBIE);
+							if(mode == 3)player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to both hands");
+							else player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to " + (mode == 1 ? "left" : "right") + " hand");
+						}
 					}
 				}
 			}
@@ -236,7 +239,7 @@ public class SkyrimRPG extends JavaPlugin
 						Spell s = null;
 						try
 						{
-							s = SpellManager.Spell.valueOf(args[1]);
+							s = SpellManager.Spell.valueOf(args[1].toUpperCase());
 						}
 						catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
 						sender.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
