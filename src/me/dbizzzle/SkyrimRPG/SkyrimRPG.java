@@ -85,6 +85,7 @@ public class SkyrimRPG extends JavaPlugin
 					if(!sm.hasSpell(player, s))
 					{
 						player.sendMessage(ChatColor.RED + "You don't know how to cast this spell.");
+						return true;
 					}
 					switch(s)
 					{
