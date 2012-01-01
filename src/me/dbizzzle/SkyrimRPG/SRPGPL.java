@@ -37,6 +37,7 @@ public class SRPGPL extends PlayerListener {
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		boolean disable = false;
+		/**
 		if(event.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD)
 		{
 			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
@@ -52,7 +53,8 @@ public class SRPGPL extends PlayerListener {
 				event.getPlayer().sendMessage("Fireball shot!");
 			}
 		}
-		else if (event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON && disable)
+		**/
+		if (event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON && disable)
 		{
 			//disabling lockpicking for alpha release
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
