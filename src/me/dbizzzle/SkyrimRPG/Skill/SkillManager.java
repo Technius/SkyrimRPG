@@ -78,6 +78,8 @@ public class SkillManager
 	public void loadData(Player player)
 	{
 		loadSkills(player);
+		SpellManager sm = new SpellManager(p);
+		sm.loadSpells(player);
 	}
 	public void loadSkills(Player player)
 	{
@@ -385,6 +387,12 @@ public class SkillManager
 		{
 			p.log.severe("[SkyrimRPG] Could not save player data!");
 		}
+	}
+	public void saveData(Player player)
+	{
+		saveSkills(player);
+		SpellManager sm = new SpellManager(p);
+		sm.saveSpells(player);
 	}
 	public void resetSkills(Player player)
 	{
