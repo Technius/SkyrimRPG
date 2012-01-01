@@ -1,5 +1,10 @@
 package me.dbizzzle.SkyrimRPG;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,10 +99,42 @@ public class SpellManager
 	}
 	public void addSpell(Player p, Spell s)
 	{
+		saveSpells(p);
 		if(!spells.get(p).contains(s))spells.get(p).add(s);
 	}
 	public boolean removeSpell(Player p, Spell s)
 	{
+		saveSpells(p);
 		return spells.get(p).remove(s);
+	}
+	public void saveSpells(Player p)
+	{
+		List<Spell> l = spells.get(p);
+		File magic = new File(this.p.getDataFolder().getPath() + File.separator + "Magic");
+		if(!magic.exists())magic.mkdir();
+		File sf = new File(magic.getPath() + File.separator + p.getName() + ".txt");
+		try
+		{
+			if(!sf.exists())
+			{
+				FileOutputStream fos = new FileOutputStream(sf);
+				fos.flush();
+				fos.close();
+			}
+			BufferedWriter bw = new BufferedWriter(new FileWriter(sf));
+			bw.write("#Spells list for SkyrimRPG, do NOT edit unless you like errors.");
+			bw.newLine();
+			for(Spell x:l)
+			{
+				bw.write(x.toString());
+				bw.newLine();
+			}
+			bw.flush();
+			bw.close();
+		}
+		catch(IOException ioe)
+		{
+			this.p.log.severe("[SkyrimRPG]FAILED TO SAVE SPELLS");
+		}
 	}
 }
