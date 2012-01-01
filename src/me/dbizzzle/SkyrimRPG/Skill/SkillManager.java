@@ -23,7 +23,14 @@ public class SkillManager
 	public static HashMap<Player, HashMap<String, Integer>> progress = new HashMap<Player, HashMap<String, Integer>>();
 	public static HashMap<Player, Integer> level = new HashMap<Player,Integer>();
 	SkyrimRPG p = null;
-	private Logger log = Logger.getLogger("Minecraft");
+	public SkillManager()
+	{
+		
+	}
+	public SkillManager(SkyrimRPG a)
+	{
+		p = a;
+	}
 	public static int calculateLevel(Player player)
 	{
 		int tot = 0;
@@ -67,6 +74,10 @@ public class SkillManager
 		int l = skills.get(player).get(skill).intValue() + 1;
 		skills.get(player).put(skill, Integer.valueOf(l));
 		player.sendMessage(skill + " increased to level " + l);
+	}
+	public void loadData(Player player)
+	{
+		loadSkills(player);
 	}
 	public void loadSkills(Player player)
 	{
