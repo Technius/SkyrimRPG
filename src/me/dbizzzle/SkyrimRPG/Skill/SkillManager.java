@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 import me.dbizzzle.SkyrimRPG.SpellManager;
@@ -22,6 +23,7 @@ public class SkillManager
 	public static HashMap<Player, HashMap<String, Integer>> progress = new HashMap<Player, HashMap<String, Integer>>();
 	public static HashMap<Player, Integer> level = new HashMap<Player,Integer>();
 	SkyrimRPG p = null;
+	private Logger log = Logger.getLogger("Minecraft");
 	public static int calculateLevel(Player player)
 	{
 		int tot = 0;
@@ -273,7 +275,8 @@ public class SkillManager
 					if(!tokens[0].equalsIgnoreCase("Level"))continue;
 					try
 					{
-						tl = Integer.parseInt(tokens[1]);
+						String s = tokens[1].replaceAll(" ", "");
+						tl = Integer.parseInt(s);
 					}
 					catch(NumberFormatException nfe)
 					{
