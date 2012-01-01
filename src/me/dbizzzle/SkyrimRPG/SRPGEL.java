@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Random;
 
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
+import net.minecraft.server.EntityPlayer;
 
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
@@ -104,10 +106,17 @@ public class SRPGEL extends EntityListener
 					else SkillManager.progress.get(player).put("Axecraft", SkillManager.progress.get(player).get("Axecraft") + 1);
 				}
 			}
+			if(e.getEntity() instanceof Player)
+			{
+				Player player = (Player)e.getEntity();
+				EntityPlayer ep = ((CraftPlayer)player).getHandle();
+				boolean ib = ep.K();
+				//if(ib)player.sendMessage("You're blocking!");
+			}
 		}
 		else
 		{
-
+			
 		}
 	}
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
