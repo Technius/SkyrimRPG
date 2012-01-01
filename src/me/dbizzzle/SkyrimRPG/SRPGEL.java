@@ -68,6 +68,14 @@ public class SRPGEL extends EntityListener
 			{
 				SkillManager sm = new SkillManager();
 				Player player = (Player)e.getDamager();
+				if(SpellManager.czombie.containsKey(player))
+				{
+					Zombie z = SpellManager.czombie.get(player);
+					if(!z.isDead())
+					{
+						if(e.getEntity() instanceof LivingEntity)z.setTarget((LivingEntity)e.getEntity());
+					}
+				}
 				String t = ToolComparer.getType(player.getItemInHand());
 				if(t == null) return;
 				if(t.equalsIgnoreCase("Sword"))
