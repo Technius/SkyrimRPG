@@ -369,17 +369,36 @@ public class SkyrimRPG extends JavaPlugin
 			}
 			else
 			{
-				player.sendMessage(ChatColor.GOLD + "Stats");
-				player.sendMessage(ChatColor.RED + "Combat" + ChatColor.WHITE + "|" + ChatColor.BLUE + "Magic" + ChatColor.WHITE + "|" + ChatColor.GRAY + "Stealth");
-				player.sendMessage(ChatColor.GREEN + "Level: " + SkillManager.level.get(player));
-				player.sendMessage(ChatColor.BLUE + "Magicka: " + SpellManager.magicka.get(player));
-				player.sendMessage(ChatColor.RED + "Archery: Level " + SkillManager.getSkillLevel("Archery", player));
-				player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + SkillManager.getSkillLevel("Swordsmanship", player));
-				player.sendMessage(ChatColor.RED + "Axecraft: Level " + SkillManager.getSkillLevel("Axecraft", player));
-				player.sendMessage(ChatColor.BLUE + "Destruction: Level " + SkillManager.getSkillLevel("Destruction", player));
-				player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + SkillManager.getSkillLevel("Conjuration", player));
-				player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
-				player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + SkillManager.getSkillLevel("Lockpicking", player));
+				int page = 0;
+				if(args.length != 0 && args.length != 1)
+				{
+					player.sendMessage(ChatColor.RED + "Usage: /skystats <page>");
+					return true;
+				}
+				try{page = Integer.parseInt(args[0]);}catch(NumberFormatException nfe){page = 0;}
+				switch(page)
+				{
+				case 0:
+					player.sendMessage(ChatColor.GOLD + "Stats Page 1 of 2");
+					player.sendMessage(ChatColor.RED + "Combat" + ChatColor.WHITE + "|" + ChatColor.BLUE + "Magic" + ChatColor.WHITE + "|" + ChatColor.GRAY + "Stealth");
+					player.sendMessage(ChatColor.GREEN + "Level: " + SkillManager.level.get(player));
+					player.sendMessage(ChatColor.BLUE + "Magicka: " + SpellManager.magicka.get(player));
+					player.sendMessage(ChatColor.RED + "Archery: Level " + SkillManager.getSkillLevel("Archery", player));
+					player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + SkillManager.getSkillLevel("Swordsmanship", player));
+					player.sendMessage(ChatColor.RED + "Axecraft: Level " + SkillManager.getSkillLevel("Axecraft", player));
+					player.sendMessage(ChatColor.RED + "Blocking: Level " + SkillManager.getSkillLevel("Blocking", player));
+					player.sendMessage(ChatColor.BLUE + "Destruction: Level " + SkillManager.getSkillLevel("Destruction", player));
+					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + SkillManager.getSkillLevel("Conjuration", player));
+					break;
+				case 1:
+					player.sendMessage(ChatColor.GOLD + "Stats Page 2 of 2");
+					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
+					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + SkillManager.getSkillLevel("Lockpicking", player));
+					break;
+				default:
+					player.sendMessage(ChatColor.GOLD + "Stats Page " + page + " of 2");
+					break;
+				}
 			}
 		}
 		return true;
