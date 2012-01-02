@@ -38,7 +38,7 @@ public class SpellManager
 	public void flames(Player player)
 	{
 		final Vector direction = player.getEyeLocation().getDirection().multiply(2);
-		for(int i = 0;i > 4; i++)
+		for(int i = 0;i < 4; i++)
 		{
 			SmallFireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), SmallFireball.class);
 			fireball.setShooter(player);
