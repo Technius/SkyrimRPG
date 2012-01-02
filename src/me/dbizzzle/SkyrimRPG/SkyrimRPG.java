@@ -375,7 +375,10 @@ public class SkyrimRPG extends JavaPlugin
 					player.sendMessage(ChatColor.RED + "Usage: /skystats <page>");
 					return true;
 				}
-				try{page = Integer.parseInt(args[0]);}catch(NumberFormatException nfe){page = 0;}
+				if(args.length == 1)
+				{
+					try{page = Integer.parseInt(args[0]);}catch(NumberFormatException nfe){page = 0;}
+				}
 				switch(page)
 				{
 				case 0:
