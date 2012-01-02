@@ -340,7 +340,7 @@ public class SkillManager
 				if(sk.get("Lockpicking")== null)sk.put("Lockpicking", 1);
 				if(sk.get("Conjuration")== null)sk.put("Conjuration", 1);
 				if(sk.get("Axecraft")== null)sk.put("Axecraft", 1);
-				if(sk.get("Blocking")== null)sk.put("Blocking", 1);
+				if(!sk.containsKey("Blocking"))sk.put("Blocking", 1);
 				//
 				if(pr.get("Archery")== null)pr.put("Archery", 1);
 				if(pr.get("Swordsmanship")== null)pr.put("Swordsmanship", 0);
@@ -349,7 +349,7 @@ public class SkillManager
 				if(pr.get("Lockpicking")== null)pr.put("Lockpicking", 0);
 				if(pr.get("Conjuration")== null)pr.put("Conjuration", 0);
 				if(pr.get("Axecraft")== null)pr.put("Axecraft", 0);
-				if(pr.get("Blocking")== null)pr.put("Blocking", 0);
+				if(!pr.containsKey("Blocking"))pr.put("Blocking", 0);
 				skills.put(player, sk);
 				progress.put(player, pr);
 				level.put(player, tl);
