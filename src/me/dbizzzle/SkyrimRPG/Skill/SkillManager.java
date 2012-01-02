@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 
 public class SkillManager 
 {
+	Logger log = Logger.getLogger("Minecraft");
 	public static HashMap<Player, HashMap<String, Integer>> skills = new HashMap<Player, HashMap<String, Integer>>();
 	public static HashMap<Player, HashMap<String, Integer>> progress = new HashMap<Player, HashMap<String, Integer>>();
 	public static HashMap<Player, Integer> level = new HashMap<Player,Integer>();
@@ -282,6 +283,28 @@ public class SkillManager
 					pr.put("Axecraft", Integer.valueOf(progress));
 					sk.put("Axecraft", Integer.valueOf(level));
 				}
+				if(l.startsWith("Blocking"))
+				{
+					if(tokens.length != 2) continue;
+					if(!tokens[0].equalsIgnoreCase("Blocking"))continue;
+					String x = tokens[1].replaceAll(" ", "");
+					String[] sep = x.split("[,]",2);
+					if(sep.length != 2) continue;
+					int level = 1;
+					int progress = 0;
+					try
+					{
+						level = Integer.parseInt(sep[0]);
+						progress = Integer.parseInt(sep[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						level = 1;
+						progress = 0;
+					}
+					pr.put("Blocking", Integer.valueOf(progress));
+					sk.put("Blocking", Integer.valueOf(level));
+				}
 				if(l.startsWith("Level"))
 				{
 					if(tokens.length != 2)continue;
@@ -302,7 +325,8 @@ public class SkillManager
 					if(!tokens[0].equalsIgnoreCase("Magicka"))continue;
 					try
 					{
-						m = Integer.parseInt(tokens[1]);
+						String s = tokens[1].replaceAll(" ", "");
+						m = Integer.parseInt(s);
 					}
 					catch(NumberFormatException nfe)
 					{
@@ -316,6 +340,8 @@ public class SkillManager
 				if(sk.get("Lockpicking")== null)sk.put("Lockpicking", 1);
 				if(sk.get("Conjuration")== null)sk.put("Conjuration", 1);
 				if(sk.get("Axecraft")== null)sk.put("Axecraft", 1);
+				if(sk.get("Axecraft")== null)sk.put("Blocking", 1);
+				//
 				if(pr.get("Archery")== null)pr.put("Archery", 1);
 				if(pr.get("Swordsmanship")== null)pr.put("Swordsmanship", 0);
 				if(pr.get("PickPocket")== null)pr.put("PickPocket", 0);
@@ -323,6 +349,7 @@ public class SkillManager
 				if(pr.get("Lockpicking")== null)pr.put("Lockpicking", 0);
 				if(pr.get("Conjuration")== null)pr.put("Conjuration", 0);
 				if(pr.get("Axecraft")== null)pr.put("Axecraft", 0);
+				if(pr.get("Axecraft")== null)pr.put("Blocking", 0);
 				skills.put(player, sk);
 				progress.put(player, pr);
 				level.put(player, tl);
@@ -380,6 +407,8 @@ public class SkillManager
 			bw.newLine();
 			bw.write("Axecraft: " + getSkillLevel("Axecraft", player) + "," + getProgress("Axecraft", player));
 			bw.newLine();
+			bw.write("Blocking: " + getSkillLevel("Blocking", player) + "," + getProgress("Blocking", player));
+			bw.newLine();
 			bw.flush();
 			bw.close();
 		}
@@ -404,6 +433,7 @@ public class SkillManager
 		sk.put("Destruction", Integer.valueOf(1));
 		sk.put("Conjuration", Integer.valueOf(1));
 		sk.put("Axecraft", Integer.valueOf(1));
+		sk.put("Blocking", Integer.valueOf(1));
 		HashMap<String, Integer> pr = new HashMap<String,Integer>();
 		pr.put("Archery", Integer.valueOf(0));
 		pr.put("PickPocket", Integer.valueOf(0));
@@ -412,6 +442,7 @@ public class SkillManager
 		pr.put("Destruction", Integer.valueOf(0));
 		pr.put("Conjuration", Integer.valueOf(0));
 		pr.put("Axecraft", Integer.valueOf(0));
+		pr.put("Blocking", Integer.valueOf(0));
 		skills.put(player, sk);
 		progress.put(player, pr);
 		level.put(player, 1);
@@ -519,6 +550,21 @@ public class SkillManager
 		{
 			int alevel = SkillManager.getSkillLevel("Axecraft", player);
 			int pro = SkillManager.getProgress("Axecraft", player);
+			int t = 5;
+			
+			for(int i = 1;i<alevel;i++) {
+				t=t+2;
+			}
+			
+			if(pro >= t) {
+				return true;
+			}
+			return false;
+		}
+		else if (skill.equalsIgnoreCase("Blocking"))
+		{
+			int alevel = SkillManager.getSkillLevel("Blocking", player);
+			int pro = SkillManager.getProgress("Blocking", player);
 			int t = 5;
 			
 			for(int i = 1;i<alevel;i++) {
