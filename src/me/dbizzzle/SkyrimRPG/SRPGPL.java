@@ -127,11 +127,11 @@ public class SRPGPL extends PlayerListener {
 
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Player se = event.getPlayer();
-		EntityPlayer s = ((CraftPlayer) event.getPlayer()).getHandle();
+		final EntityPlayer s = ((CraftPlayer) event.getPlayer()).getHandle();
 		if (s.isSneaking()) {
 			Entity ent = event.getRightClicked();
-			final String ents = ((HumanEntity) ent).getName();
 			if (ent instanceof Player) {
+				final String ents = ((HumanEntity) ent).getName();
 				EntityPlayer pick = ((CraftPlayer) plugin.getServer().getPlayer(ents)).getHandle();
 				s.a(pick.inventory);
 				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
@@ -152,6 +152,7 @@ public class SRPGPL extends PlayerListener {
 						if(!picked.isOnline())return;
 						picked.sendMessage(pickpocketed);
 						picked.updateInventory();
+						s.closeInventory();
 					}
 				}, delay);
 			}
