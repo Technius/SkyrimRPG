@@ -111,7 +111,19 @@ public class SRPGEL extends EntityListener
 				Player player = (Player)e.getEntity();
 				EntityPlayer ep = ((CraftPlayer)player).getHandle();
 				boolean ib = ep.K();
-				//if(ib)player.sendMessage("You're blocking!");
+				if(ib)
+				{
+					SkillManager sm = new SkillManager();
+					int alevel = SkillManager.getSkillLevel("Blocking", player);
+					e.setDamage(e.getDamage() - (alevel/10));
+					if(sm.processExperience(player, "Swordsmanship"))
+					{
+						sm.incrementLevel("Blocking", player);
+						SkillManager.progress.get(player).put("Blocking", 0);
+						SkillManager.calculateLevel(player);
+					}
+					else SkillManager.progress.get(player).put("Blocking", SkillManager.progress.get(player).get("Blocking") + 1);
+				}
 			}
 		}
 		else
