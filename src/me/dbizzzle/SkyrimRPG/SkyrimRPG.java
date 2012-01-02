@@ -377,7 +377,7 @@ public class SkyrimRPG extends JavaPlugin
 				}
 				if(args.length == 1)
 				{
-					try{page = Integer.parseInt(args[0]);}catch(NumberFormatException nfe){page = 0;}
+					try{page = Integer.parseInt(args[0]);}catch(NumberFormatException nfe){page = 1;}
 				}
 				switch(page)
 				{
