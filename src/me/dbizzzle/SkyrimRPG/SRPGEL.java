@@ -116,7 +116,7 @@ public class SRPGEL extends EntityListener
 					SkillManager sm = new SkillManager();
 					int alevel = SkillManager.getSkillLevel("Blocking", player);
 					e.setDamage(e.getDamage() - (alevel/10));
-					if(sm.processExperience(player, "Swordsmanship"))
+					if(sm.processExperience(player, "Blocking"))
 					{
 						sm.incrementLevel("Blocking", player);
 						SkillManager.progress.get(player).put("Blocking", 0);
