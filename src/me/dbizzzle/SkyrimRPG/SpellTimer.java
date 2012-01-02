@@ -25,11 +25,14 @@ public class SpellTimer
 			p.sm.magickaWarning(player, "Fireball");
 			return;
 		}
-		else SpellManager.magicka.put(player, SpellManager.magicka.get(player) - 30);
-		if(fireballcharge.contains(player))return;
-		fireballcharge.add(player);
-		p.getServer().getScheduler().scheduleSyncDelayedTask(p, new SpellRunnable("fireball", player), 50);
-		fballstart.put(player, Integer.valueOf(Calendar.getInstance().get(Calendar.MILLISECOND) + (Calendar.getInstance().get(Calendar.SECOND)*1000)));
+		else
+		{
+			SpellManager.magicka.put(player, SpellManager.magicka.get(player) - 30);
+			if(fireballcharge.contains(player))return;
+			fireballcharge.add(player);
+			p.getServer().getScheduler().scheduleSyncDelayedTask(p, new SpellRunnable("fireball", player), 50);
+			fballstart.put(player, Integer.valueOf(Calendar.getInstance().get(Calendar.MILLISECOND) + (Calendar.getInstance().get(Calendar.SECOND)*1000)));
+		}
 	}
 	public int unchargeFireball(Player player)
 	{

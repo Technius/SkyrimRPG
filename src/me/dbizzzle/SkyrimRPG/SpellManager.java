@@ -50,12 +50,15 @@ public class SpellManager
 			magickaWarning(player, "Raise Zombie");
 			return;
 		}
-		else magicka.put(player, magicka.get(player) - 60);
-		if(czombie.containsKey(player))czombie.get(player).remove();
-		Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.ZOMBIE);
-		int alevel = SkillManager.getSkillLevel("Conjuration", player);
-		zombie.setHealth(zombie.getHealth()/2 + alevel/10);
-		czombie.put(player,zombie);
+		else
+		{
+			magicka.put(player, magicka.get(player) - 60);
+			if(czombie.containsKey(player))czombie.get(player).remove();
+			Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.ZOMBIE);
+			int alevel = SkillManager.getSkillLevel("Conjuration", player);
+			zombie.setHealth(zombie.getHealth()/2 + alevel/10);
+			czombie.put(player,zombie);
+		}
 	}
 	public enum Spell
 	{
