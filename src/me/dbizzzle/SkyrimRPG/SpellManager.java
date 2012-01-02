@@ -18,6 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.Zombie;
 import org.bukkit.util.Vector;
 
@@ -33,6 +34,15 @@ public class SpellManager
 	public SpellManager(SkyrimRPG p)
 	{
 		this.p = p;
+	}
+	public void flames(Player player)
+	{
+		final Vector direction = player.getEyeLocation().getDirection().multiply(2);
+		for(int i = 0;i > 4; i++)
+		{
+			SmallFireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), SmallFireball.class);
+			fireball.setShooter(player);
+		}
 	}
 	public void shootFireball(Player shooter, int multiplier)
 	{
@@ -62,7 +72,7 @@ public class SpellManager
 	}
 	public enum Spell
 	{
-		RAISE_ZOMBIE,FIREBALL,HEALING,UFIREBALL;
+		RAISE_ZOMBIE,FIREBALL,HEALING,UFIREBALL, FLAMES;
 	}
 	public boolean hasSpell(Player player, Spell spell)
 	{
@@ -89,6 +99,9 @@ public class SpellManager
 			if(m == -1) return false;
 			p.sm.shootFireball(player, m);
 			player.sendMessage("Fireball shot!");
+			return true;
+		case FLAMES:
+			flames(player);
 			return true;
 		default:
 			return false;
@@ -120,6 +133,7 @@ public class SpellManager
 		{
 		case 1: s = Spell.FIREBALL; break;
 		case 2: s = Spell.RAISE_ZOMBIE; break;
+		case 3: s = Spell.FLAMES; break;
 		}
 		if(s == null)return;
 		if(hasSpell(p, s))
