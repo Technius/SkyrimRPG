@@ -37,11 +37,22 @@ public class SpellManager
 	}
 	public void flames(Player player)
 	{
-		final Vector direction = player.getEyeLocation().getDirection().multiply(2);
-		for(int i = 0;i < 4; i++)
+		if(!hasEnough(player, 14))
 		{
-			SmallFireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), SmallFireball.class);
-			fireball.setShooter(player);
+			magickaWarning(player, "Flames");
+			return;
+		}
+		else
+		{
+			final Vector direction = player.getEyeLocation().getDirection().multiply(2);
+			for(int i = 0;i < 4; i++)
+			{
+				Fireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), Fireball.class);
+				fireball.setShooter(player);
+				fireball.setVelocity(direction.multiply(0.25));
+				fireball.setYield(0);
+				fireball.setIsIncendiary(false);
+			}
 		}
 	}
 	public void shootFireball(Player shooter, int multiplier)
