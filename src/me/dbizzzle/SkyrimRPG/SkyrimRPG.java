@@ -41,7 +41,7 @@ public class SkyrimRPG extends JavaPlugin
 		pm.registerEvent(Event.Type.EXPLOSION_PRIME, el, Event.Priority.Highest, this);
 		if(!checkFiles())createFiles();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
-		log.info("[SkyrimRPG] Plugin enabled.");
+		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(), 0, 20);
 	}
 	
@@ -379,7 +379,7 @@ public class SkyrimRPG extends JavaPlugin
 				{
 					try{page = Integer.parseInt(args[0]);}catch(NumberFormatException nfe){page = 1;}
 				}
-				if(page >= 0)page = 1;
+				if(page <= 0)page = 1;
 				switch(page)
 				{
 				case 1:
