@@ -369,7 +369,7 @@ public class SkyrimRPG extends JavaPlugin
 			}
 			else
 			{
-				int page = 0;
+				int page = 1;
 				if(args.length != 0 && args.length != 1)
 				{
 					player.sendMessage(ChatColor.RED + "Usage: /skystats <page>");
@@ -381,7 +381,7 @@ public class SkyrimRPG extends JavaPlugin
 				}
 				switch(page)
 				{
-				case 0:
+				case 1:
 					player.sendMessage(ChatColor.GOLD + "Stats Page 1 of 2");
 					player.sendMessage(ChatColor.RED + "Combat" + ChatColor.WHITE + "|" + ChatColor.BLUE + "Magic" + ChatColor.WHITE + "|" + ChatColor.GRAY + "Stealth");
 					player.sendMessage(ChatColor.GREEN + "Level: " + SkillManager.level.get(player));
@@ -393,7 +393,7 @@ public class SkyrimRPG extends JavaPlugin
 					player.sendMessage(ChatColor.BLUE + "Destruction: Level " + SkillManager.getSkillLevel("Destruction", player));
 					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + SkillManager.getSkillLevel("Conjuration", player));
 					break;
-				case 1:
+				case 2:
 					player.sendMessage(ChatColor.GOLD + "Stats Page 2 of 2");
 					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
 					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + SkillManager.getSkillLevel("Lockpicking", player));
