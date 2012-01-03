@@ -70,6 +70,10 @@ public class SkillManager
 	{
 		return skills.get(player).get(skill).intValue();
 	}
+	public void setLevel(String skill, Player player, int level)
+	{
+		skills.get(player).put(skill, Integer.valueOf(level));
+	}
 	public void incrementLevel(String skill, Player player)
 	{
 		int l = skills.get(player).get(skill).intValue() + 1;
