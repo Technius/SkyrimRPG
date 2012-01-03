@@ -1,5 +1,5 @@
 name: SkyrimRPG
-version: 0.1.3a
+version: 0.1.4a
 authors: [dbizzzle, Technius]
 main: me.dbizzzle.SkyrimRPG.SkyrimRPG
 commands:
@@ -29,17 +29,22 @@ commands:
       usage: |
          /bindspell <left/right/both> <spell>
 permissions:
-   SkyrimRPG.*:
+   skyrimrpg.*:
       Description: Implies all.
       Children:
-         SkyrimRPG.addspell: true
-         SkyrimRPG.removespell: true
-         SkyrimRPG.listspells: true
-   SkyrimRPG.addspell:
+         skyrimrpg.addspell: true
+         skyrimrpg.removespell: true
+         skyrimrpg.listspells: true
+         skyrimrpg.bindspell: true
+         skyrimrpg.setlevel: true
+   skyrimrpg.addspell:
       Description: Give a player a spell.
-   SkyrimRPG.removespell:
+   skyrimrpg.removespell:
       Description: Take a spell from a player.
-   SkyrimRPG.listspells: 
+   skyrimrpg.listspells: 
       Description: List spells or find out what spells another person has.
-   SkyrimRPG.bindspell:
+   skyrimrpg.bindspell:
       Description: Binds a spell to left/right/both hands
+   skyrimrpg.setlevel:
+      Description: Sets the level of the specified skill
+   
