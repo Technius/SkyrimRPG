@@ -371,10 +371,40 @@ public class SkyrimRPG extends JavaPlugin
 			}
 			else
 			{
-				player.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + this.getDescription().getVersion());
-				player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
-				player.sendMessage("========================");
-				player.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
+				switch(args.length)
+				{
+				case 0:
+					player.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + this.getDescription().getVersion());
+					player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
+					player.sendMessage("========================");
+					player.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
+					if(player.hasPermission("skyrimrpg.setlevel"))player.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level>" + ChatColor.YELLOW + " - sets the level of the specified skill");
+					break;
+				case 3:
+					if(args[0].equalsIgnoreCase("setlevel"))
+					{
+						if(!player.hasPermission("skyrimrpg.setlevel"))
+						{
+							player.sendMessage(ChatColor.RED + "You don't have permission to do this");
+							return true;
+						}
+						String skill = args[1].toLowerCase();
+						if(skill.length() == 1)
+						{
+							player.sendMessage(ChatColor.RED + "No such skill!");
+							return true;
+						}
+						String s = skill.substring(0,0).toUpperCase() + skill.substring(1);
+						int l = SkillManager.getSkillLevel(s, player);
+						try{ l = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){sender.sendMessage(ChatColor.RED + "That is not a valid number."); return true;}
+						if(!SkillManager.skills.get(player).containsKey(s))
+						{
+							player.sendMessage(ChatColor.RED + "No such skill!");
+							return true;
+						}
+						sk.setLevel(s, player, l);
+					}
+				}
 			}
 		}
 		else if(command.getName().equalsIgnoreCase("skystats"))
