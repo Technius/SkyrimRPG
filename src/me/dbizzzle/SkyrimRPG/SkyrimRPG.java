@@ -394,15 +394,16 @@ public class SkyrimRPG extends JavaPlugin
 							player.sendMessage(ChatColor.RED + "No such skill!");
 							return true;
 						}
-						String s = skill.substring(0,0).toUpperCase() + skill.substring(1);
-						int l = SkillManager.getSkillLevel(s, player);
-						try{ l = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){sender.sendMessage(ChatColor.RED + "That is not a valid number."); return true;}
+						String s = Character.toUpperCase(skill.charAt(0)) + skill.substring(1);
 						if(!SkillManager.skills.get(player).containsKey(s))
 						{
 							player.sendMessage(ChatColor.RED + "No such skill!");
 							return true;
 						}
+						int l = SkillManager.getSkillLevel(s, player);
+						try{ l = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){sender.sendMessage(ChatColor.RED + "That is not a valid number."); return true;}
 						sk.setLevel(s, player, l);
+						player.sendMessage(ChatColor.GREEN + s + " set to level " + l);
 					}
 				}
 			}
