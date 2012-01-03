@@ -30,6 +30,7 @@ public class SpellManager
 	public static HashMap<Player, Spell>boundleft = new HashMap<Player,Spell>();
 	public static HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
 	public static HashMap<Player, Integer>magicka = new HashMap<Player,Integer>();
+	public static List<SmallFireball>flames = new ArrayList<SmallFireball>();
 	SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{
@@ -45,13 +46,14 @@ public class SpellManager
 		else
 		{
 			final Vector direction = player.getEyeLocation().getDirection().multiply(2);
-			for(int i = 0;i < 4; i++)
+			for(int i = 0;i < 3; i++)
 			{
-				Fireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), Fireball.class);
+				SmallFireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), SmallFireball.class);
 				fireball.setShooter(player);
 				fireball.setVelocity(direction.multiply(0.25));
 				fireball.setYield(0);
 				fireball.setIsIncendiary(false);
+				flames.add(fireball);
 			}
 		}
 	}
