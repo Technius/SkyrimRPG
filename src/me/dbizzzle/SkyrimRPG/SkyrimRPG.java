@@ -101,11 +101,13 @@ public class SkyrimRPG extends JavaPlugin
 							if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, Spell.RAISE_ZOMBIE);
 							if(mode == 3)player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to both hands");
 							else player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to " + (mode == 1 ? "left" : "right") + " hand");
+							break;
 						case FLAMES:
 							if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, Spell.FLAMES);
 							if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, Spell.FLAMES);
 							if(mode == 3)player.sendMessage(ChatColor.GREEN + "Flames bound to both hands");
 							else player.sendMessage(ChatColor.GREEN + "Flames bound to " + (mode == 1 ? "left" : "right") + " hand");
+							break;
 						}
 					}
 				}
