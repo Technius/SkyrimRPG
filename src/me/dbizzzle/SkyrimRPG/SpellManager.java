@@ -96,6 +96,14 @@ public class SpellManager
 		{
 			return id;
 		}
+		public static Spell getById(int id)
+		{
+			for(Spell s:Spell.values())
+			{
+				if(s.getId(s) == id)return s;
+			}
+			return null;
+		}
 	}
 	public boolean hasSpell(Player player, Spell spell)
 	{
