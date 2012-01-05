@@ -86,7 +86,16 @@ public class SpellManager
 	}
 	public enum Spell
 	{
-		RAISE_ZOMBIE,FIREBALL,HEALING,UFIREBALL, FLAMES;
+		RAISE_ZOMBIE(2),FIREBALL(1),HEALING(4),UFIREBALL(10101), FLAMES(3);
+		private int id;
+		private Spell(int id)
+		{
+			this.id = id;
+		}
+		public int getId(Spell s)
+		{
+			return id;
+		}
 	}
 	public boolean hasSpell(Player player, Spell spell)
 	{
