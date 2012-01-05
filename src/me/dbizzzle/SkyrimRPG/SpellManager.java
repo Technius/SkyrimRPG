@@ -45,6 +45,7 @@ public class SpellManager
 		}
 		else
 		{
+			magicka.put(player, magicka.get(player) - 14);
 			final Vector direction = player.getEyeLocation().getDirection().multiply(2);
 			for(int i = 0;i < 3; i++)
 			{
