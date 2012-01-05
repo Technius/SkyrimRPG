@@ -137,7 +137,7 @@ public class SpellManager
 	public boolean hasEnough(Player p, int magicka)
 	{
 		if(SpellManager.magicka.get(p) >= magicka)return true;
-		return false;
+		else return false;
 	}
 	public void addSpell(Player p, Spell s)
 	{
