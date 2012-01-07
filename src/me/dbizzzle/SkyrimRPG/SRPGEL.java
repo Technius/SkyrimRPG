@@ -8,6 +8,7 @@ import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Blaze;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
@@ -25,21 +26,42 @@ public class SRPGEL extends EntityListener
 {
 	public void onEntityTarget(EntityTargetEvent event)
 	{
-		if(!(event.getEntity() instanceof Zombie))return;
-		Zombie z = (Zombie)event.getEntity();
-		if(!SpellManager.czombie.containsValue(z))return;
-		if(!(event.getTarget() instanceof Player))return;
-		Player player = (Player)event.getTarget();
-		if(!SpellManager.czombie.containsKey(player))return;
-		if(SpellManager.czombie.get(player) != z)return;
-		event.setCancelled(true);
+		if(event.getEntity() instanceof Zombie)
+		{
+			Zombie z = (Zombie)event.getEntity();
+			if(!SpellManager.czombie.containsValue(z))return;
+			if(!(event.getTarget() instanceof Player))return;
+			Player player = (Player)event.getTarget();
+			if(!SpellManager.czombie.containsKey(player))return;
+			if(SpellManager.czombie.get(player) != z)return;
+			event.setCancelled(true);
+		}
+		else if(event.getEntity() instanceof Blaze)
+		{
+			Blaze z = (Blaze)event.getEntity();
+			if(!SpellManager.conjured.containsValue(z))return;
+			if(!(event.getTarget() instanceof Player))return;
+			Player player = (Player)event.getTarget();
+			if(!SpellManager.conjured.containsKey(player))return;
+			if(SpellManager.conjured.get(player) != z)return;
+			event.setCancelled(true);
+		}
 	}
 	public void onEntityDeath(EntityDeathEvent event)
 	{
-		if(!(event.getEntity() instanceof Zombie))return;
-		Zombie z = (Zombie)event.getEntity();
-		if(!SpellManager.czombie.containsValue(z))return;
-		SpellManager.czombie.remove(z);
+		if(event.getEntity() instanceof Zombie)
+		{
+			Zombie z = (Zombie)event.getEntity();
+			if(!SpellManager.czombie.containsValue(z))return;
+			SpellManager.czombie.remove(z);
+		}
+		else if(event.getEntity() instanceof Blaze)
+		{
+			Blaze z = (Blaze)event.getEntity();
+			if(!SpellManager.conjured.containsValue(z))return;
+			SpellManager.conjured.remove(z);
+			event.getDrops().clear();
+		}
 	}
 	public void onEntityDamage(EntityDamageEvent event)
 	{
@@ -73,6 +95,14 @@ public class SRPGEL extends EntityListener
 				if(SpellManager.czombie.containsKey(player))
 				{
 					Zombie z = SpellManager.czombie.get(player);
+					if(!z.isDead())
+					{
+						if(e.getEntity() instanceof LivingEntity)z.setTarget((LivingEntity)e.getEntity());
+					}
+				}
+				if(SpellManager.conjured.containsKey(player))
+				{
+					Blaze z = (Blaze)SpellManager.conjured.get(player);
 					if(!z.isDead())
 					{
 						if(e.getEntity() instanceof LivingEntity)z.setTarget((LivingEntity)e.getEntity());
