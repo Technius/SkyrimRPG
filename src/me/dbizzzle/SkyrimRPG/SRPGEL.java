@@ -106,6 +106,7 @@ public class SRPGEL extends EntityListener
 					if(!z.isDead())
 					{
 						if(e.getEntity() instanceof LivingEntity)z.setTarget((LivingEntity)e.getEntity());
+						if(e.getEntity().getEntityId() == z.getEntityId())z.setTarget(player);
 					}
 				}
 				String t = ToolComparer.getType(player.getItemInHand());
