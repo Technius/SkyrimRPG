@@ -89,26 +89,18 @@ public class SkyrimRPG extends JavaPlugin
 					}
 					else
 					{
-						switch(s)
+						if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, s);
+						if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, s);
+						String sl = s.toString().toLowerCase().replaceAll("_", " ");
+						String[] st = sl.split("[ ]");
+						String m = Character.toUpperCase(st[0].charAt(0)) + st[0].substring(1);
+						for(String x: st)
 						{
-						case FIREBALL:
-							SpellManager.boundleft.put(player, Spell.FIREBALL);
-							SpellManager.boundright.put(player, Spell.UFIREBALL);
-							player.sendMessage(ChatColor.GREEN + "Fireball bound to both hands");
-							break;
-						case RAISE_ZOMBIE:
-							if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, Spell.RAISE_ZOMBIE);
-							if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, Spell.RAISE_ZOMBIE);
-							if(mode == 3)player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to both hands");
-							else player.sendMessage(ChatColor.GREEN + "Raise Zombie bound to " + (mode == 1 ? "left" : "right") + " hand");
-							break;
-						case FLAMES:
-							if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, Spell.FLAMES);
-							if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, Spell.FLAMES);
-							if(mode == 3)player.sendMessage(ChatColor.GREEN + "Flames bound to both hands");
-							else player.sendMessage(ChatColor.GREEN + "Flames bound to " + (mode == 1 ? "left" : "right") + " hand");
-							break;
+							if(x.equalsIgnoreCase(st[0]))continue;
+							m = m + " " + Character.toUpperCase(x.charAt(0)) + x.substring(1);
 						}
+						if(mode != 3)player.sendMessage(ChatColor.GREEN + m + " bound to " + (mode == 1 ? "left" : "right") + " hand");
+						else player.sendMessage(ChatColor.GREEN + m + " bound to both hands");
 					}
 				}
 			}
