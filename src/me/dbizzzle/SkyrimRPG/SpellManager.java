@@ -54,6 +54,7 @@ public class SpellManager
 			int alevel = SkillManager.getSkillLevel("Conjuration", player);
 			blaze.setHealth(blaze.getHealth()/2 + alevel/10);
 			conjured.put(player,blaze);
+			player.sendMessage("You conjure up a flame atronach to fight for you");
 		}
 	}
 	public void flames(Player player)
@@ -80,6 +81,7 @@ public class SpellManager
 	}
 	public void shootFireball(Player shooter, int multiplier)
 	{
+		shooter.sendMessage("Fireball shot!");
 		final Vector direction = shooter.getEyeLocation().getDirection().multiply(2);
 		Fireball fireball = shooter.getWorld().spawn(shooter.getEyeLocation().add(direction.getX(), direction.getY(), 
 			direction.getZ()), Fireball.class);
@@ -96,6 +98,7 @@ public class SpellManager
 		}
 		else
 		{
+			player.sendMessage("You conjure up a zombie follower to fight for you");
 			magicka.put(player, magicka.get(player) - 60);
 			if(czombie.containsKey(player))czombie.get(player).remove();
 			Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.ZOMBIE);
@@ -139,17 +142,14 @@ public class SpellManager
 		{
 		case FIREBALL:
 			p.st.chargeFireball(player);
-			player.sendMessage("Charging Fireball...");
 			return true;
 		case RAISE_ZOMBIE:
 			raiseZombie(player);
-			player.sendMessage("You conjure up a zombie follower to fight for you");
 			return true;
 		case UFIREBALL:
 			int m = p.st.unchargeFireball(player);
 			if(m == -1) return false;
 			p.sm.shootFireball(player, m);
-			player.sendMessage("Fireball shot!");
 			return true;
 		case FLAMES:
 			flames(player);

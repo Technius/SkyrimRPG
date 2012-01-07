@@ -27,6 +27,7 @@ public class SpellTimer
 		}
 		else
 		{
+			player.sendMessage("Charging Fireball...");
 			SpellManager.magicka.put(player, SpellManager.magicka.get(player) - 30);
 			if(fireballcharge.contains(player))return;
 			fireballcharge.add(player);
