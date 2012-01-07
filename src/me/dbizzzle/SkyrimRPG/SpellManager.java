@@ -79,6 +79,24 @@ public class SpellManager
 			}
 		}
 	}
+	public void thunderbolt(Player player)
+	{
+		if(!hasEnough(player, 100))
+		{
+			magickaWarning(player, "ThunderBolt");
+			return;
+		}
+		else
+		{
+			int level = SkillManager.getSkillLevel("Destruction", player);
+			// Didn't know about this part. Feel free to make changes.
+			if(level == 4)
+			{
+				magicka.put(player, magicka.get(player) - 100);
+				player.getWorld().strikeLightning(player.getTargetBlock(null, 600).getLocation());
+			}
+		}
+	}
 	public void shootFireball(Player shooter, int multiplier)
 	{
 		shooter.sendMessage("Fireball shot!");
@@ -109,7 +127,7 @@ public class SpellManager
 	}
 	public enum Spell
 	{
-		RAISE_ZOMBIE(2),FIREBALL(1),HEALING(4),UFIREBALL(10101), FLAMES(3), CONJURE_FLAME_ATRONACH(5);
+		RAISE_ZOMBIE(2),FIREBALL(1),HEALING(4),UFIREBALL(10101), FLAMES(3), CONJURE_FLAME_ATRONACH(5), THUNDERBOLT(6);
 		private int id;
 		private Spell(int id)
 		{
