@@ -154,6 +154,9 @@ public class SpellManager
 		case FLAMES:
 			flames(player);
 			return true;
+		case CONJURE_FLAME_ATRONACH:
+			cflameatronach(player);
+			return true;
 		default:
 			return false;
 		}
@@ -179,13 +182,7 @@ public class SpellManager
 	}
 	public void useBook(Player p, int id)
 	{
-		Spell s = null;
-		switch(id)
-		{
-		case 1: s = Spell.FIREBALL; break;
-		case 2: s = Spell.RAISE_ZOMBIE; break;
-		case 3: s = Spell.FLAMES; break;
-		}
+		Spell s = Spell.getById(id);
 		if(s == null)return;
 		if(hasSpell(p, s))
 		{
