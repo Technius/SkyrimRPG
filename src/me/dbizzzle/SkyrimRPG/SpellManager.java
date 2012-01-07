@@ -15,8 +15,10 @@ import java.util.List;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Blaze;
 import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Fireball;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.Zombie;
@@ -26,6 +28,7 @@ public class SpellManager
 {
 	public static List<Fireball>ftracker = new ArrayList<Fireball>();
 	public static HashMap<Player, Zombie>czombie = new HashMap<Player,Zombie>();
+	public static HashMap<Player, LivingEntity>conjured = new HashMap<Player, LivingEntity>();
 	public static HashMap<Player, List<Spell>>spells = new HashMap<Player, List<Spell>>();
 	public static HashMap<Player, Spell>boundleft = new HashMap<Player,Spell>();
 	public static HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
@@ -35,6 +38,23 @@ public class SpellManager
 	public SpellManager(SkyrimRPG p)
 	{
 		this.p = p;
+	}
+	public void cflameatronach(Player player)
+	{
+		if(!hasEnough(player, 100))
+		{
+			magickaWarning(player, "Conjure Flame Atronach");
+			return;
+		}
+		else
+		{
+			magicka.put(player, magicka.get(player) - 100);
+			if(conjured.containsKey(player))conjured.get(player).remove();
+			Blaze blaze = (Blaze)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.BLAZE);
+			int alevel = SkillManager.getSkillLevel("Conjuration", player);
+			blaze.setHealth(blaze.getHealth()/2 + alevel/10);
+			conjured.put(player,blaze);
+		}
 	}
 	public void flames(Player player)
 	{
@@ -86,7 +106,7 @@ public class SpellManager
 	}
 	public enum Spell
 	{
-		RAISE_ZOMBIE(2),FIREBALL(1),HEALING(4),UFIREBALL(10101), FLAMES(3);
+		RAISE_ZOMBIE(2),FIREBALL(1),HEALING(4),UFIREBALL(10101), FLAMES(3), CONJURE_FLAME_ATRONACH(5);
 		private int id;
 		private Spell(int id)
 		{
