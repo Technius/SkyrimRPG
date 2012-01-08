@@ -477,6 +477,10 @@ public class SkyrimRPG extends JavaPlugin
 				BufferedWriter bw = new BufferedWriter(new FileWriter(config));
 				bw.write("#SkyrimRPG configuration file");
 				bw.newLine();
+				bw.write("#Enable this if you want to use spellbooks");
+				bw.newLine();
+				bw.write("useSpellbooks: true");
+				bw.newLine();
 				bw.flush();
 				bw.close();
 			}

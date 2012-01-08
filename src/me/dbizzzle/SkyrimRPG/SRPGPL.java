@@ -114,6 +114,7 @@ public class SRPGPL extends PlayerListener {
 		}
 		else if(event.getPlayer().getItemInHand().getType() == Material.BOOK)
 		{
+			if(!ConfigManager.useSpellbooks)return;
 			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				ItemStack b = event.getPlayer().getItemInHand();
