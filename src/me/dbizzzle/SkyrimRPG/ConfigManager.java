@@ -1,8 +1,11 @@
 package me.dbizzzle.SkyrimRPG;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -40,6 +43,36 @@ public class ConfigManager
 		catch(IOException ioe)
 		{
 			a.log.warning("[SkyrimRPG]Could not load config, using default values.");
+		}
+	}
+	public boolean refreshConfig()
+	{
+		if(!a.checkFiles())a.createFiles();
+		File file = new File(a.getDataFolder().getPath());
+		if(!file.exists())file.mkdir();
+		File config = new File(file.getPath() + File.separator + "config.txt");
+		try
+		{
+			if(!config.exists())
+			{
+				FileOutputStream fos = new FileOutputStream(config);
+				fos.flush();
+				fos.close();
+			}
+			BufferedWriter bw = new BufferedWriter(new FileWriter(config));
+			bw.write("#SkyrimRPG configuration file");
+			bw.newLine();
+			bw.write("#Enable this if you want to use spellbooks");
+			bw.newLine();
+			bw.write("useSpellbooks: " + (useSpellbooks ? "true" : "false"));
+			bw.newLine();
+			bw.flush();
+			bw.close();
+			return true;
+		}
+		catch(IOException ioe)
+		{
+			return false;
 		}
 	}
 }

@@ -382,6 +382,7 @@ public class SkyrimRPG extends JavaPlugin
 					player.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
 					if(player.hasPermission("skyrimrpg.setlevel"))player.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level>" + ChatColor.YELLOW + " - sets the level of the specified skill");
 					if(player.hasPermission("skyrimrpg.reload"))player.sendMessage(ChatColor.RED + "/skyrimrpg reload" + ChatColor.YELLOW + " - reloads the configuration file");
+					if(player.hasPermission("skyrimrpg.refresh"))player.sendMessage(ChatColor.RED + "/skyrimrpg refresh" + ChatColor.YELLOW + " - refreshes the configuration file by adding new values, useful when updating");
 					break;
 				case 3:
 					if(args[0].equalsIgnoreCase("setlevel"))
@@ -421,6 +422,17 @@ public class SkyrimRPG extends JavaPlugin
 						if(!checkFiles())createFiles();
 						cm.loadConfig();
 						player.sendMessage(ChatColor.GREEN + "Configuration file reloaded successfully.");
+					}
+					else if(args[0].equalsIgnoreCase("refresh"))
+					{
+						if(!player.hasPermission("skyrimrpg.refresh"))
+						{
+							player.sendMessage(ChatColor.RED + "You don't have permission to do this");
+							return true;
+						}
+						if(!checkFiles())createFiles();
+						cm.refreshConfig();
+						player.sendMessage(ChatColor.GREEN + "Configuration file refreshed successfully.");
 					}
 					break;
 				}
