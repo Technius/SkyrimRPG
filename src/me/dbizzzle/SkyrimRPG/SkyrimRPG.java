@@ -89,8 +89,16 @@ public class SkyrimRPG extends JavaPlugin
 					}
 					else
 					{
-						if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, s);
-						if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, s);
+						if(s == Spell.FIREBALL)
+						{
+							SpellManager.boundleft.put(player, Spell.FIREBALL);
+							SpellManager.boundright.put(player, Spell.UFIREBALL);
+						}
+						else
+						{
+							if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, s);
+							if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, s);
+						}
 						String sl = s.toString().toLowerCase().replaceAll("_", " ");
 						String[] st = sl.split("[ ]");
 						String m = Character.toUpperCase(st[0].charAt(0)) + st[0].substring(1);
