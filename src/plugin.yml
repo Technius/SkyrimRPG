@@ -1,5 +1,5 @@
 name: SkyrimRPG
-version: 0.1.4a
+version: 0.1.5a
 authors: [dbizzzle, Technius]
 main: me.dbizzzle.SkyrimRPG.SkyrimRPG
 commands:
