@@ -26,6 +26,7 @@ public class SkyrimRPG extends JavaPlugin
 	SpellTimer st = new SpellTimer(this);
 	SRPGPL pl = new SRPGPL(this);
 	SRPGEL el = new SRPGEL();
+	ConfigManager cm = new ConfigManager(this);
 	public void onEnable() 
 	{
 		sk.setPlugin(this);
@@ -40,6 +41,7 @@ public class SkyrimRPG extends JavaPlugin
 		pm.registerEvent(Event.Type.ENTITY_DEATH, el, Event.Priority.High, this);
 		pm.registerEvent(Event.Type.EXPLOSION_PRIME, el, Event.Priority.Highest, this);
 		if(!checkFiles())createFiles();
+		cm.loadConfig();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
 		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(), 0, 20);
