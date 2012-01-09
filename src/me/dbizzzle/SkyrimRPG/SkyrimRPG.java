@@ -17,6 +17,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.getspout.spout.Spout;
+
+import com.Technius.SkySpout.SkySpout;
 
 // IGNORE.
 
@@ -29,6 +32,7 @@ public class SkyrimRPG extends JavaPlugin
 	SRPGPL pl = new SRPGPL(this);
 	SRPGEL el = new SRPGEL();
 	ConfigManager cm = new ConfigManager(this);
+	SkySpout spoutman = new SkySpout(this);
 	public void onEnable() 
 	{
 		sk.setPlugin(this);
@@ -45,6 +49,7 @@ public class SkyrimRPG extends JavaPlugin
 		if(!checkFiles())createFiles();
 		cm.loadConfig();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
+		if(spoutman.checkSpout(pm))log.info("[SkyrimRPG]Using Spout Build " + ((Spout)pm.getPlugin("Spout")).getVersion() + "!");
 		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(), 0, 20);
 	}
