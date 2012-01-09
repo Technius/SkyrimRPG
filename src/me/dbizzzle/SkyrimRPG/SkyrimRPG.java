@@ -18,6 +18,8 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+// IGNORE.
+
 public class SkyrimRPG extends JavaPlugin 
 {
 	public Logger log = Logger.getLogger("Minecraft");
