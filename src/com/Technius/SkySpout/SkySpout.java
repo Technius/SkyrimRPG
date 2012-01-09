@@ -28,4 +28,8 @@ public class SkySpout
 	{
 		return useSpout;
 	}
+	public void init()
+	{
+		
+	}
 }
