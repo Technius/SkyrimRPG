@@ -185,10 +185,14 @@ public class SkyrimRPG extends JavaPlugin
 							break;
 					}
 				} 
+				else 
+				{
+					player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+				}
 			}
-			else 
+			else
 			{
-				player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+				player.sendMessage(ChatColor.RED + "You do no have permission to use this command");
 			}
 		}
 		
