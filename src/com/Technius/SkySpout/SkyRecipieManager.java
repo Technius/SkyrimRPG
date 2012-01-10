@@ -26,13 +26,14 @@ public class SkyRecipieManager
 	}
 	public void setupRecipies()
 	{
-		getDestructionSpellbookTexture();
-		ItemStack spellbook = new SpoutItemStack(new Spellbook(p, "DestructionSpellbook", p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png"), 1);
+		File tex = getDestructionSpellbookTexture();
+		ItemStack spellbook = new SpoutItemStack(new Spellbook(p, "Destruction Spellbook", p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png"), 1);
 		SpoutShapedRecipe spellbookr = new SpoutShapedRecipe(spellbook);
 		spellbookr.shape(" B ", "BSB", " B ");
 		spellbookr.setIngredient('B', MaterialData.blazePowder);
 		spellbookr.setIngredient('S', MaterialData.book);
 		SpoutManager.getMaterialManager().registerSpoutRecipe(spellbookr);
+		SpoutManager.getFileManager().addToPreLoginCache(p, tex);
 	}
 	public File getDestructionSpellbookTexture()
 	{
@@ -54,7 +55,6 @@ public class SkyRecipieManager
 				fos.close();
 			}
 			tex = new File(p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png");
-			SpoutManager.getFileManager().addToPreLoginCache(p, tex);
 		}
 		catch(IOException ioe)
 		{
