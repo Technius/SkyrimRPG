@@ -108,7 +108,7 @@ public class SkyrimCmd implements CommandExecutor
 						}
 						catch(IllegalArgumentException ex)
 						{
-							sender.sendMessage(ChatColor.RED + "No such spell.");
+							sender.sendMessage(ChatColor.RED + "Invalid Spell.");
 						}
 					}
 					else 
@@ -129,33 +129,29 @@ public class SkyrimCmd implements CommandExecutor
 		
 		else if (command.getName().equalsIgnoreCase("removespell")) 
 		{
-			if (player == null) 
+			if (sender.hasPermission("SkyrimRPG.removespell")) 
 			{
-				Player spell = plugin.getServer().getPlayer(args[0]);
+				Player spell = sender.getServer().getPlayer(args[0]);
 				if (spell != null) 
 				{
-					switch (args.length) 
+					Spell s;
+					try
 					{
-					case 0 :
-						sender.sendMessage(ChatColor.RED + "Usage: /removespell <player> <spell>");
-						break;
-					
-					case 1:
-						sender.sendMessage(ChatColor.RED + "Usage: /removespell <player> <spell>");
-						break;
-					
-					default:
-						String spel = spell.getName();
-						Spell s = null;
-						try
+						s = SpellManager.Spell.valueOf(args[1].toUpperCase());
+						if(sm.hasSpell(spell, s))
 						{
-							s = SpellManager.Spell.valueOf(args[1]);
+							spell.sendMessage(ChatColor.RED + "You had the spell " + s.name() + " removed.");
+							sender.sendMessage(ChatColor.GREEN + "You have succesfully removed " + s.name() + " from " + spell.getName());
+							sm.removeSpell(spell, s);
 						}
-						catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
-						sender.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
-						spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
-						sm.removeSpell(player, s);
-						break;
+						else
+						{
+							sender.sendMessage(ChatColor.RED + spell.getName() + " has not learned that spell.");
+						}
+					}
+					catch(IllegalArgumentException ex)
+					{
+						sender.sendMessage(ChatColor.RED + "Invalid Spell.");
 					}
 				} 
 				else 
@@ -163,43 +159,9 @@ public class SkyrimCmd implements CommandExecutor
 					sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 				}
 			} 
-			else if (player.hasPermission("SkyrimRPG.removespell")) 
-			{
-				Player spell = player.getServer().getPlayer(args[0]);
-				if (spell != null) 
-				{
-					switch (args.length) 
-					{
-					case 0 :
-						player.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
-						break;
-						
-					case 1:
-						player.sendMessage(ChatColor.RED + "Proper syntax: /removespell <player> <spell>");
-						break;
-						
-					default:
-						String spel = spell.getName();
-						Spell s = null;
-						try
-						{
-							s = SpellManager.Spell.valueOf(args[1].toUpperCase());
-						}
-						catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
-						sender.sendMessage(ChatColor.GREEN + "You have taken the spell " + args[1] + " from " + spel + ".");
-						spell.sendMessage(ChatColor.GREEN + "The spell " + args[1] + " has been taken from you.");
-						sm.removeSpell(player, s);
-						break;
-					}
-				} 
-				else 
-				{
-					player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
-				}
-			} 
 			else 
 			{
-				player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+				sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
 			}
 		}
 		
