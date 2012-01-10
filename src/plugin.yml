@@ -1,6 +1,6 @@
 name: SkyrimRPG
 version: 0.1.5a
-authors: [dbizzzle, Technius]
+authors: [dbizzzle, Technius, ThatBox]
 main: me.dbizzzle.SkyrimRPG.SkyrimRPG
 commands:
    addspell:
