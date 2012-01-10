@@ -4,6 +4,7 @@ import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.getspout.spout.Spout;
 
 public class SkySpout 
 {
@@ -30,6 +31,7 @@ public class SkySpout
 	}
 	public void init()
 	{
-		
+		SkyRecipieManager srm = new SkyRecipieManager((Spout)spoutraw, p);
+		srm.setupRecipies();
 	}
 }

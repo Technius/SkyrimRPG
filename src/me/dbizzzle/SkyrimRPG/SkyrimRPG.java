@@ -46,7 +46,11 @@ public class SkyrimRPG extends JavaPlugin
 		if(!checkFiles())createFiles();
 		cm.loadConfig();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
-		if(spoutman.checkSpout(pm))log.info("[SkyrimRPG] Using Spout Build " + pm.getPlugin("Spout").getDescription().getVersion() + "!");
+		if(spoutman.checkSpout(pm))
+		{
+			log.info("[SkyrimRPG] Using Spout Build " + pm.getPlugin("Spout").getDescription().getVersion() + "!");
+			spoutman.init();
+		}
 		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(), 0, 20);
 	}

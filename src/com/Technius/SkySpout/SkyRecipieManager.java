@@ -1,12 +1,12 @@
 package com.Technius.SkySpout;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 
 import org.bukkit.inventory.ItemStack;
-import org.getspout.spoutapi.Spout;
+import org.getspout.spout.Spout;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.inventory.SpoutItemStack;
 import org.getspout.spoutapi.inventory.SpoutShapedRecipe;
@@ -26,7 +26,8 @@ public class SkyRecipieManager
 	}
 	public void setupRecipies()
 	{
-		ItemStack spellbook = new SpoutItemStack(new Spellbook(p, "DestructionSpellbook", null), 8);
+		getDestructionSpellbookTexture();
+		ItemStack spellbook = new SpoutItemStack(new Spellbook(p, "DestructionSpellbook", p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png"), 1);
 		SpoutShapedRecipe spellbookr = new SpoutShapedRecipe(spellbook);
 		spellbookr.shape(" B ", "BSB", " B ");
 		spellbookr.setIngredient('B', MaterialData.blazePowder);
@@ -36,11 +37,24 @@ public class SkyRecipieManager
 	public File getDestructionSpellbookTexture()
 	{
 		File tex = null;
-		try {
-			tex = new File(DestructionSpellbook.class.getResource("textures/DestructionSpellbook.png").toURI());
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		try
+		{
+			InputStream is = DestructionSpellbook.class.getResourceAsStream("textures/DestructionSpellbook.png");
+			FileOutputStream fos = new FileOutputStream(p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png");
+			byte[] data = new byte[128];
+			int x=0;
+			while((x=is.read(data,0,128))>=0)
+			{
+				fos.write(data,0,x);
+			}
+			is.close();
+			fos.flush();
+			fos.close();
+			tex = new File(p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png");
+		}
+		catch(IOException ioe)
+		{
+			p.log.severe("[SkyrimRPG]COULD NOT LOAD SPOUT TEXTURES!");
 		}
 		return tex;
 	}
