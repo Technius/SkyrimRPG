@@ -11,6 +11,7 @@ import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.inventory.SpoutItemStack;
 import org.getspout.spoutapi.inventory.SpoutShapedRecipe;
 import org.getspout.spoutapi.material.MaterialData;
+import org.getspout.spoutapi.material.item.GenericCustomItem;
 
 import com.Technius.SkySpout.Items.DestructionSpellbook;
 import com.Technius.SkySpout.Items.Spellbook;
@@ -61,5 +62,9 @@ public class SkyRecipieManager
 			p.log.severe("[SkyrimRPG]COULD NOT LOAD SPOUT TEXTURES!");
 		}
 		return tex;
+	}
+	public enum SkyItems
+	{
+		Destruction_Spellbook, Fireball_Spellbook;
 	}
 }
