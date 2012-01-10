@@ -2,6 +2,7 @@ name: SkyrimRPG
 version: 0.1.5a
 authors: [dbizzzle, Technius, ThatBox]
 main: me.dbizzzle.SkyrimRPG.SkyrimRPG
+softdepends: [Spout]
 commands:
    addspell:
       description: Adds a spell to the specified player
