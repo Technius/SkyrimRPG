@@ -180,6 +180,14 @@ public class SpellManager
 		saveSpells(p);
 		return spells.get(p).remove(s);
 	}
+	public boolean spellExists(int spell)
+	{
+		if(Spell.getById(spell) == null)
+		{
+			return false;
+		}
+		return true;
+	}
 	public void useBook(Player p, int id)
 	{
 		Spell s = Spell.getById(id);

@@ -55,7 +55,7 @@ public class SkyrimCmd implements CommandExecutor
 					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
 					if(!sm.hasSpell(player, s))
 					{
-						player.sendMessage(ChatColor.RED + "You don't know how to cast this spell.");
+						player.sendMessage(ChatColor.RED + "You have not yet learned this spell.");
 						return true;
 					}
 					else
@@ -130,28 +130,24 @@ public class SkyrimCmd implements CommandExecutor
 				Player spell = player.getServer().getPlayer(args[0]);
 				if (spell != null) 
 				{
-					switch (args.length) 
+					if(args.length == 2)
 					{
-						case 0:
-							player.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
-							break;
-							
-						case 1:
-							player.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
-							break;
-							
-						default:
-							String spel = spell.getName();
-							Spell s = SpellManager.Spell.valueOf(args[1]);
-							try
-							{
-								s = SpellManager.Spell.valueOf(args[1].toUpperCase());
-								sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
-								spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
-								sm.addSpell(player, s);
-							}
-							catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
-							break;
+						Spell s = SpellManager.Spell.valueOf(args[1].toUpperCase());
+						int a = s.getId(s);
+						if(sm.spellExists(a))
+						{
+							sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spell.getName() + ".");
+							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
+							sm.addSpell(player, s);
+						}
+						else
+						{
+							player.sendMessage(ChatColor.RED + "That spell does not exist.");
+						}
+					}
+					else 
+					{
+						player.sendMessage(ChatColor.RED + "Usage: /addspell <player> <spell>");
 					}
 				} 
 				else 
