@@ -91,65 +91,39 @@ public class SkyrimCmd implements CommandExecutor
 		
 		if (command.getName().equalsIgnoreCase("addspell")) 
 		{
-			if (player == null) 
+			if (sender.hasPermission("skyrimrpg.addspell"))
 			{
-				Player spell = plugin.getServer().getPlayer(args[0]);
+				Player spell = sender.getServer().getPlayer(args[0]);
 				if (spell != null) 
 				{
-					switch (args.length) 
+					if(args.length == 2)
 					{
-					case 0:
-						sender.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
-						break;
-						
-					case 1:
-						sender.sendMessage(ChatColor.RED + "Usage: <player> <spell>");
-						break;
-						
-					default:
-						String spel = spell.getName();
-						Spell s = SpellManager.Spell.valueOf(args[1]);
+						Spell s;
 						try
 						{
 							s = SpellManager.Spell.valueOf(args[1].toUpperCase());
-							sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spel + ".");
+							sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spell.getName() + ".");
 							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
-							sm.addSpell(spell, s);
+							sm.addSpell(player, s);
 						}
-						catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
-						break;
+						catch(IllegalArgumentException ex)
+						{
+							sender.sendMessage(ChatColor.RED + "No such spell.");
+						}
+					}
+					else 
+					{
+						sender.sendMessage(ChatColor.RED + "Usage: /addspell <player> <spell>");
 					}
 				} 
 				else 
 				{
 					sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 				}
-			} 
-			else if (player.hasPermission("skyrimrpg.addspell"))
-			{
-				Player spell = player.getServer().getPlayer(args[0]);
-				if (spell != null) 
-				{
-					if(args.length == 2)
-					{
-						Spell s = SpellManager.Spell.valueOf(args[1].toUpperCase());
-						sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spell.getName() + ".");
-						spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
-						sm.addSpell(player, s);
-					}
-					else 
-					{
-						player.sendMessage(ChatColor.RED + "Usage: /addspell <player> <spell>");
-					}
-				} 
-				else 
-				{
-					player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
-				}
 			}
 			else
 			{
-				player.sendMessage(ChatColor.RED + "You do no have permission to use this command");
+				sender.sendMessage(ChatColor.RED + "You do no have permission to use this command");
 			}
 		}
 		
