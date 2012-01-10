@@ -6,12 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.bukkit.inventory.ItemStack;
-import org.getspout.spoutapi.Spout;
+import org.getspout.spout.Spout;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.inventory.SpoutItemStack;
 import org.getspout.spoutapi.inventory.SpoutShapedRecipe;
 import org.getspout.spoutapi.material.MaterialData;
-import org.getspout.spoutapi.material.item.GenericCustomItem;
 
 import com.Technius.SkySpout.Items.DestructionSpellbook;
 import com.Technius.SkySpout.Items.Spellbook;

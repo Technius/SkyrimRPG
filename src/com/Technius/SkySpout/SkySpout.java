@@ -4,7 +4,7 @@ import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.getspout.spoutapi.Spout;
+import org.getspout.spout.Spout;
 
 public class SkySpout 
 {
