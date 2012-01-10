@@ -40,17 +40,21 @@ public class SkyRecipieManager
 		try
 		{
 			InputStream is = DestructionSpellbook.class.getResourceAsStream("textures/DestructionSpellbook.png");
-			FileOutputStream fos = new FileOutputStream(p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png");
-			byte[] data = new byte[128];
-			int x=0;
-			while((x=is.read(data,0,128))>=0)
+			if(!new File(p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png").exists())
 			{
-				fos.write(data,0,x);
+				FileOutputStream fos = new FileOutputStream(p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png");
+				byte[] data = new byte[128];
+				int x=0;
+				while((x=is.read(data,0,128))>=0)
+				{
+					fos.write(data,0,x);
+				}
+				is.close();
+				fos.flush();
+				fos.close();
 			}
-			is.close();
-			fos.flush();
-			fos.close();
 			tex = new File(p.getDataFolder().getPath() + File.separator + "DestructionSpellbook.png");
+			SpoutManager.getFileManager().addToPreLoginCache(p, tex);
 		}
 		catch(IOException ioe)
 		{
