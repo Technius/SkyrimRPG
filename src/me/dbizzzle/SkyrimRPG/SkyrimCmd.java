@@ -134,7 +134,7 @@ public class SkyrimCmd implements CommandExecutor
 					{
 						Spell s = SpellManager.Spell.valueOf(args[1].toUpperCase());
 						int a = s.getId(s);
-						if(sm.spellExists(a))
+						if(sm.spellExists(a) == true)
 						{
 							sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spell.getName() + ".");
 							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
