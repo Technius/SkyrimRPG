@@ -29,17 +29,12 @@ commands:
       description: Binds a spell to left/right hand
       usage: |
          /bindspell <left/right/both> <spell>
-   equipshout:
-      description: Equips a shout.
-      usage: |
-         /equipshout <left/right/both> <shout>
 permissions:
    skyrimrpg.*:
       Description: Implies all.
       Children:
          skyrimrpg.addspell: true
          skyrimrpg.removespell: true
-         skyrimrpg.shout: true
          skyrimrpg.listspells: true
          skyrimrpg.bindspell: true
          skyrimrpg.setlevel: true
