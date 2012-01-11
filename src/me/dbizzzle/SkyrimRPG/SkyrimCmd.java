@@ -88,8 +88,7 @@ public class SkyrimCmd implements CommandExecutor
 				player.sendMessage("You aren't allowed to bind spells.");
 			}
 		}
-		
-		if (command.getName().equalsIgnoreCase("addspell")) 
+		else if (command.getName().equalsIgnoreCase("addspell")) 
 		{
 			if (sender.hasPermission("skyrimrpg.addspell"))
 			{
@@ -126,7 +125,6 @@ public class SkyrimCmd implements CommandExecutor
 				sender.sendMessage(ChatColor.RED + "You do no have permission to use this command");
 			}
 		}
-		
 		else if (command.getName().equalsIgnoreCase("removespell")) 
 		{
 			if (sender.hasPermission("SkyrimRPG.removespell")) 
@@ -164,7 +162,6 @@ public class SkyrimCmd implements CommandExecutor
 				sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
 			}
 		}
-		
 		else if (command.getName().equalsIgnoreCase("listspells")) 
 		{
 			if (player == null) 

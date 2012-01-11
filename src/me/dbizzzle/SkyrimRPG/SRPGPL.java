@@ -103,13 +103,17 @@ public class SRPGPL extends PlayerListener {
 		{
 			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
 			{
-				if(!SpellManager.boundleft.containsKey(event.getPlayer()))return;
-				plugin.sm.castSpell(SpellManager.boundleft.get(event.getPlayer()), event.getPlayer());
+				if(SpellManager.boundleft.containsKey(event.getPlayer()))
+				{
+					plugin.sm.castSpell(SpellManager.boundleft.get(event.getPlayer()), event.getPlayer());
+				}
 			}
 			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
-				if(!SpellManager.boundright.containsKey(event.getPlayer()))return;
+				if(SpellManager.boundright.containsKey(event.getPlayer()))
+				{
 				plugin.sm.castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
+				}
 			}
 		}
 		else if(event.getPlayer().getItemInHand().getType() == Material.BOOK)
