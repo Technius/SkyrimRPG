@@ -53,7 +53,7 @@ public class SpellManager
 			Blaze blaze = (Blaze)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.BLAZE);
 			int alevel = SkillManager.getSkillLevel("Conjuration", player);
 			blaze.setHealth(blaze.getHealth()/2 + alevel/10);
-			conjured.put(player,blaze);
+			conjured.put(player, blaze);
 			player.sendMessage("You conjure up a flame atronach to fight for you");
 		}
 	}
