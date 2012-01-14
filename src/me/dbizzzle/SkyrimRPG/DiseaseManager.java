@@ -15,5 +15,14 @@ public class DiseaseManager
 		{
 			return id;
 		}
+		public static Disease getById(int id)
+		{
+			for(Disease d : Disease.values())
+			{
+				if(d.getId(d) == id)
+					return d;
+			}
+			return null;
+		}
 	}
 }
