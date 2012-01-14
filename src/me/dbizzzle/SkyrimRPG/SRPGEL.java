@@ -3,9 +3,11 @@ package me.dbizzzle.SkyrimRPG;
 import java.util.List;
 import java.util.Random;
 
+import me.dbizzzle.SkyrimRPG.DiseaseManager.Disease;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import net.minecraft.server.EntityPlayer;
 
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Blaze;
@@ -156,10 +158,20 @@ public class SRPGEL extends EntityListener
 					else SkillManager.progress.get(player).put("Blocking", SkillManager.progress.get(player).get("Blocking") + 1);
 				}
 			}
-		}
-		else
-		{
-			
+			else if(e.getDamager() instanceof Zombie)
+			{
+				if(e.getEntity() instanceof Player)
+				{
+					double a;
+					a = Math.random();
+					if(a > 80)
+					{
+						Player p = (Player) e.getEntity();
+						DiseaseManager.addDisease(p, Disease.BRAIN_ROT);
+						p.sendMessage(ChatColor.GRAY + "The zombie has given you brain rot!");
+					}
+				}
+			}
 		}
 	}
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
