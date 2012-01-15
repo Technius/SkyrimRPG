@@ -63,6 +63,8 @@ public class SkyrimRPG extends JavaPlugin
 		if(!locks.exists())locks.mkdir();
 		File magic = new File(file.getPath() + File.separator + "Magic");
 		if(!magic.exists())magic.mkdir();
+		File perks = new File(file.getPath() + File.separator + "Perks");
+		if(!perks.exists())perks.mkdir();
 		try
 		{
 			if(!config.exists())
@@ -99,6 +101,8 @@ public class SkyrimRPG extends JavaPlugin
 		if(!locks.exists())return false;
 		File magic = new File(file.getPath() + File.separator + "Magic");
 		if(!magic.exists())return false;
+		File perks = new File(file.getPath() + File.separator + "Perks");
+		if(!perks.exists())return false;
 		return true;
 	}
 }
