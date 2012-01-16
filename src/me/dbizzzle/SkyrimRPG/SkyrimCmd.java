@@ -263,7 +263,7 @@ public class SkyrimCmd implements CommandExecutor
 			if(player == null)
 			{
 				System.out.println("[SkyrimRPG]SkyrimRPG version " + plugin.getDescription().getVersion());
-				System.out.println("[SkyrimRPG]Made by dbizzle and Technius");
+				System.out.println("[SkyrimRPG]Made by dbizzle, ThatBox and Technius");
 			}
 			else
 			{
