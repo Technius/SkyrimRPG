@@ -204,23 +204,10 @@ public class SkyrimCmd implements CommandExecutor
 			{
 				if (args.length == 0) 
 				{
+					player.sendMessage(ChatColor.BLUE + "Spells you know");
 					for(Spell s:SpellManager.spells.get(player))
 					{
-						switch(s)
-						{
-						case FIREBALL:
-							sender.sendMessage("Fireball");
-							break;
-						case RAISE_ZOMBIE:
-							sender.sendMessage("Raise Zombie");
-							break;
-						case HEALING:
-							sender.sendMessage("Healing");
-							break;
-						case FLAMES:
-							sender.sendMessage("Flames");
-							break;
-						}
+						player.sendMessage(ChatColor.GREEN + s.getDisplayName());
 					}
 				} 
 				else if (args.length > 0) 
@@ -228,23 +215,10 @@ public class SkyrimCmd implements CommandExecutor
 					Player spell = player.getServer().getPlayer(args[0]);
 					if (spell != null) 
 					{
-						for(Spell s:SpellManager.spells.get(player))
+						player.sendMessage(ChatColor.BLUE + "Spells " + spell.getName() + " knows");
+						for(Spell s:SpellManager.spells.get(spell))
 						{
-							switch(s)
-							{
-							case FIREBALL:
-								sender.sendMessage("Fireball");
-								break;
-							case RAISE_ZOMBIE:
-								sender.sendMessage("Raise Zombie");
-								break;
-							case HEALING:
-								sender.sendMessage("Healing");
-								break;
-							case FLAMES:
-								sender.sendMessage("Flames");
-								break;
-							}
+							player.sendMessage(ChatColor.GREEN + s.getDisplayName());
 						}
 					} 
 					else 
