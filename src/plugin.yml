@@ -29,6 +29,14 @@ commands:
       description: Binds a spell to left/right hand
       usage: |
          /bindspell <left/right/both> <spell>
+   addperk:
+      description: Adds a perk to the specified player
+      usage: |
+         /addperk [player] <perk>
+   removeperk:
+      description: Removes a perk from the specified player
+      usage: |
+         /removeperk [player] <perk>
 permissions:
    skyrimrpg.*:
       Description: Implies all.
@@ -38,6 +46,8 @@ permissions:
          skyrimrpg.listspells: true
          skyrimrpg.bindspell: true
          skyrimrpg.setlevel: true
+         skyrimrpg.removeperk: true
+         skyrimrpg.addperk: true
    skyrimrpg.addspell:
       Description: Give a player a spell.
    skyrimrpg.removespell:
@@ -48,6 +58,8 @@ permissions:
       Description: Binds a spell to left/right/both hands
    skyrimrpg.setlevel:
       Description: Sets the level of the specified skill
-   skyrimrpg.shout:
-      Description: Equip a shout.
+   skyrimrpg.removeperk:
+      Description: Removes a perk
+   skyrimrpg.addperk:
+      Description: Adds a perk
    
