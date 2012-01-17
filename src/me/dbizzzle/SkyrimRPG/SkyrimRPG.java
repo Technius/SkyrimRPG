@@ -25,6 +25,8 @@ public class SkyrimRPG extends JavaPlugin
 	{
 		getCommand("addspell").setExecutor(new SkyrimCmd(sm, this, cm, sk));
 		getCommand("bindspell").setExecutor(new SkyrimCmd(sm, this, cm, sk));
+		getCommand("addperk").setExecutor(new SkyrimCmd(sm, this, cm, sk));
+		getCommand("removeperk").setExecutor(new SkyrimCmd(sm, this, cm, sk));
 		getCommand("removespell").setExecutor(new SkyrimCmd(sm, this, cm, sk));
 		getCommand("listspells").setExecutor(new SkyrimCmd(sm, this, cm, sk));
 		getCommand("skyrimrpg").setExecutor(new SkyrimCmd(sm, this, cm, sk));
