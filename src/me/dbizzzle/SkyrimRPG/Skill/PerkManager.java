@@ -87,7 +87,7 @@ public class PerkManager
 			bw.newLine();
 			for(Perk p:PerkManager.perks.get(player).keySet())
 			{
-				bw.write(p.toString() + PerkManager.perks.get(player).get(p));
+				bw.write(p.toString() + "," + PerkManager.perks.get(player).get(p));
 				bw.newLine();
 			}
 			bw.flush();
