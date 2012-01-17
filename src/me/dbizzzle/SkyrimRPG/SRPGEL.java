@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 import me.dbizzzle.SkyrimRPG.DiseaseManager.Disease;
+import me.dbizzzle.SkyrimRPG.Skill.Perk;
+import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import net.minecraft.server.EntityPlayer;
 
@@ -78,7 +80,12 @@ public class SRPGEL extends EntityListener
 					SkillManager sm = new SkillManager();
 					Player shooter = (Player)a.getShooter();
 					int alevel = SkillManager.getSkillLevel("Archery", shooter);
-					e.setDamage(e.getDamage() + (alevel/10));
+					double perkm = 1;
+					if(PerkManager.perks.get(shooter).containsKey(Perk.OVERDRAW))
+					{
+						perkm = 1 + (0.2*(PerkManager.perks.get(shooter).get(Perk.OVERDRAW)/100));
+					}
+					e.setDamage((int)((e.getDamage() + (alevel/10))*(1 + perkm)));
 					if(sm.processExperience(shooter, "Archery"))
 					{
 						sm.incrementLevel("Archery", shooter);
