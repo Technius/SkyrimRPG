@@ -129,7 +129,7 @@ public class SRPGEL extends EntityListener
 				{
 					int alevel = SkillManager.getSkillLevel("Axecraft", player);
 					int crit = new Random().nextInt(99);
-					e.setDamage(e.getDamage() + (alevel/10) * crit<=alevel ? 2 : 1);
+					e.setDamage(e.getDamage() + (alevel/10) * (crit<=alevel ? 2 : 1));
 					if(sm.processExperience(player, "Axecraft"))
 					{
 						sm.incrementLevel("Axecraft", player);
