@@ -85,6 +85,8 @@ public class SkillManager
 		loadSkills(player);
 		SpellManager sm = new SpellManager(p);
 		sm.loadSpells(player);
+		PerkManager pm = new PerkManager(p);
+		pm.loadPerks(player);
 	}
 	public void loadSkills(Player player)
 	{
@@ -426,6 +428,8 @@ public class SkillManager
 		saveSkills(player);
 		SpellManager sm = new SpellManager(p);
 		sm.saveSpells(player);
+		PerkManager pm = new PerkManager(p);
+		pm.savePerks(player);
 	}
 	public void resetSkills(Player player)
 	{
