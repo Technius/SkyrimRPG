@@ -251,6 +251,7 @@ public class SkyrimCmd implements CommandExecutor
 					if(player.hasPermission("skyrimrpg.setlevel"))player.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level>" + ChatColor.YELLOW + " - sets the level of the specified skill");
 					if(player.hasPermission("skyrimrpg.reload"))player.sendMessage(ChatColor.RED + "/skyrimrpg reload" + ChatColor.YELLOW + " - reloads the configuration file");
 					if(player.hasPermission("skyrimrpg.refresh"))player.sendMessage(ChatColor.RED + "/skyrimrpg refresh" + ChatColor.YELLOW + " - refreshes the configuration file by adding new values, useful when updating");
+					player.sendMessage(ChatColor.RED + "/perk" + ChatColor.YELLOW + " - shows the perk menu");
 					break;
 				case 3:
 					if(args[0].equalsIgnoreCase("setlevel"))
