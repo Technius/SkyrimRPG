@@ -109,7 +109,8 @@ public class PerkCmd implements CommandExecutor
 						return true;
 					}
 					PerkManager.perks.get(player).put(p, l);
-					sender.sendMessage(p.getName() + " successfully added at level " + l);
+					sender.sendMessage(p.getName() + " successfully added to " + t.getName() +  " at level " + l);
+					t.sendMessage(ChatColor.GREEN + "You were given the perk " + p.getName() + " at level " + l);
 				}
 				else if(player.hasPermission("skyrimrpg.addperk"))
 				{
@@ -145,7 +146,8 @@ public class PerkCmd implements CommandExecutor
 						return true;
 					}
 					PerkManager.perks.get(player).put(p, l);
-					player.sendMessage(ChatColor.RED + p.getName() + " successfully added at level " + l);
+					player.sendMessage(ChatColor.GREEN + p.getName() + " successfully added to " + t.getName() + " level " + l);
+					t.sendMessage(ChatColor.GREEN + "You were given the perk " + p.getName() + " at level " + l);
 				}
 				return true;
 			default:
