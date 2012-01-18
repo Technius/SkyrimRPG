@@ -1,7 +1,5 @@
 package me.dbizzzle.SkyrimRPG;
 
-import me.dbizzzle.SkyrimRPG.Skill.Perk;
-import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
 import org.bukkit.command.CommandExecutor;
