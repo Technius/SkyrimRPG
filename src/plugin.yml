@@ -37,6 +37,10 @@ commands:
       description: Removes a perk from the specified player
       usage: |
          /removeperk [player] <perk>
+   perk:
+      description: Shows the perk menu
+      usage: |
+         /perk <args>
 permissions:
    skyrimrpg.*:
       Description: Implies all.
