@@ -150,7 +150,7 @@ public class SRPGEL extends EntityListener
 			{
 				Player player = (Player)e.getEntity();
 				EntityPlayer ep = ((CraftPlayer)player).getHandle();
-				boolean ib = ep.L();
+				boolean ib = ep.l();
 				if(ib)
 				{
 					SkillManager sm = new SkillManager();
