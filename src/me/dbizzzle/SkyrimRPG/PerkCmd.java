@@ -33,9 +33,11 @@ public class PerkCmd implements CommandExecutor
 				if(args[0].equalsIgnoreCase("list"))
 				{
 					int ct = 0;
+					int pg = Math.round(PerkManager.perks.get(player).size()/10);
+					if(pg < PerkManager.perks.get(player).size()/10)pg++;
+					player.sendMessage(ChatColor.GOLD + "Perks list " + ChatColor.RED + "1" + ChatColor.GOLD + " of " + ChatColor.GREEN + pg);
 					for(Perk p:PerkManager.perks.get(player).keySet())
 					{
-						player.sendMessage(ChatColor.GOLD + "Perks list " + ChatColor.RED + "0" + ChatColor.GOLD + " of " + ChatColor.GREEN + PerkManager.perks.get(player).size());
 						if(ct == 9)break;
 						ChatColor c;
 						switch(p.getSkill())
