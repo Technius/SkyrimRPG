@@ -108,6 +108,7 @@ public class SkillManager
 			HashMap<String, Integer> sk = new HashMap<String, Integer>();
 			int tl = 1;
 			int m = 0;
+			int pp = 0;
 			while((l=br.readLine())!= null)
 			{
 				if(l.startsWith("#"))continue;
@@ -339,6 +340,20 @@ public class SkillManager
 						m = 0;
 					}
 				}
+				if(l.startsWith("Perk Points"))
+				{
+					if(tokens.length != 2)continue;
+					if(!tokens[0].equalsIgnoreCase("Perk Points"))continue;
+					try
+					{
+						String s = tokens[1].replaceAll(" ", "");
+						pp = Integer.parseInt(s);
+					}
+					catch(NumberFormatException nfe)
+					{
+						pp = 0;
+					}
+				}
 				if(sk.get("Archery")== null)sk.put("Archery", 1);
 				if(sk.get("Swordsmanship")== null)sk.put("Swordsmanship", 1);
 				if(sk.get("PickPocket")== null)sk.put("PickPocket", 1);
@@ -359,6 +374,7 @@ public class SkillManager
 				skills.put(player, sk);
 				progress.put(player, pr);
 				level.put(player, tl);
+				PerkManager.points.put(player, pp);
 				SpellManager.magicka.put(player, m);
 			}
 			
@@ -396,6 +412,10 @@ public class SkillManager
 			bw.write("#Magicka");
 			bw.newLine();
 			bw.write("Magicka: " + SpellManager.magicka.get(player));
+			bw.newLine();
+			bw.write("#SPENT Perk Points");
+			bw.newLine();
+			bw.write("Perk Points: " + PerkManager.perks.get(player));
 			bw.newLine();
 			bw.write("#Skill: level, progress");
 			bw.newLine();
