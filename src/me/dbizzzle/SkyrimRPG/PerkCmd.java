@@ -27,8 +27,37 @@ public class PerkCmd implements CommandExecutor
 				plugin.log.info("You don't have perks!");
 				return true;
 			}
-			player.sendMessage(ChatColor.GOLD + "Perk Menu");
-			if(player.hasPermission("skyrimrpg.addperk"))player.sendMessage(ChatColor.GREEN + "/addperk [player] <perk> <level> " + ChatColor.RED + "- Adds a perk to specified player");
+			switch(args.length)
+			{
+			case 1:
+				if(args[0].equalsIgnoreCase("list"))
+				{
+					int ct = 0;
+					int pg = Math.round(PerkManager.perks.get(player).size()/10);
+					if(pg < PerkManager.perks.get(player).size()/10)pg++;
+					player.sendMessage(ChatColor.GOLD + "Perks list " + ChatColor.RED + "1" + ChatColor.GOLD + " of " + ChatColor.GREEN + pg);
+					for(Perk p:PerkManager.perks.get(player).keySet())
+					{
+						if(ct == 9)break;
+						ChatColor c;
+						switch(p.getSkill())
+						{
+						case ARCHERY: c = ChatColor.DARK_RED; break;
+						default: c = ChatColor.WHITE; break;
+						}
+						int l = PerkManager.perks.get(player).get(p);
+						if(l == 1)player.sendMessage(c + p.getName());
+						else player.sendMessage(c + p.getName() + " " + l);
+						ct++;
+					}
+				}
+				break;
+			default:
+				player.sendMessage(ChatColor.GOLD + "Perk Menu");
+				player.sendMessage(ChatColor.YELLOW + "<Required>" + ChatColor.GOLD + "[Optional]");
+				if(player.hasPermission("skyrimrpg.addperk"))player.sendMessage(ChatColor.GREEN + "/addperk [player] <perk> <level> " + ChatColor.RED + "- Adds a perk to specified player");
+				return true;
+			}
 		}
 		else if(command.getName().equalsIgnoreCase("addperk"))
 		{
