@@ -50,11 +50,64 @@ public class PerkCmd implements CommandExecutor
 						else player.sendMessage(c + p.getName() + " " + l);
 						ct++;
 					}
+					return true;
 				}
-				break;
+				else if(args[0].equalsIgnoreCase("unlock"))
+				{
+					player.sendMessage(ChatColor.RED + "Usage: /perk unlock <perk> [level]");
+					return true;
+				}
+				else
+				{
+					player.sendMessage(ChatColor.GOLD + "Perk Menu");
+					player.sendMessage(ChatColor.YELLOW + "<Required>" + ChatColor.GOLD + "[Optional]");
+					player.sendMessage(ChatColor.GREEN + "/perk unlock <perk> [level] " + ChatColor.RED + "- Unlocks a perk, if all requirements have been met");
+					if(player.hasPermission("skyrimrpg.addperk"))player.sendMessage(ChatColor.GREEN + "/addperk [player] <perk> <level> " + ChatColor.RED + "- Adds a perk to specified player");
+					return true;
+				}
+			case 2:
+				if(args[0].equalsIgnoreCase("unlock"))
+				{
+					Perk p;
+					try
+					{
+						p = Perk.valueOf(args[1].toUpperCase());
+					}
+					catch(IllegalArgumentException iae)
+					{
+						player.sendMessage(ChatColor.RED + "No such perk: " + args[1]);
+						return true;
+					}
+					if(PerkManager.perks.get(player).containsKey(p))
+					{
+						player.sendMessage(ChatColor.RED + "You already have this perk!");
+						return true;
+					}
+					int level = PerkManager.perks.get(player).get(p);
+					if(level != 1)
+					{
+						player.sendMessage(ChatColor.RED + "Use /perk unlock <perk> <level>");
+						return true;
+					}
+					else
+					{
+						PerkManager.perks.get(player).put(p, 1);
+						player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
+					}
+					return true;
+				}
+				else
+				{
+					player.sendMessage(ChatColor.GOLD + "Perk Menu");
+					player.sendMessage(ChatColor.YELLOW + "<Required>" + ChatColor.GOLD + "[Optional]");
+					player.sendMessage(ChatColor.GREEN + "/perk unlock <perk> [level] " + ChatColor.RED + "- Unlocks a perk, if all requirements have been met");
+					if(player.hasPermission("skyrimrpg.addperk"))player.sendMessage(ChatColor.GREEN + "/addperk [player] <perk> <level> " + ChatColor.RED + "- Adds a perk to specified player");
+					return true;
+				}
 			default:
 				player.sendMessage(ChatColor.GOLD + "Perk Menu");
 				player.sendMessage(ChatColor.YELLOW + "<Required>" + ChatColor.GOLD + "[Optional]");
+				player.sendMessage(ChatColor.GREEN + "/perk unlock <perk> [level] " + ChatColor.RED + "- Unlocks a perk, if all requirements have been met");
 				if(player.hasPermission("skyrimrpg.addperk"))player.sendMessage(ChatColor.GREEN + "/addperk [player] <perk> <level> " + ChatColor.RED + "- Adds a perk to specified player");
 				return true;
 			}
