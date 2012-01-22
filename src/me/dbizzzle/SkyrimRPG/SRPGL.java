@@ -10,24 +10,211 @@ import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Door;
 
-public class SRPGEL extends EntityListener
+public class SRPGL implements Listener
 {
+	public SkyrimRPG plugin;
+
+	public SRPGL(SkyrimRPG p) {
+		plugin = p;
+	}
+	
+	int secondsDelay = 20; //This will be configurable, I just set 20 for now
+	long delay = secondsDelay*20;
+
+	String pickpocketed = ChatColor.RED + "Somebody has pickpocketed you!"; //Configurable
+	@EventHandler(event = PlayerInteractEvent.class, priority = EventPriority.NORMAL)
+	public void onPlayerInteract(PlayerInteractEvent event)
+	{
+		boolean disable = false;
+		/**
+		if(event.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD)
+		{
+			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+			{
+				plugin.st.chargeFireball(event.getPlayer());
+				event.getPlayer().sendMessage("Charging fireball...");
+			}	
+			else if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				int m = plugin.st.unchargeFireball(event.getPlayer());
+				if(m == -1) return;
+				plugin.sm.shootFireball(event.getPlayer(), m);
+				event.getPlayer().sendMessage("Fireball shot!");
+			}
+		}
+		**/
+		if (event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON && disable)
+		{
+			//disabling lockpicking for alpha release
+			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				if (event.getClickedBlock().getType() == Material.IRON_DOOR)
+				{
+					Player s = event.getPlayer();
+					Inventory inv = s.getInventory();
+					if (inv.contains(Material.IRON_INGOT))
+					{
+						if (pickLockSuccess(s, event.getClickedBlock().getLocation()))
+						{
+							SkillManager sm = new SkillManager();
+							if (sm.processExperience(s, "Lockpicking"))
+							{
+								sm.incrementLevel("Lockpicking", s);
+								SkillManager.progress.get(s).put("Lockpicking", 0);
+							}
+							else SkillManager.progress.get(s).put("Lockpicking", SkillManager.progress.get(s).get("Lockpicking") + 1);
+							s.sendMessage(ChatColor.GREEN + "You picked the lock successfully!");
+							Door d = (Door) event.getClickedBlock().getState();
+							d.setOpen(true);
+						}
+						else
+						{
+							int alevel = SkillManager.getSkillLevel("Lockpicking", s);
+							Random r = new Random();
+							int calc = 20 - (alevel/10);
+							if(r.nextInt(calc + 1) < alevel/10)
+							{
+								s.sendMessage(ChatColor.RED + "You failed at picking the lock, and one of your lockpicks broke!");
+								for(ItemStack i:inv.getContents())
+								{
+									if(i.getType() != Material.IRON_INGOT)continue;
+									i.setAmount(i.getAmount() - 1);
+									break;
+								}
+							}
+							else s.sendMessage(ChatColor.RED + "You failed at picking the lock!");
+						}
+					}
+				}
+			}
+		}
+		else if(event.getPlayer().getItemInHand().getType() == Material.AIR)
+		{
+			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+			{
+				if(SpellManager.boundleft.containsKey(event.getPlayer()))
+				{
+					plugin.sm.castSpell(SpellManager.boundleft.get(event.getPlayer()), event.getPlayer());
+				}
+			}
+			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				if(SpellManager.boundright.containsKey(event.getPlayer()))
+				{
+				plugin.sm.castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
+				}
+			}
+		}
+		else if(event.getPlayer().getItemInHand().getType() == Material.BOOK)
+		{
+			if(!ConfigManager.useSpellbooks)return;
+			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				ItemStack b = event.getPlayer().getItemInHand();
+				if(b.getDurability() != 0)
+				{
+					plugin.sm.useBook(event.getPlayer(), b.getDurability());
+				}
+			}
+		}
+}
+
+	@EventHandler(event = PlayerInteractEntityEvent.class, priority = EventPriority.LOW)
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+		Player se = event.getPlayer();
+		final EntityPlayer s = ((CraftPlayer) event.getPlayer()).getHandle();
+		if (s.isSneaking()) {
+			Entity ent = event.getRightClicked();
+			if (ent instanceof Player) {
+				final String ents = ((HumanEntity) ent).getName();
+				EntityPlayer pick = ((CraftPlayer) plugin.getServer().getPlayer(ents)).getHandle();
+				s.a(pick.inventory);
+				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
+
+				SkillManager sm = new SkillManager();
+				if (sm.processExperience(se, "PickPocket")) {
+					sm.incrementLevel("PickPocket", se);
+					SkillManager.progress.get(se).put("PickPocket", 0);
+					SkillManager.calculateLevel(se);
+				} else {
+					SkillManager.progress.get(se).put("PickPocket", SkillManager.progress.get(se).get("PickPocket") + 1);
+				}
+
+				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+					@SuppressWarnings("deprecation")
+					public void run() {
+						Player picked = plugin.getServer().getPlayer(ents);
+						if(!picked.isOnline())return;
+						picked.sendMessage(pickpocketed);
+						picked.updateInventory();
+						s.closeInventory();
+					}
+				}, delay);
+			}
+		}
+	}
+	@EventHandler(event = PlayerJoinEvent.class, priority = EventPriority.HIGHEST)
+	public void onPlayerJoin(PlayerJoinEvent event)
+	{
+		SkillManager sm = new SkillManager(plugin);
+		sm.loadData(event.getPlayer());
+	}
+	@EventHandler(event = PlayerQuitEvent.class, priority = EventPriority.HIGHEST)
+	public void onPlayerQuit(PlayerQuitEvent event)
+	{
+		SkillManager sm = new SkillManager();
+		sm.setPlugin(plugin);
+		sm.saveData(event.getPlayer());
+	}
+
+	public boolean pickLockSuccess(Player pla, Location loc)
+	{
+		if (loc.getBlock().getType() == Material.IRON_DOOR || loc.getBlock().getType() == Material.CHEST)
+		{
+			int alevel = SkillManager.getSkillLevel("LockPick", pla);
+			Random r = new Random();
+			int calc = 10 - (alevel/10);
+			if (r.nextInt(calc + 1) < alevel/10)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return false;
+	}	
+	@EventHandler(event = EntityTargetEvent.class, priority = EventPriority.HIGH)
 	public void onEntityTarget(EntityTargetEvent event)
 	{
 		if(event.getEntity() instanceof Zombie)
@@ -51,6 +238,7 @@ public class SRPGEL extends EntityListener
 			event.setCancelled(true);
 		}
 	}
+	@EventHandler(event = EntityDeathEvent.class, priority = EventPriority.HIGH)
 	public void onEntityDeath(EntityDeathEvent event)
 	{
 		if(event.getEntity() instanceof Zombie)
@@ -67,6 +255,7 @@ public class SRPGEL extends EntityListener
 			event.getDrops().clear();
 		}
 	}
+	@EventHandler(event = EntityDamageEvent.class, priority = EventPriority.HIGH)
 	public void onEntityDamage(EntityDamageEvent event)
 	{
 		if(event instanceof EntityDamageByEntityEvent)
@@ -150,7 +339,7 @@ public class SRPGEL extends EntityListener
 			{
 				Player player = (Player)e.getEntity();
 				EntityPlayer ep = ((CraftPlayer)player).getHandle();
-				boolean ib = ep.l();
+				boolean ib = ep.L();
 				if(ib)
 				{
 					SkillManager sm = new SkillManager();
@@ -181,10 +370,12 @@ public class SRPGEL extends EntityListener
 			}
 		}
 	}
+	@EventHandler(event = FoodLevelChangeEvent.class, priority = EventPriority.HIGHEST)
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
 		event.setCancelled(true);
 	}
+	@EventHandler(event = ExplosionPrimeEvent.class, priority = EventPriority.HIGHEST)
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if(!(event.getEntity() instanceof Fireball))return;

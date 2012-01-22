@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,8 +17,6 @@ public class SkyrimRPG extends JavaPlugin
 	SpellManager sm = new SpellManager(this);
 	SkillManager sk = new SkillManager();
 	SpellTimer st = new SpellTimer(this);
-	SRPGPL pl = new SRPGPL(this);
-	SRPGEL el = new SRPGEL();
 	ConfigManager cm = new ConfigManager(this);
 	public void onEnable() 
 	{
@@ -34,15 +31,7 @@ public class SkyrimRPG extends JavaPlugin
 		getCommand("skystats").setExecutor(new SkyrimCmd(sm, this, cm, sk));
 		sk.setPlugin(this);
 		PluginManager pm = this.getServer().getPluginManager();
-		pm.registerEvent(Event.Type.PLAYER_INTERACT, pl, Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, pl, Event.Priority.Low, this);
-		pm.registerEvent(Event.Type.FOOD_LEVEL_CHANGE, el, Event.Priority.Highest, this);
-		pm.registerEvent(Event.Type.PLAYER_JOIN, pl, Event.Priority.Highest, this);
-		pm.registerEvent(Event.Type.PLAYER_QUIT, pl, Event.Priority.Highest, this);
-		pm.registerEvent(Event.Type.ENTITY_DAMAGE, el, Event.Priority.High, this);
-		pm.registerEvent(Event.Type.ENTITY_TARGET, el, Event.Priority.High, this);
-		pm.registerEvent(Event.Type.ENTITY_DEATH, el, Event.Priority.High, this);
-		pm.registerEvent(Event.Type.EXPLOSION_PRIME, el, Event.Priority.Highest, this);
+		pm.registerEvents(new SRPGL(this), this);
 		if(!checkFiles())createFiles();
 		cm.loadConfig();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
