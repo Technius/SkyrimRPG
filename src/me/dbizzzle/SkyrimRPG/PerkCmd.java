@@ -68,6 +68,7 @@ public class PerkCmd implements CommandExecutor
 			case 2:
 				if(args[0].equalsIgnoreCase("unlock"))
 				{
+					PerkManager pm = new PerkManager(plugin);
 					Perk p;
 					try
 					{
@@ -80,20 +81,19 @@ public class PerkCmd implements CommandExecutor
 					}
 					if(PerkManager.perks.get(player).containsKey(p))
 					{
-						player.sendMessage(ChatColor.RED + "You already have this perk!");
+						player.sendMessage(ChatColor.RED + "Use /perk unlock <perk> <level>!");
 						return true;
 					}
-					int level = PerkManager.perks.get(player).get(p);
-					if(level != 1)
+					else if(pm.hasEnough(player))
 					{
-						player.sendMessage(ChatColor.RED + "Use /perk unlock <perk> <level>");
-						return true;
+						if(pm.canUnlock(player, p, 1))
+						{
+							PerkManager.perks.get(player).put(p, 1);
+							player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
+						}
+						else player.sendMessage(ChatColor.RED + "You have not met the requirements to unlock this perk.");
 					}
-					else
-					{
-						PerkManager.perks.get(player).put(p, 1);
-						player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
-					}
+					else player.sendMessage(ChatColor.RED + "You don't have enough perk points!");
 					return true;
 				}
 				else
