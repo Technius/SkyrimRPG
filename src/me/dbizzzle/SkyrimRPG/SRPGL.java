@@ -49,7 +49,7 @@ public class SRPGL implements Listener
 	long delay = secondsDelay*20;
 
 	String pickpocketed = ChatColor.RED + "Somebody has pickpocketed you!"; //Configurable
-	@EventHandler(event = PlayerInteractEvent.class, priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		if(event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON)
@@ -57,7 +57,8 @@ public class SRPGL implements Listener
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				Material btype = event.getClickedBlock().getType();
-				if (btype == Material.IRON_DOOR)
+				plugin.log.info(btype.toString());
+				if (btype == Material.IRON_DOOR_BLOCK)
 				{
 					Door d = (Door) event.getClickedBlock().getState();
 					if(!d.isOpen())
