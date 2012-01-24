@@ -3,15 +3,14 @@ package me.dbizzzle.SkyrimRPG;
 import java.util.List;
 import java.util.Random;
 
-import me.dbizzzle.SkyrimRPG.DiseaseManager.Disease;
 import me.dbizzzle.SkyrimRPG.Skill.Perk;
 import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Blaze;
@@ -35,7 +34,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Door;
 
@@ -54,64 +52,70 @@ public class SRPGL implements Listener
 	@EventHandler(event = PlayerInteractEvent.class, priority = EventPriority.NORMAL)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		boolean disable = false;
-		/**
-		if(event.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD)
+		if(event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON)
 		{
-			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
-			{
-				plugin.st.chargeFireball(event.getPlayer());
-				event.getPlayer().sendMessage("Charging fireball...");
-			}	
-			else if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-			{
-				int m = plugin.st.unchargeFireball(event.getPlayer());
-				if(m == -1) return;
-				plugin.sm.shootFireball(event.getPlayer(), m);
-				event.getPlayer().sendMessage("Fireball shot!");
-			}
-		}
-		**/
-		if (event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON && disable)
-		{
-			//disabling lockpicking for alpha release
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
-				if (event.getClickedBlock().getType() == Material.IRON_DOOR)
+				Material btype = event.getClickedBlock().getType();
+				if (btype == Material.IRON_DOOR)
 				{
-					Player s = event.getPlayer();
-					Inventory inv = s.getInventory();
-					if (inv.contains(Material.IRON_INGOT))
+					Door d = (Door) event.getClickedBlock().getState();
+					if(!d.isOpen())
 					{
-						if (pickLockSuccess(s, event.getClickedBlock().getLocation()))
+						SkillManager sm = new SkillManager();
+						if(pickLockSuccess(event.getPlayer()))
 						{
-							SkillManager sm = new SkillManager();
-							if (sm.processExperience(s, "Lockpicking"))
-							{
-								sm.incrementLevel("Lockpicking", s);
-								SkillManager.progress.get(s).put("Lockpicking", 0);
-							}
-							else SkillManager.progress.get(s).put("Lockpicking", SkillManager.progress.get(s).get("Lockpicking") + 1);
-							s.sendMessage(ChatColor.GREEN + "You picked the lock successfully!");
-							Door d = (Door) event.getClickedBlock().getState();
 							d.setOpen(true);
+							if(d.isTopHalf())((Door)event.getClickedBlock().getRelative(BlockFace.DOWN, 1)).setOpen(true);
+							else ((Door)event.getClickedBlock().getRelative(BlockFace.UP, 1).getState()).setOpen(true);
+							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
+							if(event.isCancelled())event.setCancelled(true);
+						}
+						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel("Lockpicking", event.getPlayer())/2 + 10)
+						{
+							event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - 1);
+							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed, and your lock pick broke.");
 						}
 						else
 						{
-							int alevel = SkillManager.getSkillLevel("Lockpicking", s);
-							Random r = new Random();
-							int calc = 20 - (alevel/10);
-							if(r.nextInt(calc + 1) < alevel/10)
-							{
-								s.sendMessage(ChatColor.RED + "You failed at picking the lock, and one of your lockpicks broke!");
-								for(ItemStack i:inv.getContents())
-								{
-									if(i.getType() != Material.IRON_INGOT)continue;
-									i.setAmount(i.getAmount() - 1);
-									break;
-								}
-							}
-							else s.sendMessage(ChatColor.RED + "You failed at picking the lock!");
+							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed!");
+						}
+						if (sm.processExperience(event.getPlayer(), "Lockpicking")) {
+							sm.incrementLevel("Lockpicking", event.getPlayer());
+							SkillManager.progress.get(event.getPlayer()).put("Lockpicking", 0);
+							SkillManager.calculateLevel(event.getPlayer());
+						} else {
+							SkillManager.progress.get(event.getPlayer()).put("Lockpicking", SkillManager.progress.get(event.getPlayer()).get("Lockpicking") + 1);
+						}
+					}
+				}
+				else if(btype == Material.CHEST)
+				{
+					if(event.isCancelled())
+					{
+						SkillManager sm = new SkillManager();
+						if(pickLockSuccess(event.getPlayer()))
+						{
+							net.minecraft.server.TileEntityChest c = (net.minecraft.server.TileEntityChest)((org.bukkit.craftbukkit.CraftWorld)event.getPlayer().getWorld()).getTileEntityAt(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ());
+							c.a((net.minecraft.server.EntityHuman)((CraftPlayer)event.getPlayer()).getHandle());
+							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
+							if(event.isCancelled())event.setCancelled(true);
+						}
+						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel("Lockpicking", event.getPlayer())/2 + 10)
+						{
+							event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - 1);
+							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed, and your lock pick broke.");
+						}
+						else
+						{
+							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed!");
+						}
+						if (sm.processExperience(event.getPlayer(), "Lockpicking")) {
+							sm.incrementLevel("Lockpicking", event.getPlayer());
+							SkillManager.progress.get(event.getPlayer()).put("Lockpicking", 0);
+							SkillManager.calculateLevel(event.getPlayer());
+						} else {
+							SkillManager.progress.get(event.getPlayer()).put("Lockpicking", SkillManager.progress.get(event.getPlayer()).get("Lockpicking") + 1);
 						}
 					}
 				}
@@ -146,8 +150,7 @@ public class SRPGL implements Listener
 				}
 			}
 		}
-}
-
+	}
 	@EventHandler(event = PlayerInteractEntityEvent.class, priority = EventPriority.LOW)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Player se = event.getPlayer();
@@ -196,22 +199,12 @@ public class SRPGL implements Listener
 		sm.saveData(event.getPlayer());
 	}
 
-	public boolean pickLockSuccess(Player pla, Location loc)
+	public boolean pickLockSuccess(Player pla)
 	{
-		if (loc.getBlock().getType() == Material.IRON_DOOR || loc.getBlock().getType() == Material.CHEST)
-		{
-			int alevel = SkillManager.getSkillLevel("LockPick", pla);
-			Random r = new Random();
-			int calc = 10 - (alevel/10);
-			if (r.nextInt(calc + 1) < alevel/10)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+		int alevel = SkillManager.getSkillLevel("Lockpicking", pla);
+		Random r = new Random();
+		int calc = r.nextInt(100) + 1;
+		if(calc < alevel/2)return true;
 		return false;
 	}	
 	@EventHandler(event = EntityTargetEvent.class, priority = EventPriority.HIGH)
@@ -362,20 +355,6 @@ public class SRPGL implements Listener
 						SkillManager.calculateLevel(player);
 					}
 					else SkillManager.progress.get(player).put("Blocking", SkillManager.progress.get(player).get("Blocking") + 1);
-				}
-			}
-			else if(e.getDamager() instanceof Zombie)
-			{
-				if(e.getEntity() instanceof Player)
-				{
-					double a;
-					a = Math.random();
-					if(a > 80)
-					{
-						Player p = (Player) e.getEntity();
-						DiseaseManager.addDisease(p, Disease.BRAIN_ROT);
-						p.sendMessage(ChatColor.GRAY + "The zombie has given you brain rot!");
-					}
 				}
 			}
 		}
