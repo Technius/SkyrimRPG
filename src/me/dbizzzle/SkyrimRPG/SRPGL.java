@@ -59,21 +59,22 @@ public class SRPGL implements Listener
 				Material btype = event.getClickedBlock().getType();
 				if (btype == Material.IRON_DOOR_BLOCK)
 				{
-					Door d = (Door) event.getClickedBlock();
+					Door d = (Door) event.getClickedBlock().getState().getData();
 					if(!d.isOpen())
 					{
 						SkillManager sm = new SkillManager();
 						if(pickLockSuccess(event.getPlayer()))
 						{
 							d.setOpen(true);
-							if(d.isTopHalf())((Door)event.getClickedBlock().getRelative(BlockFace.DOWN, 1)).setOpen(true);
-							else ((Door)event.getClickedBlock().getRelative(BlockFace.UP, 1).getState()).setOpen(true);
+							if(d.isTopHalf())((Door)event.getClickedBlock().getRelative(BlockFace.DOWN, 1).getState().getData()).setOpen(true);
+							else ((Door)event.getClickedBlock().getRelative(BlockFace.UP, 1).getState().getData()).setOpen(true);
 							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
-							if(event.isCancelled())event.setCancelled(true);
+							if(event.isCancelled())event.setCancelled(false);
+							event.getClickedBlock().getState().update();
 						}
 						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel("Lockpicking", event.getPlayer())/2 + 10)
 						{
-							event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - 1);
+							event.getPlayer().getItemInHand().setAmount((event.getPlayer().getItemInHand().getAmount() - 1));
 							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed, and your lock pick broke.");
 						}
 						else
@@ -204,7 +205,7 @@ public class SRPGL implements Listener
 		int alevel = SkillManager.getSkillLevel("Lockpicking", pla);
 		Random r = new Random();
 		int calc = r.nextInt(100) + 1;
-		if(calc < alevel/2)return true;
+		if(calc < (alevel/2 + 10))return true;
 		return false;
 	}	
 	@EventHandler(event = EntityTargetEvent.class, priority = EventPriority.HIGH)
