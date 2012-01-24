@@ -57,10 +57,9 @@ public class SRPGL implements Listener
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				Material btype = event.getClickedBlock().getType();
-				plugin.log.info(btype.toString());
 				if (btype == Material.IRON_DOOR_BLOCK)
 				{
-					Door d = (Door) event.getClickedBlock().getState();
+					Door d = (Door) event.getClickedBlock();
 					if(!d.isOpen())
 					{
 						SkillManager sm = new SkillManager();
