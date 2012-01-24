@@ -1,5 +1,8 @@
 package me.dbizzzle.SkyrimRPG.Skill;
 
+/**
+ * Represents a perk
+ */
 public enum Perk 
 {
 	OVERDRAW(Skill.ARCHERY, 5, null, 20, 40, 60, 80, 100), SWORDSMAN(Skill.SWORDSMANSHIP, 5, null, 20, 40, 60, 80, 100),
