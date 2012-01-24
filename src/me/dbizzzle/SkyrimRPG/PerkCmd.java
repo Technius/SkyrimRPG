@@ -57,8 +57,8 @@ public class PerkCmd implements CommandExecutor
 						default: c = ChatColor.WHITE; break;
 						}
 						int l = PerkManager.perks.get(player).get(p);
-						if(l == 1)player.sendMessage(c + p.getName());
-						else player.sendMessage(c + p.getName() + " " + l);
+						if(p.getMaxLevel() == 1)player.sendMessage(c + p.getName());
+						else player.sendMessage(c + p.getName() + " " + ChatColor.GOLD + "(" + l + "/" + p.getMaxLevel() + ")");
 						ct++;
 					}
 					return true;

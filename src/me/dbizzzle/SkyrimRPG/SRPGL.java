@@ -272,7 +272,7 @@ public class SRPGL implements Listener
 					double perkm = 1;
 					if(PerkManager.perks.get(shooter).containsKey(Perk.OVERDRAW))
 					{
-						perkm = 1 + (0.2*(PerkManager.perks.get(shooter).get(Perk.OVERDRAW)/100));
+						perkm = 1 + (0.2*(PerkManager.perks.get(shooter).get(Perk.OVERDRAW)));
 					}
 					e.setDamage((int)((e.getDamage() + (alevel/10))*(1 + perkm)));
 					if(sm.processExperience(shooter, "Archery"))
@@ -312,7 +312,17 @@ public class SRPGL implements Listener
 				if(t.equalsIgnoreCase("Sword"))
 				{
 					int alevel = SkillManager.getSkillLevel("Swordsmanship", player);
-					e.setDamage(e.getDamage() + (alevel/10));
+					double perkm = 1;
+					if(PerkManager.perks.get(player).containsKey(Perk.SWORDSMAN))
+					{
+						perkm = 1 + (0.2*(PerkManager.perks.get(player).get(Perk.SWORDSMAN)));
+					}
+					if(PerkManager.perks.get(player).containsKey(Perk.BLADESMAN))
+					{
+						int a = new Random().nextInt(100);
+						if(a < 5 + (5*PerkManager.perks.get(player).get(Perk.BLADESMAN)))perkm = perkm + 0.25 + (PerkManager.perks.get(player).get(Perk.BLADESMAN)*0.83);
+					}
+					e.setDamage((int)(e.getDamage() + (alevel/10)*perkm));
 					if(sm.processExperience(player, "Swordsmanship"))
 					{
 						sm.incrementLevel("Swordsmanship", player);
