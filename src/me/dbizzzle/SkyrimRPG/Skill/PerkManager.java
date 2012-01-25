@@ -32,7 +32,7 @@ public class PerkManager
 	{
 		if(perk == null)throw new IllegalArgumentException("Perk is null");
 		if(SkillManager.skills.get(player).get(perk.getSkill()) > perk.getRequiredSkillLevels()[level])return false;
-		if(!perks.get(player).containsKey(perk.getRequiedPerk()))return false;
+		if(!perks.get(player).containsKey(perk.getRequiedPerk()) && perk.getRequiedPerk() != null)return false;
 		return points.get(player) < SkillManager.level.get(player);
 	}
 	public void unlock(Player player, Perk perk, int level)

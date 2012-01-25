@@ -166,7 +166,7 @@ public class PerkCmd implements CommandExecutor
 					Player t = plugin.getServer().getPlayer(args[0]);
 					if(t == null)
 					{
-						plugin.log.info("No such player!");
+						plugin.log.info("[SkyrimRPG]No such player!");
 						return true;
 					}
 					Perk p;
@@ -176,7 +176,7 @@ public class PerkCmd implements CommandExecutor
 					}
 					catch(IllegalArgumentException iae)
 					{
-						sender.sendMessage("No such perk!");
+						sender.sendMessage("[SkyrimRPG]No such perk!");
 						return true;
 					}
 					int l;
@@ -185,7 +185,7 @@ public class PerkCmd implements CommandExecutor
 						l = Integer.parseInt(args[2]);
 						if(l>p.getMaxLevel())
 						{
-							sender.sendMessage(p.getName() + " has a max level of " + p.getMaxLevel() +", you entered " + l + "!");
+							sender.sendMessage("[SkyrimRPG]" + p.getName() + " has a max level of " + p.getMaxLevel() +", you entered " + l + "!");
 							return true;
 						}
 					}
@@ -195,7 +195,7 @@ public class PerkCmd implements CommandExecutor
 						return true;
 					}
 					PerkManager.perks.get(player).put(p, l);
-					sender.sendMessage(p.getName() + " successfully added to " + t.getName() +  " at level " + l);
+					sender.sendMessage("[SkyrimRPG]" + p.getName() + " successfully added to " + t.getName() +  " at level " + l);
 					t.sendMessage(ChatColor.GREEN + "You were given the perk " + p.getName() + " at level " + l);
 				}
 				else if(player.hasPermission("skyrimrpg.addperk"))
@@ -244,6 +244,63 @@ public class PerkCmd implements CommandExecutor
 				}
 				else player.sendMessage(ChatColor.RED + "You don't have permission to do this.");
 				return true;
+			}
+		}
+		else if(command.getName().equalsIgnoreCase("removeperk"))
+		{
+			if(player == null)
+			{
+				if(args.length != 2)
+				{
+					plugin.log.info("[SkyrimRPG]Usage: /removeperk <player> <perk>");
+					return true;
+				}
+				Perk p;
+				try
+				{
+					p = Perk.valueOf(args[1].toUpperCase());
+				}catch(IllegalArgumentException iae){plugin.log.info("[SkyrimRPG]No such perk!");return true;}
+				Player t = plugin.getServer().getPlayer(args[0]);
+				if(t == null)
+				{
+					plugin.log.info("[SkyrimRPG]No such player: \"" + args[0] + "\"");
+					return true;
+				}
+				if(!PerkManager.perks.get(player).containsKey(p))
+				{
+					plugin.log.info("[SkyrimRPG]" + args[0] + " doesn't have the perk " + p.getName());
+					return true;
+				}
+				PerkManager.perks.get(player).remove(p);
+				plugin.log.info("[SkyrimRPG]" + p.getName() + " removed from " + args[0]);
+				t.sendMessage(ChatColor.GREEN + "The perk " + p.getName() + " has been taken away from you.");
+			}
+			else if(player.hasPermission("skyrimrpg.removeperk"))
+			{
+				if(args.length != 2)
+				{
+					player.sendMessage(ChatColor.RED + "Usage: /removeperk <player> <perk>");
+					return true;
+				}
+				Perk p;
+				try
+				{
+					p = Perk.valueOf(args[1].toUpperCase());
+				}catch(IllegalArgumentException iae){player.sendMessage(ChatColor.RED + "No such perk!");return true;}
+				Player t = plugin.getServer().getPlayer(args[0]);
+				if(t == null)
+				{
+					player.sendMessage(ChatColor.RED + "No such player: \"" + args[0] + "\"");
+					return true;
+				}
+				if(!PerkManager.perks.get(player).containsKey(p))
+				{
+					player.sendMessage(ChatColor.RED + args[0] + " doesn't have the perk " + p.getName());
+					return true;
+				}
+				PerkManager.perks.get(player).remove(p);
+				player.sendMessage(ChatColor.RED + p.getName() + " removed from " + args[0]);
+				t.sendMessage(ChatColor.GREEN + "The perk " + p.getName() + " has been taken away from you.");
 			}
 		}
 		return true;
