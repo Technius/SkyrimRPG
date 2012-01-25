@@ -50,6 +50,7 @@ public class SRPGL implements Listener
 	long delay = secondsDelay*20;
 
 	String pickpocketed = ChatColor.RED + "Somebody has pickpocketed you!"; //Configurable
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
@@ -73,7 +74,7 @@ public class SRPGL implements Listener
 							{
 								d.setOpen(true);
 								event.getClickedBlock().setData(d.getData(),true);
-								d.setOpen(false);
+								d.setOpen(true);
 								d.setTopHalf(false);
 								below.setData(d.getData(), true);
 							}
@@ -81,7 +82,7 @@ public class SRPGL implements Listener
 							{
 								d.setOpen(true);
 								event.getClickedBlock().setData(d.getData(),true);
-								d.setOpen(false);
+								d.setOpen(true);
 								d.setTopHalf(true);
 								above.setData(d.getData(), true);
 							}
@@ -91,7 +92,8 @@ public class SRPGL implements Listener
 						}
 						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel("Lockpicking", event.getPlayer())/2 + 10)
 						{
-							event.getPlayer().getItemInHand().setAmount((event.getPlayer().getItemInHand().getAmount() - 1));
+							int newa = event.getPlayer().getItemInHand().getAmount() - 1;
+							event.getPlayer().setItemInHand(new org.bukkit.inventory.ItemStack(Material.REDSTONE_TORCH_ON, newa));
 							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed, and your lock pick broke.");
 						}
 						else
@@ -117,7 +119,7 @@ public class SRPGL implements Listener
 							net.minecraft.server.TileEntityChest c = (net.minecraft.server.TileEntityChest)((org.bukkit.craftbukkit.CraftWorld)event.getPlayer().getWorld()).getTileEntityAt(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ());
 							c.a((net.minecraft.server.EntityHuman)((CraftPlayer)event.getPlayer()).getHandle());
 							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
-							if(event.isCancelled())event.setCancelled(true);
+							if(event.isCancelled())event.setCancelled(false);
 						}
 						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel("Lockpicking", event.getPlayer())/2 + 10)
 						{
@@ -137,6 +139,7 @@ public class SRPGL implements Listener
 						}
 					}
 				}
+				event.getPlayer().updateInventory();
 			}
 		}
 		else if(event.getPlayer().getItemInHand().getType() == Material.AIR)
