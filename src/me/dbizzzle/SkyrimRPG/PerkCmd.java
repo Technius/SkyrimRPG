@@ -98,7 +98,7 @@ public class PerkCmd implements CommandExecutor
 					{
 						if(pm.canUnlock(player, p, 1))
 						{
-							PerkManager.perks.get(player).put(p, 1);
+							pm.unlock(player, p, 1);
 							player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
 						}
 						else player.sendMessage(ChatColor.RED + "You have not met the requirements to unlock this perk.");
