@@ -22,21 +22,15 @@ public class PerkManager
 	public static HashMap<Player, Integer>points = new HashMap<Player, Integer>();
 	public int getPoints(Player player)
 	{
-		return SkillManager.level.get(player) - points.get(player);
+		return SkillManager.level.get(player) - points.get(player) - 1;
 	}
 	public boolean hasEnough(Player player)
 	{
-		return SkillManager.level.get(player) > points.get(player);
+		return getPoints(player) != 0;
 	}
 	public boolean canUnlock(Player player, Perk perk, int level)
 	{
-		int last = perk.getRequiredSkillLevels()[0];
-		for(int c : perk.getRequiredSkillLevels())
-		{
-			if(c <= perk.getRequiredSkillLevels()[level - 1])last = c;
-			else if(last <= perk.getRequiredSkillLevels()[level - 1])return true;
-		}
-		return true;
+		return points.get(player) < SkillManager.level.get(player);
 	}
 	public void loadPerks(Player player)
 	{

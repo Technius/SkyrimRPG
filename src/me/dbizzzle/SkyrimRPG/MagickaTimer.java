@@ -1,5 +1,6 @@
 package me.dbizzzle.SkyrimRPG;
 
+import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
 import org.bukkit.entity.Player;
@@ -10,8 +11,8 @@ public class MagickaTimer implements Runnable
 	{
 		for(Player p:SpellManager.magicka.keySet())
 		{
-			int clevel = SkillManager.getSkillLevel("Conjuration", p);
-			int dlevel = SkillManager.getSkillLevel("Destruction", p);
+			int clevel = SkillManager.getSkillLevel(Skill.CONJURATION, p);
+			int dlevel = SkillManager.getSkillLevel(Skill.DESTRUCTION, p);
 			int cl = clevel/10;
 			int dl = dlevel/10;
 			int newv = 5 + cl + dl + SpellManager.magicka.get(p);

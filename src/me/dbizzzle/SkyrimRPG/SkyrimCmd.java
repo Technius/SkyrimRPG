@@ -1,5 +1,6 @@
 package me.dbizzzle.SkyrimRPG;
 
+import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
 import org.bukkit.command.CommandExecutor;
@@ -261,22 +262,20 @@ public class SkyrimCmd implements CommandExecutor
 							player.sendMessage(ChatColor.RED + "You don't have permission to do this");
 							return true;
 						}
-						String skill = args[1].toLowerCase();
-						if(skill.length() == 1)
+						Skill skill;
+						try
+						{
+							skill = Skill.valueOf(args[1].toUpperCase());
+						}
+						catch(IllegalArgumentException iae)
 						{
 							player.sendMessage(ChatColor.RED + "No such skill!");
 							return true;
 						}
-						String s = Character.toUpperCase(skill.charAt(0)) + skill.substring(1);
-						if(!SkillManager.skills.get(player).containsKey(s))
-						{
-							player.sendMessage(ChatColor.RED + "No such skill!");
-							return true;
-						}
-						int l = SkillManager.getSkillLevel(s, player);
+						int l = SkillManager.getSkillLevel(skill, player);
 						try{ l = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){sender.sendMessage(ChatColor.RED + "That is not a valid number."); return true;}
-						sk.setLevel(s, player, l);
-						player.sendMessage(ChatColor.GREEN + s + " set to level " + l);
+						sk.setLevel(skill, player, l);
+						player.sendMessage(ChatColor.GREEN + skill.getName() + " set to level " + l);
 						return true;
 					}
 					break;
@@ -334,17 +333,17 @@ public class SkyrimCmd implements CommandExecutor
 					player.sendMessage(ChatColor.RED + "Combat" + ChatColor.WHITE + "|" + ChatColor.BLUE + "Magic" + ChatColor.WHITE + "|" + ChatColor.GRAY + "Stealth");
 					player.sendMessage(ChatColor.GREEN + "Level: " + SkillManager.level.get(player));
 					player.sendMessage(ChatColor.BLUE + "Magicka: " + SpellManager.magicka.get(player));
-					player.sendMessage(ChatColor.RED + "Archery: Level " + SkillManager.getSkillLevel("Archery", player));
-					player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + SkillManager.getSkillLevel("Swordsmanship", player));
-					player.sendMessage(ChatColor.RED + "Axecraft: Level " + SkillManager.getSkillLevel("Axecraft", player));
-					player.sendMessage(ChatColor.RED + "Blocking: Level " + SkillManager.getSkillLevel("Blocking", player));
-					player.sendMessage(ChatColor.BLUE + "Destruction: Level " + SkillManager.getSkillLevel("Destruction", player));
-					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + SkillManager.getSkillLevel("Conjuration", player));
+					player.sendMessage(ChatColor.RED + "Archery: Level " + SkillManager.getSkillLevel(Skill.ARCHERY, player));
+					player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + SkillManager.getSkillLevel(Skill.SWORDSMANSHIP, player));
+					player.sendMessage(ChatColor.RED + "Axecraft: Level " + SkillManager.getSkillLevel(Skill.AXECRAFT, player));
+					player.sendMessage(ChatColor.RED + "Blocking: Level " + SkillManager.getSkillLevel(Skill.BLOCKING, player));
+					player.sendMessage(ChatColor.BLUE + "Destruction: Level " + SkillManager.getSkillLevel(Skill.DESTRUCTION, player));
+					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + SkillManager.getSkillLevel(Skill.CONJURATION, player));
 					break;
 				case 2:
 					player.sendMessage(ChatColor.GOLD + "Stats Page 2 of 2");
-					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + SkillManager.getSkillLevel("PickPocket", player));
-					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + SkillManager.getSkillLevel("Lockpicking", player));
+					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + SkillManager.getSkillLevel(Skill.PICKPOCKETING, player));
+					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + SkillManager.getSkillLevel(Skill.LOCKPICKING, player));
 					break;
 				default:
 					player.sendMessage(ChatColor.GOLD + "Stats Page " + page + " of 2");

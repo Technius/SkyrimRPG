@@ -5,6 +5,7 @@ import java.util.Random;
 
 import me.dbizzzle.SkyrimRPG.Skill.Perk;
 import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
+import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import net.minecraft.server.EntityPlayer;
 
@@ -90,7 +91,7 @@ public class SRPGL implements Listener
 							if(event.isCancelled())event.setCancelled(false);
 							event.getClickedBlock().getWorld().playEffect(event.getClickedBlock().getLocation(), Effect.DOOR_TOGGLE, 0);
 						}
-						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel("Lockpicking", event.getPlayer())/2 + 10)
+						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel(Skill.LOCKPICKING, event.getPlayer())/2 + 10)
 						{
 							int newa = event.getPlayer().getItemInHand().getAmount() - 1;
 							event.getPlayer().setItemInHand(new org.bukkit.inventory.ItemStack(Material.REDSTONE_TORCH_ON, newa));
@@ -100,12 +101,12 @@ public class SRPGL implements Listener
 						{
 							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed!");
 						}
-						if (sm.processExperience(event.getPlayer(), "Lockpicking")) {
-							sm.incrementLevel("Lockpicking", event.getPlayer());
-							SkillManager.progress.get(event.getPlayer()).put("Lockpicking", 0);
+						if (sm.processExperience(event.getPlayer(), Skill.LOCKPICKING)) {
+							sm.incrementLevel(Skill.LOCKPICKING, event.getPlayer());
+							SkillManager.progress.get(event.getPlayer()).put(Skill.LOCKPICKING, 0);
 							SkillManager.calculateLevel(event.getPlayer());
 						} else {
-							SkillManager.progress.get(event.getPlayer()).put("Lockpicking", SkillManager.progress.get(event.getPlayer()).get("Lockpicking") + 1);
+							SkillManager.progress.get(event.getPlayer()).put(Skill.LOCKPICKING, SkillManager.progress.get(event.getPlayer()).get(Skill.LOCKPICKING) + 1);
 						}
 					}
 				}
@@ -121,7 +122,7 @@ public class SRPGL implements Listener
 							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
 							if(event.isCancelled())event.setCancelled(false);
 						}
-						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel("Lockpicking", event.getPlayer())/2 + 10)
+						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel(Skill.LOCKPICKING, event.getPlayer())/2 + 10)
 						{
 							event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - 1);
 							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed, and your lock pick broke.");
@@ -130,12 +131,12 @@ public class SRPGL implements Listener
 						{
 							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed!");
 						}
-						if (sm.processExperience(event.getPlayer(), "Lockpicking")) {
-							sm.incrementLevel("Lockpicking", event.getPlayer());
-							SkillManager.progress.get(event.getPlayer()).put("Lockpicking", 0);
+						if (sm.processExperience(event.getPlayer(), Skill.LOCKPICKING)) {
+							sm.incrementLevel(Skill.LOCKPICKING, event.getPlayer());
+							SkillManager.progress.get(event.getPlayer()).put(Skill.LOCKPICKING, 0);
 							SkillManager.calculateLevel(event.getPlayer());
 						} else {
-							SkillManager.progress.get(event.getPlayer()).put("Lockpicking", SkillManager.progress.get(event.getPlayer()).get("Lockpicking") + 1);
+							SkillManager.progress.get(event.getPlayer()).put(Skill.LOCKPICKING, SkillManager.progress.get(event.getPlayer()).get(Skill.LOCKPICKING) + 1);
 						}
 					}
 				}
@@ -185,12 +186,12 @@ public class SRPGL implements Listener
 				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
 
 				SkillManager sm = new SkillManager();
-				if (sm.processExperience(se, "PickPocket")) {
-					sm.incrementLevel("PickPocket", se);
-					SkillManager.progress.get(se).put("PickPocket", 0);
+				if (sm.processExperience(se, Skill.PICKPOCKETING)) {
+					sm.incrementLevel(Skill.PICKPOCKETING, se);
+					SkillManager.progress.get(se).put(Skill.PICKPOCKETING, 0);
 					SkillManager.calculateLevel(se);
 				} else {
-					SkillManager.progress.get(se).put("PickPocket", SkillManager.progress.get(se).get("PickPocket") + 1);
+					SkillManager.progress.get(se).put(Skill.PICKPOCKETING, SkillManager.progress.get(se).get(Skill.PICKPOCKETING) + 1);
 				}
 
 				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -222,7 +223,7 @@ public class SRPGL implements Listener
 
 	public boolean pickLockSuccess(Player pla)
 	{
-		int alevel = SkillManager.getSkillLevel("Lockpicking", pla);
+		int alevel = SkillManager.getSkillLevel(Skill.PICKPOCKETING, pla);
 		Random r = new Random();
 		int calc = r.nextInt(100) + 1;
 		if(calc < (alevel/2 + 10))return true;
@@ -282,20 +283,20 @@ public class SRPGL implements Listener
 				{
 					SkillManager sm = new SkillManager();
 					Player shooter = (Player)a.getShooter();
-					int alevel = SkillManager.getSkillLevel("Archery", shooter);
+					int alevel = SkillManager.getSkillLevel(Skill.ARCHERY, shooter);
 					double perkm = 1;
 					if(PerkManager.perks.get(shooter).containsKey(Perk.OVERDRAW))
 					{
 						perkm = 1 + (0.2*(PerkManager.perks.get(shooter).get(Perk.OVERDRAW)));
 					}
 					e.setDamage((int)((e.getDamage() + (alevel/10))*(1 + perkm)));
-					if(sm.processExperience(shooter, "Archery"))
+					if(sm.processExperience(shooter, Skill.ARCHERY))
 					{
-						sm.incrementLevel("Archery", shooter);
-						SkillManager.progress.get(shooter).put("Archery", 0);
+						sm.incrementLevel(Skill.ARCHERY, shooter);
+						SkillManager.progress.get(shooter).put(Skill.ARCHERY, 0);
 						SkillManager.calculateLevel(shooter);
 					}
-					else SkillManager.progress.get(shooter).put("Archery", SkillManager.progress.get(shooter).get("Archery") + 1);
+					else SkillManager.progress.get(shooter).put(Skill.ARCHERY, SkillManager.progress.get(shooter).get(Skill.ARCHERY) + 1);
 					//debug message:  shooter.sendMessage("Progress:" + pro + "/" + t);
 				}
 				else return;
@@ -325,7 +326,7 @@ public class SRPGL implements Listener
 				if(t == null) return;
 				if(t.equalsIgnoreCase("Sword"))
 				{
-					int alevel = SkillManager.getSkillLevel("Swordsmanship", player);
+					int alevel = SkillManager.getSkillLevel(Skill.SWORDSMANSHIP, player);
 					double perkm = 1;
 					if(PerkManager.perks.get(player).containsKey(Perk.SWORDSMAN))
 					{
@@ -337,26 +338,26 @@ public class SRPGL implements Listener
 						if(a < 5 + (5*PerkManager.perks.get(player).get(Perk.BLADESMAN)))perkm = perkm + 0.25 + (PerkManager.perks.get(player).get(Perk.BLADESMAN)*0.83);
 					}
 					e.setDamage((int)(e.getDamage() + (alevel/10)*perkm));
-					if(sm.processExperience(player, "Swordsmanship"))
+					if(sm.processExperience(player, Skill.SWORDSMANSHIP))
 					{
-						sm.incrementLevel("Swordsmanship", player);
-						SkillManager.progress.get(player).put("Swordsmanship", 0);
+						sm.incrementLevel(Skill.SWORDSMANSHIP, player);
+						SkillManager.progress.get(player).put(Skill.SWORDSMANSHIP, 0);
 						SkillManager.calculateLevel(player);
 					}
-					else SkillManager.progress.get(player).put("Swordsmanship", SkillManager.progress.get(player).get("Swordsmanship") + 1);
+					else SkillManager.progress.get(player).put(Skill.SWORDSMANSHIP, SkillManager.progress.get(player).get(Skill.SWORDSMANSHIP) + 1);
 				}
 				else if(t.equalsIgnoreCase("Axe"))
 				{
-					int alevel = SkillManager.getSkillLevel("Axecraft", player);
+					int alevel = SkillManager.getSkillLevel(Skill.AXECRAFT, player);
 					int crit = new Random().nextInt(99);
 					e.setDamage(e.getDamage() + (alevel/10) * (crit<=alevel ? 2 : 1));
-					if(sm.processExperience(player, "Axecraft"))
+					if(sm.processExperience(player, Skill.AXECRAFT))
 					{
-						sm.incrementLevel("Axecraft", player);
-						SkillManager.progress.get(player).put("Axecraft", 0);
+						sm.incrementLevel(Skill.AXECRAFT, player);
+						SkillManager.progress.get(player).put(Skill.AXECRAFT, 0);
 						SkillManager.calculateLevel(player);
 					}
-					else SkillManager.progress.get(player).put("Axecraft", SkillManager.progress.get(player).get("Axecraft") + 1);
+					else SkillManager.progress.get(player).put(Skill.AXECRAFT, SkillManager.progress.get(player).get(Skill.AXECRAFT) + 1);
 				}
 			}
 			if(e.getEntity() instanceof Player)
@@ -367,15 +368,15 @@ public class SRPGL implements Listener
 				if(ib)
 				{
 					SkillManager sm = new SkillManager();
-					int alevel = SkillManager.getSkillLevel("Blocking", player);
+					int alevel = SkillManager.getSkillLevel(Skill.BLOCKING, player);
 					e.setDamage(e.getDamage() - (alevel/10));
-					if(sm.processExperience(player, "Blocking"))
+					if(sm.processExperience(player, Skill.BLOCKING))
 					{
-						sm.incrementLevel("Blocking", player);
-						SkillManager.progress.get(player).put("Blocking", 0);
+						sm.incrementLevel(Skill.BLOCKING, player);
+						SkillManager.progress.get(player).put(Skill.BLOCKING, 0);
 						SkillManager.calculateLevel(player);
 					}
-					else SkillManager.progress.get(player).put("Blocking", SkillManager.progress.get(player).get("Blocking") + 1);
+					else SkillManager.progress.get(player).put(Skill.BLOCKING, SkillManager.progress.get(player).get(Skill.BLOCKING) + 1);
 				}
 			}
 		}
@@ -397,7 +398,7 @@ public class SRPGL implements Listener
 		event.setCancelled(true);
 		f.setYield(0);
 		int sp = 0;
-		int alevel = SkillManager.getSkillLevel("Destruction", p);
+		int alevel = SkillManager.getSkillLevel(Skill.DESTRUCTION, p);
 		for(Entity x:tod)
 		{
 			if(!(x instanceof LivingEntity))continue;
@@ -408,12 +409,12 @@ public class SRPGL implements Listener
 			sp = sp+1;
 		}
 		SkillManager sm = new SkillManager();
-		if(sm.processExperience(p, "Destruction"))
+		if(sm.processExperience(p, Skill.DESTRUCTION))
 		{
-			sm.incrementLevel("Destruction", p);
-			SkillManager.progress.get(p).put("Destruction", 0);
+			sm.incrementLevel(Skill.DESTRUCTION, p);
+			SkillManager.progress.get(p).put(Skill.DESTRUCTION, 0);
 		}
-		else SkillManager.progress.get(p).put("Destruction", SkillManager.progress.get(p).get("Destruction") + sp);
+		else SkillManager.progress.get(p).put(Skill.DESTRUCTION, SkillManager.progress.get(p).get(Skill.DESTRUCTION) + sp);
 		SpellManager.ftracker.remove(f);
 	}
 }

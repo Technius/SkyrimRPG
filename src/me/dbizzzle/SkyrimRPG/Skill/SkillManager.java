@@ -20,8 +20,8 @@ import org.bukkit.entity.Player;
 public class SkillManager 
 {
 	Logger log = Logger.getLogger("Minecraft");
-	public static HashMap<Player, HashMap<String, Integer>> skills = new HashMap<Player, HashMap<String, Integer>>();
-	public static HashMap<Player, HashMap<String, Integer>> progress = new HashMap<Player, HashMap<String, Integer>>();
+	public static HashMap<Player, HashMap<Skill, Integer>> skills = new HashMap<Player, HashMap<Skill, Integer>>();
+	public static HashMap<Player, HashMap<Skill, Integer>> progress = new HashMap<Player, HashMap<Skill, Integer>>();
 	public static HashMap<Player, Integer> level = new HashMap<Player,Integer>();
 	SkyrimRPG p = null;
 	public SkillManager()
@@ -34,15 +34,20 @@ public class SkillManager
 	}
 	public static int calculateLevel(Player player)
 	{
+		int lvl = 0;
 		int tot = 0;
-		int cl = level.get(player).intValue();
-		for(String s:skills.get(player).keySet())
+		for(Skill s:skills.get(player).keySet())
 		{
 			tot = tot + skills.get(player).get(s).intValue();
+			while(tot >= 8)
+			{
+				lvl = lvl + 1;
+				tot = tot - 8;
+			}
 		}
-		if(tot > cl * 7)
+		if(lvl != level.get(player).intValue())
 		{
-			level.put(player, new Integer(cl + 1));
+			level.put(player, lvl);
 			player.sendMessage(ChatColor.GOLD + "You are now level " + level.get(player).intValue());
 		}
 		return level.get(player).intValue();
@@ -51,34 +56,34 @@ public class SkillManager
 	{
 		int tot = 0;
 		int cl = level.get(player).intValue();
-		for(String s:skills.get(player).keySet())
+		for(Skill s:skills.get(player).keySet())
 		{
 			tot = tot + skills.get(player).get(s).intValue();
 		}
 		if(tot > cl * 7)return true;
 		return false;
 	}
-	public static HashMap<String, Integer> getSkills (Player player)
+	public static HashMap<Skill, Integer> getSkills (Player player)
 	{
 		return skills.get(player);
 	}
-	public static int getProgress(String skill, Player player)
+	public static int getProgress(Skill skill, Player player)
 	{
 		return progress.get(player).get(skill).intValue();
 	}
-	public static int getSkillLevel(String skill, Player player)
+	public static int getSkillLevel(Skill skill, Player player)
 	{
 		return skills.get(player).get(skill).intValue();
 	}
-	public void setLevel(String skill, Player player, int level)
+	public void setLevel(Skill skill, Player player, int level)
 	{
 		skills.get(player).put(skill, Integer.valueOf(level));
 	}
-	public void incrementLevel(String skill, Player player)
+	public void incrementLevel(Skill skill, Player player)
 	{
 		int l = skills.get(player).get(skill).intValue() + 1;
 		skills.get(player).put(skill, Integer.valueOf(l));
-		player.sendMessage(skill + " increased to level " + l);
+		player.sendMessage(skill.getName() + " increased to level " + l);
 	}
 	public void loadData(Player player)
 	{
@@ -104,8 +109,8 @@ public class SkillManager
 		{
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(save)));
 			String l;
-			HashMap<String, Integer> pr = new HashMap<String, Integer>();
-			HashMap<String, Integer> sk = new HashMap<String, Integer>();
+			HashMap<Skill, Integer> pr = new HashMap<Skill, Integer>();
+			HashMap<Skill, Integer> sk = new HashMap<Skill, Integer>();
 			int tl = 1;
 			int m = 0;
 			int pp = 0;
@@ -119,10 +124,7 @@ public class SkillManager
 				{
 					if(tokens.length != 2) continue;
 					if(!tokens[0].equalsIgnoreCase("Archery"))continue;
-					delim = "[ ]+";
-					String[] spaced = tokens[1].split(delim);
-					String x = "";
-					for(String p:spaced)x=x+p;
+					String x = tokens[1].replaceAll(" ", "");
 					String[] sep = x.split("[,]",2);
 					if(sep.length != 2) continue;
 					int level = 1;
@@ -137,8 +139,8 @@ public class SkillManager
 						level = 1;
 						progress = 0;
 					}
-					pr.put("Archery", Integer.valueOf(progress));
-					sk.put("Archery", Integer.valueOf(level));
+					pr.put(Skill.ARCHERY, Integer.valueOf(progress));
+					sk.put(Skill.ARCHERY, Integer.valueOf(level));
 				}
 				if(l.startsWith("Swordsmanship"))
 				{
@@ -162,8 +164,8 @@ public class SkillManager
 						level = 1;
 						progress = 0;
 					}
-					pr.put("Swordsmanship", Integer.valueOf(progress));
-					sk.put("Swordsmanship", Integer.valueOf(level));
+					pr.put(Skill.SWORDSMANSHIP, Integer.valueOf(progress));
+					sk.put(Skill.SWORDSMANSHIP, Integer.valueOf(level));
 				}
 				if(l.startsWith("PickPocket"))
 				{
@@ -187,8 +189,8 @@ public class SkillManager
 						level = 1;
 						progress = 0;
 					}
-					pr.put("PickPocket", Integer.valueOf(progress));
-					sk.put("PickPocket", Integer.valueOf(level));
+					pr.put(Skill.PICKPOCKETING, Integer.valueOf(progress));
+					sk.put(Skill.PICKPOCKETING, Integer.valueOf(level));
 				}
 				if(l.startsWith("Destruction"))
 				{
@@ -212,8 +214,8 @@ public class SkillManager
 						level = 1;
 						progress = 0;
 					}
-					pr.put("Destruction", Integer.valueOf(progress));
-					sk.put("Destruction", Integer.valueOf(level));
+					pr.put(Skill.DESTRUCTION, Integer.valueOf(progress));
+					sk.put(Skill.DESTRUCTION, Integer.valueOf(level));
 				}
 				if(l.startsWith("Conjuration"))
 				{
@@ -237,8 +239,8 @@ public class SkillManager
 						level = 1;
 						progress = 0;
 					}
-					pr.put("Conjuration", Integer.valueOf(progress));
-					sk.put("Conjuration", Integer.valueOf(level));
+					pr.put(Skill.CONJURATION, Integer.valueOf(progress));
+					sk.put(Skill.CONJURATION, Integer.valueOf(level));
 				}
 				if(l.startsWith("Lockpicking"))
 				{
@@ -262,8 +264,8 @@ public class SkillManager
 						level = 1;
 						progress = 0;
 					}
-					pr.put("Lockpicking", Integer.valueOf(progress));
-					sk.put("Lockpicking", Integer.valueOf(level));
+					pr.put(Skill.LOCKPICKING, Integer.valueOf(progress));
+					sk.put(Skill.LOCKPICKING, Integer.valueOf(level));
 				}
 				if(l.startsWith("Axecraft"))
 				{
@@ -287,8 +289,8 @@ public class SkillManager
 						level = 1;
 						progress = 0;
 					}
-					pr.put("Axecraft", Integer.valueOf(progress));
-					sk.put("Axecraft", Integer.valueOf(level));
+					pr.put(Skill.AXECRAFT, Integer.valueOf(progress));
+					sk.put(Skill.AXECRAFT, Integer.valueOf(level));
 				}
 				if(l.startsWith("Blocking"))
 				{
@@ -309,8 +311,8 @@ public class SkillManager
 						level = 1;
 						progress = 0;
 					}
-					pr.put("Blocking", Integer.valueOf(progress));
-					sk.put("Blocking", Integer.valueOf(level));
+					pr.put(Skill.BLOCKING, Integer.valueOf(progress));
+					sk.put(Skill.BLOCKING, Integer.valueOf(level));
 				}
 				if(l.startsWith("Level"))
 				{
@@ -354,23 +356,23 @@ public class SkillManager
 						pp = 0;
 					}
 				}
-				if(sk.get("Archery")== null)sk.put("Archery", 1);
-				if(sk.get("Swordsmanship")== null)sk.put("Swordsmanship", 1);
-				if(sk.get("PickPocket")== null)sk.put("PickPocket", 1);
-				if(sk.get("Destruction")== null)sk.put("Destruction", 1);
-				if(sk.get("Lockpicking")== null)sk.put("Lockpicking", 1);
-				if(sk.get("Conjuration")== null)sk.put("Conjuration", 1);
-				if(sk.get("Axecraft")== null)sk.put("Axecraft", 1);
-				if(!sk.containsKey("Blocking"))sk.put("Blocking", 1);
+				if(sk.get(Skill.ARCHERY)== null)sk.put(Skill.ARCHERY, 1);
+				if(sk.get(Skill.SWORDSMANSHIP)== null)sk.put(Skill.SWORDSMANSHIP, 1);
+				if(sk.get(Skill.PICKPOCKETING)== null)sk.put(Skill.PICKPOCKETING, 1);
+				if(sk.get(Skill.DESTRUCTION)== null)sk.put(Skill.DESTRUCTION, 1);
+				if(sk.get(Skill.LOCKPICKING)== null)sk.put(Skill.LOCKPICKING, 1);
+				if(sk.get(Skill.CONJURATION)== null)sk.put(Skill.CONJURATION, 1);
+				if(sk.get(Skill.AXECRAFT)== null)sk.put(Skill.AXECRAFT, 1);
+				if(!sk.containsKey(Skill.BLOCKING))sk.put(Skill.BLOCKING, 1);
 				//
-				if(pr.get("Archery")== null)pr.put("Archery", 1);
-				if(pr.get("Swordsmanship")== null)pr.put("Swordsmanship", 0);
-				if(pr.get("PickPocket")== null)pr.put("PickPocket", 0);
-				if(pr.get("Destruction")== null)pr.put("Destruction", 0);
-				if(pr.get("Lockpicking")== null)pr.put("Lockpicking", 0);
-				if(pr.get("Conjuration")== null)pr.put("Conjuration", 0);
-				if(pr.get("Axecraft")== null)pr.put("Axecraft", 0);
-				if(!pr.containsKey("Blocking"))pr.put("Blocking", 0);
+				if(pr.get(Skill.ARCHERY)== null)pr.put(Skill.ARCHERY, 0);
+				if(pr.get(Skill.SWORDSMANSHIP)== null)pr.put(Skill.SWORDSMANSHIP, 0);
+				if(pr.get(Skill.PICKPOCKETING)== null)pr.put(Skill.PICKPOCKETING, 0);
+				if(pr.get(Skill.DESTRUCTION)== null)pr.put(Skill.DESTRUCTION, 0);
+				if(pr.get(Skill.LOCKPICKING)== null)pr.put(Skill.LOCKPICKING, 0);
+				if(pr.get(Skill.CONJURATION)== null)pr.put(Skill.CONJURATION, 0);
+				if(pr.get(Skill.AXECRAFT)== null)pr.put(Skill.AXECRAFT, 0);
+				if(!pr.containsKey(Skill.BLOCKING))pr.put(Skill.BLOCKING, 0);
 				skills.put(player, sk);
 				progress.put(player, pr);
 				level.put(player, tl);
@@ -415,25 +417,25 @@ public class SkillManager
 			bw.newLine();
 			bw.write("#SPENT Perk Points");
 			bw.newLine();
-			bw.write("Perk Points: " + PerkManager.perks.get(player));
+			bw.write("Perk Points: " + PerkManager.points.get(player));
 			bw.newLine();
 			bw.write("#Skill: level, progress");
 			bw.newLine();
-			bw.write("Archery: " + getSkillLevel("Archery", player) + "," + getProgress("Archery",player));
+			bw.write("Archery: " + getSkillLevel(Skill.ARCHERY, player) + "," + getProgress(Skill.ARCHERY,player));
 			bw.newLine();
-			bw.write("Swordsmanship: " + getSkillLevel("Swordsmanship", player) + "," + getProgress("Swordsmanship",player));
+			bw.write("Swordsmanship: " + getSkillLevel(Skill.SWORDSMANSHIP, player) + "," + getProgress(Skill.SWORDSMANSHIP, player));
 			bw.newLine();
-			bw.write("PickPocket: " + getSkillLevel("PickPocket", player) + "," + getProgress("PickPocket", player));
+			bw.write("PickPocket: " + getSkillLevel(Skill.PICKPOCKETING, player) + "," + getProgress(Skill.PICKPOCKETING, player));
 			bw.newLine();
-			bw.write("Destruction: " + getSkillLevel("Destruction", player) + "," + getProgress("Destruction", player));
+			bw.write("Destruction: " + getSkillLevel(Skill.DESTRUCTION, player) + "," + getProgress(Skill.DESTRUCTION, player));
 			bw.newLine();
-			bw.write("Conjuration: " + getSkillLevel("Conjuration", player) + "," + getProgress("Conjuration", player));
+			bw.write("Conjuration: " + getSkillLevel(Skill.CONJURATION, player) + "," + getProgress(Skill.CONJURATION, player));
 			bw.newLine();
-			bw.write("Lockpicking: " + getSkillLevel("Lockpicking", player) + "," + getProgress("Lockpicking", player));
+			bw.write("Lockpicking: " + getSkillLevel(Skill.LOCKPICKING, player) + "," + getProgress(Skill.LOCKPICKING, player));
 			bw.newLine();
-			bw.write("Axecraft: " + getSkillLevel("Axecraft", player) + "," + getProgress("Axecraft", player));
+			bw.write("Axecraft: " + getSkillLevel(Skill.AXECRAFT, player) + "," + getProgress(Skill.AXECRAFT, player));
 			bw.newLine();
-			bw.write("Blocking: " + getSkillLevel("Blocking", player) + "," + getProgress("Blocking", player));
+			bw.write("Blocking: " + getSkillLevel(Skill.BLOCKING, player) + "," + getProgress(Skill.BLOCKING, player));
 			bw.newLine();
 			bw.flush();
 			bw.close();
@@ -453,24 +455,24 @@ public class SkillManager
 	}
 	public void resetSkills(Player player)
 	{
-		HashMap<String, Integer> sk = new HashMap<String, Integer>();
-		sk.put("PickPocket", Integer.valueOf(1));
-		sk.put("Archery", Integer.valueOf(1));
-		sk.put("Swordsmanship", Integer.valueOf(1));
-		sk.put("Lockpicking", Integer.valueOf(1));
-		sk.put("Destruction", Integer.valueOf(1));
-		sk.put("Conjuration", Integer.valueOf(1));
-		sk.put("Axecraft", Integer.valueOf(1));
-		sk.put("Blocking", Integer.valueOf(1));
-		HashMap<String, Integer> pr = new HashMap<String,Integer>();
-		pr.put("Archery", Integer.valueOf(0));
-		pr.put("PickPocket", Integer.valueOf(0));
-		pr.put("Swordsmanship", Integer.valueOf(0));
-		pr.put("Lockpicking", Integer.valueOf(0));
-		pr.put("Destruction", Integer.valueOf(0));
-		pr.put("Conjuration", Integer.valueOf(0));
-		pr.put("Axecraft", Integer.valueOf(0));
-		pr.put("Blocking", Integer.valueOf(0));
+		HashMap<Skill, Integer> sk = new HashMap<Skill, Integer>();
+		sk.put(Skill.PICKPOCKETING, Integer.valueOf(1));
+		sk.put(Skill.ARCHERY, Integer.valueOf(1));
+		sk.put(Skill.SWORDSMANSHIP, Integer.valueOf(1));
+		sk.put(Skill.LOCKPICKING, Integer.valueOf(1));
+		sk.put(Skill.DESTRUCTION, Integer.valueOf(1));
+		sk.put(Skill.CONJURATION, Integer.valueOf(1));
+		sk.put(Skill.ARCHERY, Integer.valueOf(1));
+		sk.put(Skill.BLOCKING, Integer.valueOf(1));
+		HashMap<Skill, Integer> pr = new HashMap<Skill, Integer>();
+		pr.put(Skill.PICKPOCKETING, Integer.valueOf(1));
+		pr.put(Skill.ARCHERY, Integer.valueOf(1));
+		pr.put(Skill.SWORDSMANSHIP, Integer.valueOf(1));
+		pr.put(Skill.LOCKPICKING, Integer.valueOf(1));
+		pr.put(Skill.DESTRUCTION, Integer.valueOf(1));
+		pr.put(Skill.CONJURATION, Integer.valueOf(1));
+		pr.put(Skill.ARCHERY, Integer.valueOf(1));
+		pr.put(Skill.BLOCKING, Integer.valueOf(1));
 		skills.put(player, sk);
 		progress.put(player, pr);
 		level.put(player, 1);
@@ -482,127 +484,18 @@ public class SkillManager
 	 * @param skill The skill that the player is "practicing"
 	 * @return True if the player is leveling up, otherwise false
 	 */
-	public boolean processExperience(Player player, String skill)
+	public boolean processExperience(Player player, Skill skill)
 	{
-		if(skill.equalsIgnoreCase("Archery"))
+		int alevel = SkillManager.getSkillLevel(skill, player);
+		int pro = SkillManager.getProgress(skill, player);
+		int t = 5;
+		for(int i = 1;i<alevel;i++)
 		{
-			int alevel = SkillManager.getSkillLevel("Archery", player);
-			int pro = SkillManager.getProgress("Archery", player);
-			int t = 5;
-			for(int i = 1;i<alevel;i++)
-			{
-				t=t+2;
-			}
-			if(pro >= t)
-			{
-				return true;
-			}
-			return false;
+			t=t+2;
 		}
-		else if(skill.equalsIgnoreCase("Swordsmanship"))
+		if(pro >= t)
 		{
-			int alevel = SkillManager.getSkillLevel("Swordsmanship", player);
-			int pro = SkillManager.getProgress("Swordsmanship", player);
-			int t = 5;
-			for(int i = 1;i<alevel;i++)
-			{
-				t=t+2;
-			}
-			if(pro >= t)
-			{
-				return true;
-			}
-			return false;
-		} 
-		else if (skill.equalsIgnoreCase("PickPocket"))
-		{
-			int alevel = SkillManager.getSkillLevel("PickPocket", player);
-			int pro = SkillManager.getProgress("PickPocket", player);
-			int t = 5;
-			
-			for(int i = 1;i<alevel;i++) {
-				t=t+2;
-			}
-			
-			if(pro >= t) {
-				return true;
-			}
-			return false;
-		}
-		else if (skill.equalsIgnoreCase("Destruction"))
-		{
-			int alevel = SkillManager.getSkillLevel("Destruction", player);
-			int pro = SkillManager.getProgress("Destruction", player);
-			int t = 5;
-			
-			for(int i = 1;i<alevel;i++) {
-				t=t+2;
-			}
-			
-			if(pro >= t) {
-				return true;
-			}
-			return false;
-		}
-		else if (skill.equalsIgnoreCase("Conjuration"))
-		{
-			int alevel = SkillManager.getSkillLevel("Conjuration", player);
-			int pro = SkillManager.getProgress("Conjuration", player);
-			int t = 5;
-			
-			for(int i = 1;i<alevel;i++) {
-				t=t+2;
-			}
-			
-			if(pro >= t) {
-				return true;
-			}
-			return false;
-		}
-		else if (skill.equalsIgnoreCase("Lockpicking"))
-		{
-			int alevel = SkillManager.getSkillLevel("Lockpicking", player);
-			int pro = SkillManager.getProgress("Lockpicking", player);
-			int t = 5;
-			
-			for(int i = 1;i<alevel;i++) {
-				t=t+2;
-			}
-			
-			if(pro >= t) {
-				return true;
-			}
-			return false;
-		}
-		else if (skill.equalsIgnoreCase("Axecraft"))
-		{
-			int alevel = SkillManager.getSkillLevel("Axecraft", player);
-			int pro = SkillManager.getProgress("Axecraft", player);
-			int t = 5;
-			
-			for(int i = 1;i<alevel;i++) {
-				t=t+2;
-			}
-			
-			if(pro >= t) {
-				return true;
-			}
-			return false;
-		}
-		else if (skill.equalsIgnoreCase("Blocking"))
-		{
-			int alevel = SkillManager.getSkillLevel("Blocking", player);
-			int pro = SkillManager.getProgress("Blocking", player);
-			int t = 5;
-			
-			for(int i = 1;i<alevel;i++) {
-				t=t+2;
-			}
-			
-			if(pro >= t) {
-				return true;
-			}
-			return false;
+			return true;
 		}
 		return false;
 	}
