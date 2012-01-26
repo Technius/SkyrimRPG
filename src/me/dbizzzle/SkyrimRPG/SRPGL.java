@@ -51,6 +51,7 @@ public class SRPGL implements Listener
 	long delay = secondsDelay*20;
 
 	String pickpocketed = ChatColor.RED + "Somebody has pickpocketed you!"; //Configurable
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteract(PlayerInteractEvent event)
@@ -173,7 +174,7 @@ public class SRPGL implements Listener
 			}
 		}
 	}
-	@EventHandler(event = PlayerInteractEntityEvent.class, priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Player se = event.getPlayer();
 		final EntityPlayer s = ((CraftPlayer) event.getPlayer()).getHandle();
@@ -207,13 +208,13 @@ public class SRPGL implements Listener
 			}
 		}
 	}
-	@EventHandler(event = PlayerJoinEvent.class, priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		SkillManager sm = new SkillManager(plugin);
 		sm.loadData(event.getPlayer());
 	}
-	@EventHandler(event = PlayerQuitEvent.class, priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
 		SkillManager sm = new SkillManager();
@@ -229,7 +230,7 @@ public class SRPGL implements Listener
 		if(calc < (alevel/2 + 10))return true;
 		return false;
 	}	
-	@EventHandler(event = EntityTargetEvent.class, priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityTarget(EntityTargetEvent event)
 	{
 		if(event.getEntity() instanceof Zombie)
@@ -253,7 +254,7 @@ public class SRPGL implements Listener
 			event.setCancelled(true);
 		}
 	}
-	@EventHandler(event = EntityDeathEvent.class, priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDeath(EntityDeathEvent event)
 	{
 		if(event.getEntity() instanceof Zombie)
@@ -270,7 +271,7 @@ public class SRPGL implements Listener
 			event.getDrops().clear();
 		}
 	}
-	@EventHandler(event = EntityDamageEvent.class, priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDamage(EntityDamageEvent event)
 	{
 		if(event instanceof EntityDamageByEntityEvent)
@@ -381,12 +382,12 @@ public class SRPGL implements Listener
 			}
 		}
 	}
-	@EventHandler(event = FoodLevelChangeEvent.class, priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onFoodLevelChange(FoodLevelChangeEvent event)
 	{
 		event.setCancelled(true);
 	}
-	@EventHandler(event = ExplosionPrimeEvent.class, priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if(!(event.getEntity() instanceof Fireball))return;

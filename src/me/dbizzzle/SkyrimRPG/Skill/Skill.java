@@ -9,7 +9,7 @@ public enum Skill
 {
 	ARCHERY, SWORDSMANSHIP, AXECRAFT, PICKPOCKETING, 
 	LOCKPICKING, BLOCKING,
-	CONJURATION, DESTRUCTION;
+	CONJURATION, DESTRUCTION, RESTORATION;
 	public String getName()
 	{
 		String sl = toString().toLowerCase().replaceAll("_", " ");

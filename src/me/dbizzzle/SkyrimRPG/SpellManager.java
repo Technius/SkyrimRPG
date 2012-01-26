@@ -58,6 +58,28 @@ public class SpellManager
 			player.sendMessage("You conjure up a flame atronach to fight for you");
 		}
 	}
+	public void heal(Player p)
+	{
+		if(!hasEnough(p, 20))
+		{
+			magickaWarning(p, "Healing");
+			return;
+		}
+		else
+		{
+			magicka.put(p, magicka.get(p) - 20);
+			int health = 0;
+			if(SkillManager.getSkillLevel(Skill.RESTORATION, p) >= 20)
+			{
+				health = p.getHealth() + 2;
+			}
+			else
+			{
+				health = p.getHealth() + 1;
+			}
+			p.setHealth(health);
+		}
+	}
 	public void flames(Player player)
 	{
 		if(!hasEnough(player, 14))
@@ -169,6 +191,8 @@ public class SpellManager
 			return true;
 		case CONJURE_FLAME_ATRONACH:
 			cflameatronach(player);
+			return true;
+		case HEALING:
 			return true;
 		default:
 			return false;
