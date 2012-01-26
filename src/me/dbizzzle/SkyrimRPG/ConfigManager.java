@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 public class ConfigManager 
 {
 	public static boolean useSpellbooks = true;
+	public static boolean enableLockpicking = true;
+	public static boolean enablePickpocketing = true;
 	SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
@@ -36,6 +38,16 @@ public class ConfigManager
 				{
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))useSpellbooks = false;
 					else useSpellbooks = true;
+				}
+				if(tokens[0].equalsIgnoreCase("enablelockpicking"))
+				{
+					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableLockpicking = false;
+					else enableLockpicking = true;
+				}
+				if(tokens[0].equalsIgnoreCase("enablepickpocketing"))
+				{
+					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePickpocketing = false;
+					else enablePickpocketing = true;
 				}
 			}
 			br.close();
@@ -65,6 +77,12 @@ public class ConfigManager
 			bw.write("#Enable this if you want to use spellbooks");
 			bw.newLine();
 			bw.write("useSpellbooks: " + (useSpellbooks ? "true" : "false"));
+			bw.newLine();
+			bw.write("#Disable these if you don't like thievery");
+			bw.newLine();
+			bw.write("enableLockpicking: " + (enableLockpicking ? "true" : "false"));
+			bw.flush();
+			bw.write("enablePickpocketing: " + (enablePickpocketing ? "true" : "false"));
 			bw.newLine();
 			bw.flush();
 			bw.close();

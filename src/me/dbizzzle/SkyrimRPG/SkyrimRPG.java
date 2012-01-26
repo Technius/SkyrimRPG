@@ -71,6 +71,12 @@ public class SkyrimRPG extends JavaPlugin
 				bw.newLine();
 				bw.write("useSpellbooks: true");
 				bw.newLine();
+				bw.write("#Disable these if you don't like thievery");
+				bw.newLine();
+				bw.write("enableLockpicking: true");
+				bw.flush();
+				bw.write("enablePickpocketing: true");
+				bw.newLine();
 				bw.flush();
 				bw.close();
 			}
