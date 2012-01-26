@@ -68,16 +68,9 @@ public class SpellManager
 		else
 		{
 			magicka.put(p, magicka.get(p) - 20);
-			int health = 0;
-			if(SkillManager.getSkillLevel(Skill.RESTORATION, p) >= 20)
-			{
-				health = p.getHealth() + 2;
-			}
-			else
-			{
-				health = p.getHealth() + 1;
-			}
-			p.setHealth(health);
+			int health = SkillManager.skills.get(p).get(Skill.RESTORATION)/20;
+			p.setHealth(health + p.getHealth());
+			p.sendMessage(ChatColor.GREEN + "You are healed for " + health/2 + " hearts");
 		}
 	}
 	public void flames(Player player)
@@ -193,6 +186,7 @@ public class SpellManager
 			cflameatronach(player);
 			return true;
 		case HEALING:
+			heal(player);
 			return true;
 		default:
 			return false;
