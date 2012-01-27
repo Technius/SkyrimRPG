@@ -15,7 +15,7 @@ public class SkyrimRPG extends JavaPlugin
 {
 	public Logger log = Logger.getLogger("Minecraft");
 	SpellManager sm = new SpellManager(this);
-	SkillManager sk = new SkillManager();
+	SkillManager sk = new SkillManager(this);
 	SpellTimer st = new SpellTimer(this);
 	ConfigManager cm = new ConfigManager(this);
 	public void onEnable() 
