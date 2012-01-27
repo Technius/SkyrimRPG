@@ -169,9 +169,11 @@ public class SRPGL implements Listener
 				ItemStack b = event.getPlayer().getItemInHand();
 				if(b.getDurability() != 0)
 				{
-					plugin.sm.useBook(event.getPlayer(), b.getDurability());
-					b.setAmount(b.getAmount() - 1);
-					event.getPlayer().setItemInHand(b);
+					if(plugin.sm.useBook(event.getPlayer(), b.getDurability()))
+					{
+						b.setAmount(b.getAmount() - 1);
+						event.getPlayer().setItemInHand(b);
+					}
 				}
 			}
 		}

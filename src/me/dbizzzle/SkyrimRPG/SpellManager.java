@@ -212,17 +212,18 @@ public class SpellManager
 		saveSpells(p);
 		return spells.get(p).remove(s);
 	}
-	public void useBook(Player p, int id)
+	public boolean useBook(Player p, int id)
 	{
 		Spell s = Spell.getById(id);
-		if(s == null)return;
+		if(s == null)return false;
 		if(hasSpell(p, s))
 		{
 			p.sendMessage(ChatColor.RED + "You already know how to cast " + s.toString());
-			return;
+			return false;
 		}
 		addSpell(p, s);
 		p.sendMessage(ChatColor.GREEN + "You have learned how to cast " + s.toString());
+		return true;
 	}
 	public void saveSpells(Player p)
 	{
