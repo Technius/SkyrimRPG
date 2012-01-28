@@ -76,14 +76,14 @@ public class SpellManager
 	}
 	public void flames(Player player)
 	{
-		if(!hasEnough(player, 14))
+		if(!hasEnough(player, 20))
 		{
 			magickaWarning(player, "Flames");
 			return;
 		}
 		else
 		{
-			magicka.put(player, magicka.get(player) - 14);
+			magicka.put(player, magicka.get(player) - 20);
 			final Vector direction = player.getEyeLocation().getDirection().multiply(2);
 			for(int i = 0;i < 3; i++)
 			{
@@ -108,7 +108,7 @@ public class SpellManager
 	}
 	public void raiseZombie(Player player)
 	{
-		if(!hasEnough(player, 60))
+		if(!hasEnough(player, 90))
 		{
 			magickaWarning(player, "Raise Zombie");
 			return;

@@ -20,7 +20,7 @@ public class SpellTimer
 	}
 	public void chargeFireball(Player player)
 	{
-		if(!p.sm.hasEnough(player, 30))
+		if(!p.sm.hasEnough(player, 100))
 		{
 			p.sm.magickaWarning(player, "Fireball");
 			return;
