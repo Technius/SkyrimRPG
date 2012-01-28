@@ -91,45 +91,104 @@ public class SkyrimCmd implements CommandExecutor
 		}
 		else if (command.getName().equalsIgnoreCase("addspell")) 
 		{
-			if (sender.hasPermission("skyrimrpg.addspell"))
+			if (player == null)
 			{
+				if(args.length != 2)
+				{
+					plugin.log.info("[SkyrimRPG]Usage: /addspell <player> <spell>");
+					return true;
+				}
 				Player spell = sender.getServer().getPlayer(args[0]);
 				if (spell != null) 
 				{
-					if(args.length == 2)
+					Spell s;
+					try
 					{
-						Spell s;
-						try
+						s = SpellManager.Spell.valueOf(args[1].toUpperCase());
+						if(!sm.hasSpell(spell, s))
 						{
-							s = SpellManager.Spell.valueOf(args[1].toUpperCase());
-							sender.sendMessage(ChatColor.GREEN + "You have given the spell " + args[1] + " to " + spell.getName() + ".");
-							spell.sendMessage(ChatColor.GREEN + "You have been given the spell " + args[1] + ".");
-							sm.addSpell(player, s);
+							spell.sendMessage(ChatColor.GREEN + "You were given the spell " + s.name());
+							plugin.log.info("[SkrimRPG]You have given " + s.name() + " to " + spell.getName());
+							sm.addSpell(spell, s);
 						}
-						catch(IllegalArgumentException ex)
-						{
-							sender.sendMessage(ChatColor.RED + "Invalid Spell.");
-						}
+						else plugin.log.info("[SkyrimRPG]" + spell.getName() + " already has that spell.");
 					}
-					else 
+					catch(IllegalArgumentException ex)
 					{
-						sender.sendMessage(ChatColor.RED + "Usage: /addspell <player> <spell>");
+						plugin.log.info("[SkyrimRPG]Invalid Spell.");
 					}
 				} 
 				else 
 				{
-					sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+					plugin.log.info("[SkyrimRPG]" + args[0] + " is currently not available or not online.");
+				}
+			} 
+			else if(player.hasPermission("skyrimrpg.addspell"))
+			{
+				switch(args.length)
+				{
+				case 1:
+					Spell s;
+					try
+					{
+						s = SpellManager.Spell.valueOf(args[1].toUpperCase());
+						if(!sm.hasSpell(player, s))
+						{
+							player.sendMessage(ChatColor.GREEN + "You had the spell " + s.name() + " added to you.");
+							sm.removeSpell(player, s);
+						}
+						else player.sendMessage(ChatColor.RED + "You already learned that spell.");
+					}
+					catch(IllegalArgumentException ex)
+					{
+						player.sendMessage(ChatColor.RED + "Invalid Spell.");
+					}
+					return true;
+				case 2:
+					Player spell = sender.getServer().getPlayer(args[0]);
+					if (spell != null) 
+					{
+						Spell s1;
+						try
+						{
+							s1 = SpellManager.Spell.valueOf(args[1].toUpperCase());
+							if(!sm.hasSpell(spell, s1))
+							{
+								player.sendMessage(ChatColor.GREEN + "You have given " + s1.getDisplayName() + " to " + spell.getName());
+								spell.sendMessage(ChatColor.GREEN + "You had the spell " + s1.getDisplayName() + " given to you.");
+								sm.removeSpell(spell, s1);
+							}
+							else player.sendMessage(ChatColor.RED + spell.getName() + " has already learned that spell.");
+						}
+						catch(IllegalArgumentException ex)
+						{
+							player.sendMessage(ChatColor.RED + "Invalid Spell.");
+						}
+					} 
+					else 
+					{
+						player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+					}
+					return true;
+				default:
+					player.sendMessage(ChatColor.RED + "Usage: /addspell <player> <spell>");
+					return true;
 				}
 			}
-			else
+			else 
 			{
-				sender.sendMessage(ChatColor.RED + "You do no have permission to use this command");
+				sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
 			}
 		}
 		else if (command.getName().equalsIgnoreCase("removespell")) 
 		{
-			if (sender.hasPermission("SkyrimRPG.removespell")) 
+			if (player == null)
 			{
+				if(args.length != 2)
+				{
+					plugin.log.info("[SkyrimRPG]Usage: /removespell <player> <spell>");
+					return true;
+				}
 				Player spell = sender.getServer().getPlayer(args[0]);
 				if (spell != null) 
 				{
@@ -140,24 +199,73 @@ public class SkyrimCmd implements CommandExecutor
 						if(sm.hasSpell(spell, s))
 						{
 							spell.sendMessage(ChatColor.RED + "You had the spell " + s.name() + " removed.");
-							sender.sendMessage(ChatColor.GREEN + "You have succesfully removed " + s.name() + " from " + spell.getName());
+							plugin.log.info("[SkrimRPG]You have succesfully removed " + s.name() + " from " + spell.getName());
 							sm.removeSpell(spell, s);
 						}
-						else
-						{
-							sender.sendMessage(ChatColor.RED + spell.getName() + " has not learned that spell.");
-						}
+						else plugin.log.info("[SkyrimRPG]" + spell.getName() + " has not learned that spell.");
 					}
 					catch(IllegalArgumentException ex)
 					{
-						sender.sendMessage(ChatColor.RED + "Invalid Spell.");
+						plugin.log.info("[SkyrimRPG]Invalid Spell.");
 					}
 				} 
 				else 
 				{
-					sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+					plugin.log.info("[SkyrimRPG]" + args[0] + " is currently not available or not online.");
 				}
 			} 
+			else if(player.hasPermission("skyrimrpg.removespell"))
+			{
+				switch(args.length)
+				{
+				case 1:
+					Spell s;
+					try
+					{
+						s = SpellManager.Spell.valueOf(args[1].toUpperCase());
+						if(sm.hasSpell(player, s))
+						{
+							player.sendMessage(ChatColor.GREEN + "You had the spell " + s.name() + " removed.");
+							sm.removeSpell(player, s);
+						}
+						else player.sendMessage(ChatColor.RED + "You haven't learned that spell.");
+					}
+					catch(IllegalArgumentException ex)
+					{
+						player.sendMessage(ChatColor.RED + "Invalid Spell.");
+					}
+					return true;
+				case 2:
+					Player spell = sender.getServer().getPlayer(args[0]);
+					if (spell != null) 
+					{
+						Spell s1;
+						try
+						{
+							s1 = SpellManager.Spell.valueOf(args[1].toUpperCase());
+							if(sm.hasSpell(spell, s1))
+							{
+								player.sendMessage(ChatColor.GREEN + "You had the spell " + s1.getDisplayName() + " removed from " + spell.getName());
+								spell.sendMessage(ChatColor.RED + "You had the spell " + s1.getDisplayName() + " taken away from you.");
+								sm.removeSpell(spell, s1);
+							}
+							else player.sendMessage(ChatColor.RED + spell.getName() + " has not learned that spell.");
+						}
+						catch(IllegalArgumentException ex)
+						{
+							player.sendMessage(ChatColor.RED + "Invalid Spell.");
+						}
+					} 
+					else 
+					{
+						player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
+					}
+					return true;
+				default:
+					player.sendMessage(ChatColor.RED + "Usage: /removespell <player> <spell>");
+					return true;
+				}
+			}
 			else 
 			{
 				sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
@@ -176,23 +284,10 @@ public class SkyrimCmd implements CommandExecutor
 					Player spell = plugin.getServer().getPlayer(args[0]);
 					if (spell != null) 
 					{
+						plugin.log.info("[SkyrimRPG]Spells " + spell.getName() + " know");
 						for(Spell s:SpellManager.spells.get(spell))
 						{
-							switch(s)
-							{
-							case FIREBALL:
-								sender.sendMessage("Fireball");
-								break;
-							case RAISE_ZOMBIE:
-								sender.sendMessage("Raise Zombie");
-								break;
-							case HEALING:
-								sender.sendMessage("Healing");
-								break;
-							case FLAMES:
-								sender.sendMessage("Flames");
-								break;
-							}
+							plugin.log.info("[SkyrimRPG]" + s.getDisplayName());
 						}
 					} 
 					else 

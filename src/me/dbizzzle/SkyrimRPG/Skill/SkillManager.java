@@ -375,31 +375,31 @@ public class SkillManager
 					pr.put(Skill.BLOCKING, Integer.valueOf(progress));
 					sk.put(Skill.BLOCKING, Integer.valueOf(level));
 				}
-				if(sk.get(Skill.ARCHERY)== null)sk.put(Skill.ARCHERY, 1);
-				if(sk.get(Skill.SWORDSMANSHIP)== null)sk.put(Skill.SWORDSMANSHIP, 1);
-				if(sk.get(Skill.PICKPOCKETING)== null)sk.put(Skill.PICKPOCKETING, 1);
-				if(sk.get(Skill.DESTRUCTION)== null)sk.put(Skill.DESTRUCTION, 1);
-				if(sk.get(Skill.LOCKPICKING)== null)sk.put(Skill.LOCKPICKING, 1);
-				if(sk.get(Skill.CONJURATION)== null)sk.put(Skill.CONJURATION, 1);
-				if(sk.get(Skill.AXECRAFT)== null)sk.put(Skill.AXECRAFT, 1);
-				if(sk.get(Skill.RESTORATION) == null)sk.put(Skill.RESTORATION, 1);
-				if(!sk.containsKey(Skill.BLOCKING))sk.put(Skill.BLOCKING, 1);
-				//
-				if(pr.get(Skill.ARCHERY)== null)pr.put(Skill.ARCHERY, 0);
-				if(pr.get(Skill.SWORDSMANSHIP)== null)pr.put(Skill.SWORDSMANSHIP, 0);
-				if(pr.get(Skill.PICKPOCKETING)== null)pr.put(Skill.PICKPOCKETING, 0);
-				if(pr.get(Skill.DESTRUCTION)== null)pr.put(Skill.DESTRUCTION, 0);
-				if(pr.get(Skill.LOCKPICKING)== null)pr.put(Skill.LOCKPICKING, 0);
-				if(pr.get(Skill.CONJURATION)== null)pr.put(Skill.CONJURATION, 0);
-				if(pr.get(Skill.AXECRAFT)== null)pr.put(Skill.AXECRAFT, 0);
-				if(!pr.containsKey(Skill.BLOCKING))pr.put(Skill.BLOCKING, 0);
-				skills.put(player, sk);
-				progress.put(player, pr);
-				level.put(player, tl);
-				PerkManager.points.put(player, pp);
-				SpellManager.magicka.put(player, m);
 			}
-			
+			if(sk.get(Skill.ARCHERY)== null)sk.put(Skill.ARCHERY, 1);
+			if(sk.get(Skill.SWORDSMANSHIP)== null)sk.put(Skill.SWORDSMANSHIP, 1);
+			if(sk.get(Skill.PICKPOCKETING)== null)sk.put(Skill.PICKPOCKETING, 1);
+			if(sk.get(Skill.DESTRUCTION)== null)sk.put(Skill.DESTRUCTION, 1);
+			if(sk.get(Skill.LOCKPICKING)== null)sk.put(Skill.LOCKPICKING, 1);
+			if(sk.get(Skill.CONJURATION)== null)sk.put(Skill.CONJURATION, 1);
+			if(sk.get(Skill.AXECRAFT)== null)sk.put(Skill.AXECRAFT, 1);
+			if(sk.get(Skill.RESTORATION) == null)sk.put(Skill.RESTORATION, 1);
+			if(!sk.containsKey(Skill.BLOCKING))sk.put(Skill.BLOCKING, 1);
+			//
+			if(pr.get(Skill.ARCHERY)== null)pr.put(Skill.ARCHERY, 0);
+			if(pr.get(Skill.SWORDSMANSHIP)== null)pr.put(Skill.SWORDSMANSHIP, 0);
+			if(pr.get(Skill.PICKPOCKETING)== null)pr.put(Skill.PICKPOCKETING, 0);
+			if(pr.get(Skill.DESTRUCTION)== null)pr.put(Skill.DESTRUCTION, 0);
+			if(pr.get(Skill.LOCKPICKING)== null)pr.put(Skill.LOCKPICKING, 0);
+			if(pr.get(Skill.CONJURATION)== null)pr.put(Skill.CONJURATION, 0);
+			if(pr.get(Skill.AXECRAFT)== null)pr.put(Skill.AXECRAFT, 0);
+			if(pr.get(Skill.RESTORATION) == null)pr.put(Skill.RESTORATION, 0);
+			if(!pr.containsKey(Skill.BLOCKING))pr.put(Skill.BLOCKING, 0);
+			skills.put(player, sk);
+			progress.put(player, pr);
+			level.put(player, tl);
+			PerkManager.points.put(player, pp);
+			SpellManager.magicka.put(player, m);
 			br.close();
 		}
 		catch(IOException ioe)
@@ -491,6 +491,7 @@ public class SkillManager
 		sk.put(Skill.ARCHERY, Integer.valueOf(1));
 		sk.put(Skill.BLOCKING, Integer.valueOf(1));
 		sk.put(Skill.RESTORATION, Integer.valueOf(1));
+		sk.put(Skill.AXECRAFT, Integer.valueOf(1));
 		HashMap<Skill, Integer> pr = new HashMap<Skill, Integer>();
 		pr.put(Skill.PICKPOCKETING, Integer.valueOf(1));
 		pr.put(Skill.ARCHERY, Integer.valueOf(1));
@@ -501,9 +502,12 @@ public class SkillManager
 		pr.put(Skill.CONJURATION, Integer.valueOf(1));
 		pr.put(Skill.ARCHERY, Integer.valueOf(1));
 		pr.put(Skill.BLOCKING, Integer.valueOf(1));
+		pr.put(Skill.RESTORATION, Integer.valueOf(1));
+		pr.put(Skill.AXECRAFT, Integer.valueOf(1));
 		skills.put(player, sk);
 		progress.put(player, pr);
 		level.put(player, 1);
+		PerkManager.points.put(player, 0);
 		SpellManager.magicka.put(player, 0);
 	}
 	/**
