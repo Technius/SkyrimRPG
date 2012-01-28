@@ -43,7 +43,7 @@ public class SkyrimRPG extends JavaPlugin
 		{
 			String v = vm.getLatestVersion();
 			if(v == null)log.info("[SkyrimRPG]Could not find new version");
-			else this.getServer().getScheduler().scheduleSyncDelayedTask(this, new VC("New version available: " + v), 1L);
+			else if(vm.compareVersion(v, getDescription().getVersion())) this.getServer().getScheduler().scheduleSyncDelayedTask(this, new VC("New version available: " + v), 1L);
 		}
 		catch(MalformedURLException mue)
 		{
