@@ -18,12 +18,14 @@ public class VersionManager
 			URLConnection uc = u.openConnection();
 			BufferedReader br = new BufferedReader(new InputStreamReader(uc.getInputStream()));
 			String l;
-			while((l=br.readLine()) != null)
+			boolean gotver = false;
+			while((l=br.readLine()) != null && !gotver)
 			{
 				String[] tokens = l.split("[:]");
 				if(tokens.length != 2)continue;
 				if(!tokens[0].equalsIgnoreCase("version"))continue;
 				version = tokens[1].trim();
+				gotver = true;
 			}
 			br.close();
 		} 
