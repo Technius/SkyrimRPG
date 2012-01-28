@@ -1,5 +1,7 @@
 package me.dbizzzle.SkyrimRPG;
 
+import java.net.MalformedURLException;
+
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
@@ -342,6 +344,11 @@ public class SkyrimCmd implements CommandExecutor
 				case 0:
 					player.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + plugin.getDescription().getVersion());
 					player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
+					try
+					{
+						String v = plugin.vm.getLatestVersion();
+						if(v != null && player.hasPermission("skyrimrpg.newversion"))player.sendMessage(ChatColor.GOLD + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "A new version is available: " + v + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "!" + ChatColor.RED + "!");
+					}catch(MalformedURLException mue){}
 					player.sendMessage("========================");
 					player.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
 					if(player.hasPermission("skyrimrpg.setlevel"))player.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level>" + ChatColor.YELLOW + " - sets the level of the specified skill");
@@ -437,6 +444,7 @@ public class SkyrimCmd implements CommandExecutor
 					break;
 				case 2:
 					player.sendMessage(ChatColor.GOLD + "Stats Page 2 of 2");
+					player.sendMessage(ChatColor.BLUE + "Restoration: Level " + SkillManager.getSkillLevel(Skill.RESTORATION, player));
 					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + SkillManager.getSkillLevel(Skill.PICKPOCKETING, player));
 					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + SkillManager.getSkillLevel(Skill.LOCKPICKING, player));
 					break;
