@@ -21,6 +21,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -53,10 +54,10 @@ public class SRPGL implements Listener
 	String pickpocketed = ChatColor.RED + "Somebody has pickpocketed you!"; //Configurable
 	
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		if(event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON)
+		if(event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON && ConfigManager.enableLockpicking)
 		{
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
@@ -178,7 +179,7 @@ public class SRPGL implements Listener
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Player se = event.getPlayer();
 		final EntityPlayer s = ((CraftPlayer) event.getPlayer()).getHandle();
-		if (s.isSneaking()) {
+		if (s.isSneaking() && ConfigManager.enablePickpocketing) {
 			Entity ent = event.getRightClicked();
 			if (ent instanceof Player) {
 				final String ents = ((HumanEntity) ent).getName();
@@ -208,13 +209,13 @@ public class SRPGL implements Listener
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		SkillManager sm = new SkillManager(plugin);
 		sm.loadData(event.getPlayer());
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
 		SkillManager sm = new SkillManager();
@@ -254,7 +255,7 @@ public class SRPGL implements Listener
 			event.setCancelled(true);
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent event)
 	{
 		if(event.getEntity() instanceof Zombie)
@@ -359,6 +360,28 @@ public class SRPGL implements Listener
 						SkillManager.calculateLevel(player);
 					}
 					else SkillManager.progress.get(player).put(Skill.AXECRAFT, SkillManager.progress.get(player).get(Skill.AXECRAFT) + 1);
+				}
+			}
+			else if(e.getDamager() instanceof SmallFireball)
+			{
+				SmallFireball sf = (SmallFireball)e.getDamager();
+				if(sf.getShooter() instanceof Player)
+				{
+					if(SpellManager.flames.contains(sf))
+					{
+						Player player = (Player)sf.getShooter();
+						int alevel = SkillManager.getSkillLevel(Skill.DESTRUCTION, player)/20;
+						int damage = 1 + alevel;
+						e.setDamage(damage);
+						SkillManager sm = new SkillManager();
+						if(sm.processExperience(player, Skill.DESTRUCTION))
+						{
+							sm.incrementLevel(Skill.DESTRUCTION, player);
+							SkillManager.progress.get(player).put(Skill.DESTRUCTION, 0);
+							SkillManager.calculateLevel(player);
+						}
+						else SkillManager.progress.get(player).put(Skill.DESTRUCTION, SkillManager.progress.get(player).get(Skill.DESTRUCTION) + 1);
+					}
 				}
 			}
 			if(e.getEntity() instanceof Player)
