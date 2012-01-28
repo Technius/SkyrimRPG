@@ -9,12 +9,7 @@ import java.net.URLConnection;
 
 public class VersionManager 
 {
-	private SkyrimRPG s;
-	public VersionManager(SkyrimRPG s)
-	{
-		this.s = s;
-	}
-	public String getLatestVersion()
+	public String getLatestVersion() throws MalformedURLException
 	{
 		String version = null;
 		URL u;
@@ -32,10 +27,8 @@ public class VersionManager
 			}
 			br.close();
 		} 
-		catch (MalformedURLException e) 
+		catch (IOException e) 
 		{
-			return "NoHostFound";
-		} catch (IOException e) {
 			return null;
 		}
 		return version;

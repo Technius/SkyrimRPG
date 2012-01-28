@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.logging.Logger;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import org.bukkit.entity.Player;
@@ -18,6 +19,7 @@ public class SkyrimRPG extends JavaPlugin
 	SkillManager sk = new SkillManager(this);
 	SpellTimer st = new SpellTimer(this);
 	ConfigManager cm = new ConfigManager(this);
+	VersionManager vm = new VersionManager();
 	public void onEnable() 
 	{
 		getCommand("addspell").setExecutor(new SkyrimCmd(sm, this, cm, sk));
@@ -37,6 +39,16 @@ public class SkyrimRPG extends JavaPlugin
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
 		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(), 0, 20);
+		try
+		{
+			String v = vm.getLatestVersion();
+			if(v == null)log.info("[SkyrimRPG]Could not find new version");
+			else this.getServer().getScheduler().scheduleSyncDelayedTask(this, new VC("New version available: " + v), 1L);
+		}
+		catch(MalformedURLException mue)
+		{
+			log.info("[SkyrimRPG]Could not find new version");
+		}
 	}
 	
 	public void onDisable() 
@@ -102,5 +114,17 @@ public class SkyrimRPG extends JavaPlugin
 		File perks = new File(file.getPath() + File.separator + "Perks");
 		if(!perks.exists())return false;
 		return true;
+	}
+	private class VC implements Runnable
+	{
+		private VC(String message)
+		{
+			this.message = message;
+		}
+		private String message;
+		public void run() {
+			log.info("[SkyrimRPG]" + message);
+		}
+		
 	}
 }
