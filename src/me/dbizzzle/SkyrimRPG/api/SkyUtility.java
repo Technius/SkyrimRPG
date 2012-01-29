@@ -1,8 +1,11 @@
 package me.dbizzzle.SkyrimRPG.api;
 
+import me.dbizzzle.SkyrimRPG.ConfigManager;
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 import me.dbizzzle.SkyrimRPG.Skill.Perk;
 import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
+import me.dbizzzle.SkyrimRPG.Skill.Skill;
+import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -14,6 +17,8 @@ import org.bukkit.plugin.Plugin;
 public class SkyUtility 
 {
 	private SkyrimRPG p;
+	private ConfigManager cm;
+	private SkillManager sm;
 	/**
 	 * Main API class of SkyrimRPG
 	 * @param SkyrimRPG - The plugin that represents SkyrimRPG
@@ -21,8 +26,13 @@ public class SkyUtility
 	 */
 	public SkyUtility(Plugin SkyrimRPG)
 	{
-		if(p instanceof SkyrimRPG)this.p = (SkyrimRPG) SkyrimRPG;
-		else throw new ClassCastException("This \"" + SkyrimRPG.getDescription().getName() + "\"is not SkyrimRPG!");
+		if(p instanceof SkyrimRPG)
+		{
+			this.p = (SkyrimRPG) SkyrimRPG;
+			cm = new ConfigManager(p);
+			sm = new SkillManager(p);
+		}
+		else throw new ClassCastException("This plugin: \"" + SkyrimRPG.getDescription().getName() + "\"is not SkyrimRPG!");
 	}
 	/**
 	 * Checks if the player has the specified perk
@@ -44,5 +54,21 @@ public class SkyUtility
 	{
 		if(!hasPerk(player, perk))return -1;
 		return PerkManager.perks.get(player).get(perk);
+	}
+	/**Checks if files and folders exists, and creates them if not
+	 * @return True if all files and folders exist, otherwise false
+	 * 
+	 */
+	public boolean checkFiles()
+	{
+		return p.checkFiles();
+	}
+	public int getLevel(Player player)
+	{
+		return SkillManager.level.get(player);
+	}
+	public int getSkillLevel(Player player, Skill skill)
+	{
+		return SkillManager.getSkillLevel(skill, player);
 	}
 }
