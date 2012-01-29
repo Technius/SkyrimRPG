@@ -71,4 +71,27 @@ public class SkyUtility
 	{
 		return SkillManager.getSkillLevel(skill, player);
 	}
+	/**
+	 * Sets the level of a player's skill
+	 * @param player - The player
+	 * @param skill - The skill
+	 * @param level - Level of the skill
+	 * @return The old skill level
+	 */
+	public int setSkillLevel(Player player, Skill skill, int level)
+	{
+		int old = SkillManager.getSkillLevel(skill, player);
+		sm.setLevel(skill, player, level);
+		return old;
+	}
+	/**
+	 * Saves all player data
+	 */
+	public void saveAllData()
+	{
+		for(Player player:p.getServer().getOnlinePlayers())
+		{
+			sm.saveData(player);
+		}
+	}
 }
