@@ -81,7 +81,7 @@ public class ConfigManager
 			bw.write("#Disable these if you don't like thievery");
 			bw.newLine();
 			bw.write("enableLockpicking: " + (enableLockpicking ? "true" : "false"));
-			bw.flush();
+			bw.newLine();
 			bw.write("enablePickpocketing: " + (enablePickpocketing ? "true" : "false"));
 			bw.newLine();
 			bw.flush();

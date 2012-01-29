@@ -60,7 +60,7 @@ public class SkillManager
 		{
 			tot = tot + skills.get(player).get(s).intValue();
 		}
-		if(tot > cl * 7)return true;
+		if(tot > cl * Skill.values().length)return true;
 		return false;
 	}
 	public static HashMap<Skill, Integer> getSkills (Player player)
@@ -310,6 +310,28 @@ public class SkillManager
 					pr.put(Skill.BLOCKING, Integer.valueOf(progress));
 					sk.put(Skill.BLOCKING, Integer.valueOf(level));
 				}
+				if(l.startsWith("Enchanting"))
+				{
+					if(tokens.length != 2) continue;
+					if(!tokens[0].equalsIgnoreCase("Enchanting"))continue;
+					String x = tokens[1].replaceAll(" ", "");
+					String[] sep = x.split("[,]",2);
+					if(sep.length != 2) continue;
+					int level = 1;
+					int progress = 0;
+					try
+					{
+						level = Integer.parseInt(sep[0]);
+						progress = Integer.parseInt(sep[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						level = 1;
+						progress = 0;
+					}
+					pr.put(Skill.ENCHANTING, Integer.valueOf(progress));
+					sk.put(Skill.ENCHANTING, Integer.valueOf(level));
+				}
 				if(l.startsWith("Level"))
 				{
 					if(tokens.length != 2)continue;
@@ -385,6 +407,7 @@ public class SkillManager
 			if(sk.get(Skill.AXECRAFT)== null)sk.put(Skill.AXECRAFT, 1);
 			if(sk.get(Skill.RESTORATION) == null)sk.put(Skill.RESTORATION, 1);
 			if(!sk.containsKey(Skill.BLOCKING))sk.put(Skill.BLOCKING, 1);
+			if(!sk.containsKey(Skill.ENCHANTING))sk.put(Skill.ENCHANTING, 1);
 			//
 			if(pr.get(Skill.ARCHERY)== null)pr.put(Skill.ARCHERY, 0);
 			if(pr.get(Skill.SWORDSMANSHIP)== null)pr.put(Skill.SWORDSMANSHIP, 0);
@@ -394,7 +417,7 @@ public class SkillManager
 			if(pr.get(Skill.CONJURATION)== null)pr.put(Skill.CONJURATION, 0);
 			if(pr.get(Skill.AXECRAFT)== null)pr.put(Skill.AXECRAFT, 0);
 			if(pr.get(Skill.RESTORATION) == null)pr.put(Skill.RESTORATION, 0);
-			if(!pr.containsKey(Skill.BLOCKING))pr.put(Skill.BLOCKING, 0);
+			if(!pr.containsKey(Skill.ENCHANTING))pr.put(Skill.ENCHANTING, 0);
 			skills.put(player, sk);
 			progress.put(player, pr);
 			level.put(player, tl);
@@ -463,6 +486,8 @@ public class SkillManager
 			bw.newLine();
 			bw.write("Restoration: " + getSkillLevel(Skill.RESTORATION, player) + "," + getProgress(Skill.RESTORATION, player));
 			bw.newLine();
+			bw.write("Enchanting: " + getSkillLevel(Skill.ENCHANTING, player) + "," + getProgress(Skill.ENCHANTING, player));
+			bw.newLine();
 			bw.flush();
 			bw.close();
 		}
@@ -492,18 +517,20 @@ public class SkillManager
 		sk.put(Skill.BLOCKING, Integer.valueOf(1));
 		sk.put(Skill.RESTORATION, Integer.valueOf(1));
 		sk.put(Skill.AXECRAFT, Integer.valueOf(1));
+		sk.put(Skill.ENCHANTING, Integer.valueOf(1));
 		HashMap<Skill, Integer> pr = new HashMap<Skill, Integer>();
-		pr.put(Skill.PICKPOCKETING, Integer.valueOf(1));
-		pr.put(Skill.ARCHERY, Integer.valueOf(1));
-		pr.put(Skill.SWORDSMANSHIP, Integer.valueOf(1));
-		pr.put(Skill.RESTORATION, Integer.valueOf(1));
-		pr.put(Skill.LOCKPICKING, Integer.valueOf(1));
-		pr.put(Skill.DESTRUCTION, Integer.valueOf(1));
-		pr.put(Skill.CONJURATION, Integer.valueOf(1));
-		pr.put(Skill.ARCHERY, Integer.valueOf(1));
-		pr.put(Skill.BLOCKING, Integer.valueOf(1));
-		pr.put(Skill.RESTORATION, Integer.valueOf(1));
-		pr.put(Skill.AXECRAFT, Integer.valueOf(1));
+		pr.put(Skill.PICKPOCKETING, Integer.valueOf(0));
+		pr.put(Skill.ARCHERY, Integer.valueOf(0));
+		pr.put(Skill.SWORDSMANSHIP, Integer.valueOf(0));
+		pr.put(Skill.RESTORATION, Integer.valueOf(0));
+		pr.put(Skill.LOCKPICKING, Integer.valueOf(0));
+		pr.put(Skill.DESTRUCTION, Integer.valueOf(0));
+		pr.put(Skill.CONJURATION, Integer.valueOf(0));
+		pr.put(Skill.ARCHERY, Integer.valueOf(0));
+		pr.put(Skill.BLOCKING, Integer.valueOf(0));
+		pr.put(Skill.RESTORATION, Integer.valueOf(0));
+		pr.put(Skill.AXECRAFT, Integer.valueOf(0));
+		pr.put(Skill.ENCHANTING, Integer.valueOf(0));
 		skills.put(player, sk);
 		progress.put(player, pr);
 		level.put(player, 1);
