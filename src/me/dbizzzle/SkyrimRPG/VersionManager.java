@@ -37,8 +37,7 @@ public class VersionManager
 	}
 	public boolean compareVersion(String newver, String oldver)
 	{
-		if(newver == null)return false;
-		if(newver.equals(oldver))return true;
-		return false;
+		if(newver.equals(oldver))return false;
+		return true;
 	}
 }
