@@ -1,7 +1,5 @@
 package me.dbizzzle.SkyrimRPG;
 
-import java.net.MalformedURLException;
-
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
@@ -344,11 +342,7 @@ public class SkyrimCmd implements CommandExecutor
 				case 0:
 					player.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + plugin.getDescription().getVersion());
 					player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
-					try
-					{
-						String v = plugin.vm.getLatestVersion();
-						if(v != null && player.hasPermission("skyrimrpg.newversion"))player.sendMessage(ChatColor.GOLD + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "A new version is available: " + v + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "!" + ChatColor.RED + "!");
-					}catch(MalformedURLException mue){}
+					if(plugin.vm.compareVersion(plugin.latestversion, plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))player.sendMessage(ChatColor.GOLD + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "A new version is available: " + plugin.latestversion + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "!" + ChatColor.RED + "!");
 					player.sendMessage("========================");
 					player.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
 					if(player.hasPermission("skyrimrpg.setlevel"))player.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level>" + ChatColor.YELLOW + " - sets the level of the specified skill");

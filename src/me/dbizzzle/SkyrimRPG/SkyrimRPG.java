@@ -20,6 +20,7 @@ public class SkyrimRPG extends JavaPlugin
 	SpellTimer st = new SpellTimer(this);
 	ConfigManager cm = new ConfigManager(this);
 	VersionManager vm = new VersionManager();
+	String latestversion;
 	public void onEnable() 
 	{
 		getCommand("addspell").setExecutor(new SkyrimCmd(sm, this, cm, sk));
@@ -41,9 +42,9 @@ public class SkyrimRPG extends JavaPlugin
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(), 0, 20);
 		try
 		{
-			String v = vm.getLatestVersion();
-			if(v == null)log.info("[SkyrimRPG]Could not find new version");
-			else if(vm.compareVersion(v, getDescription().getVersion())) this.getServer().getScheduler().scheduleSyncDelayedTask(this, new VC("New version available: " + v), 0L);
+			latestversion = vm.getLatestVersion();
+			if(latestversion == null)log.info("[SkyrimRPG]Could not find new version");
+			else if(vm.compareVersion(latestversion, getDescription().getVersion())) this.getServer().getScheduler().scheduleSyncDelayedTask(this, new VC("New version available: " + latestversion), 0L);
 		}
 		catch(MalformedURLException mue)
 		{
