@@ -32,7 +32,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -279,9 +278,11 @@ public class SRPGL implements Listener
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDamage(EntityDamageEvent event)
 	{
+		if(event.isCancelled())return;
 		if(event instanceof EntityDamageByEntityEvent)
 		{
 			EntityDamageByEntityEvent e = (EntityDamageByEntityEvent)event;
+			if(e.getDamager() instanceof Player && e.getEntity() instanceof Player && !event.getEntity().getWorld().getPVP())return;
 			if((e.getDamager() instanceof Arrow))
 			{
 				Arrow a = (Arrow)e.getDamager();
