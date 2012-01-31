@@ -410,11 +410,6 @@ public class SRPGL implements Listener
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onFoodLevelChange(FoodLevelChangeEvent event)
-	{
-		event.setCancelled(true);
-	}
-	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if(!(event.getEntity() instanceof Fireball))return;
