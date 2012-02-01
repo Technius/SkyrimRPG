@@ -2,6 +2,7 @@ package me.dbizzzle.SkyrimRPG;
 
 import me.dbizzzle.SkyrimRPG.Skill.Perk;
 import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
+import me.dbizzzle.SkyrimRPG.Skill.Skill;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -24,7 +25,8 @@ public class PerkCmd implements CommandExecutor
 			player.sendMessage(ChatColor.GOLD + "Available Perk Points: " + ChatColor.BLUE + new PerkManager(plugin).getPoints(player));
 			player.sendMessage(ChatColor.YELLOW + "<Required>" + ChatColor.GOLD + "[Optional]");
 			player.sendMessage(ChatColor.GREEN + "/perk unlock <perk> [level] " + ChatColor.RED + "- Unlocks a perk, if all requirements have been met");
-			player.sendMessage(ChatColor.GREEN + "/perk list [level] " + ChatColor.RED + "- Lists your perks");
+			player.sendMessage(ChatColor.GREEN + "/perk list [page number] " + ChatColor.RED + "- Lists your perks");
+			player.sendMessage(ChatColor.GREEN + "/perk all [skill] " + ChatColor.RED + "- Lists all the requirements about the perks of that skill");
 			if(player.hasPermission("skyrimrpg.addperk"))player.sendMessage(ChatColor.GREEN + "/addperk [player] <perk> <level> " + ChatColor.RED + "- Adds a perk to specified player");
 			if(player.hasPermission("skyrimrpg.removeperk"))player.sendMessage(ChatColor.GREEN + "/removeperk <player> <perk> " + ChatColor.RED + "- Removes a perk from specified player");
 		}
@@ -110,6 +112,19 @@ public class PerkCmd implements CommandExecutor
 						else player.sendMessage(ChatColor.RED + "You have not met the requirements to unlock this perk.");
 					}
 					else player.sendMessage(ChatColor.RED + "You don't have enough perk points!");
+					return true;
+				}
+				else if(args[0].equalsIgnoreCase("all"))
+				{
+					Skill s;
+					PerkManager pm = new PerkManager(plugin);
+					try{s = Skill.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){player.sendMessage(ChatColor.RED + "No such skill: " + args[1]);return true;}
+					player.sendMessage(ChatColor.RED + s.getName() + " Perks" + ChatColor.GOLD +" - Required Skill Level - Max Level");
+					for(Perk p:pm.getPerksBySkill(s))
+					{
+						if(PerkManager.perks.get(player).containsKey(p))player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + p.getRequiredSkillLevels()[PerkManager.perks.get(player).get(p) - 1] + " - " + p.getMaxLevel());
+						else player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + p.getRequiredSkillLevels()[0] + " - " + p.getMaxLevel());
+					}
 					return true;
 				}
 				else

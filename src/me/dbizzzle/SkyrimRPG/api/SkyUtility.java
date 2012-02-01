@@ -94,4 +94,11 @@ public class SkyUtility
 			sm.saveData(player);
 		}
 	}
+	/**
+	 * Refreshes the config
+	 */
+	public void refreshConfig()
+	{
+		cm.refreshConfig();
+	}
 }

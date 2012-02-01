@@ -1,5 +1,7 @@
 package me.dbizzzle.SkyrimRPG.Skill;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -39,6 +41,12 @@ public class PerkManager
 	{
 		perks.get(player).put(perk, level);
 		points.put(player, points.get(player) + 1);
+	}
+	public List<Perk> getPerksBySkill(Skill s)
+	{
+		List<Perk> l = new ArrayList<Perk>();
+		for(Perk as:Perk.values())if(as.getSkill() == s)l.add(as);
+		return l;
 	}
 	public void loadPerks(Player player)
 	{
