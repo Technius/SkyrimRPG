@@ -185,7 +185,7 @@ public class SRPGL implements Listener
 		if (s.isSneaking() && ConfigManager.enablePickpocketing) {
 			Entity ent = event.getRightClicked();
 			if (ent instanceof Player) {
-				final String ents = ((HumanEntity) ent).getName();
+				final String ents = ((Player) ent).getName();
 				EntityPlayer pick = ((CraftPlayer) plugin.getServer().getPlayer(ents)).getHandle();
 				s.a(pick.inventory);
 				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
@@ -203,6 +203,7 @@ public class SRPGL implements Listener
 					@SuppressWarnings("deprecation")
 					public void run() {
 						Player picked = plugin.getServer().getPlayer(ents);
+						if(picked == null)return;
 						if(!picked.isOnline())return;
 						picked.sendMessage(pickpocketed);
 						picked.updateInventory();
