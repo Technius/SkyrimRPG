@@ -292,7 +292,10 @@ public class SkillManager
 				{
 					if(tokens.length != 2) continue;
 					if(!tokens[0].equalsIgnoreCase("Blocking"))continue;
-					String x = tokens[1].replaceAll(" ", "");
+					delim = "[ ]+";
+					String[] spaced = tokens[1].split(delim);
+					String x = "";
+					for(String p:spaced)x=x+p;
 					String[] sep = x.split("[,]",2);
 					if(sep.length != 2) continue;
 					int level = 1;
