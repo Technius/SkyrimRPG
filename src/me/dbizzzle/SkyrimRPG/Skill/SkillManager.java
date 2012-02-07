@@ -32,6 +32,16 @@ public class SkillManager
 	{
 		p = a;
 	}
+	public void calculateLevel(Player player, Skill s)
+	{
+		if (processExperience(player, s)) {
+			incrementLevel(s, player);
+			progress.get(player).put(s, 0);
+			calculateLevel(player);
+		} else {
+			progress.get(player).put(s, progress.get(player).get(s) + 1);
+		}
+	}
 	public static int calculateLevel(Player player)
 	{
 		int lvl = 0;
