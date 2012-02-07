@@ -14,6 +14,7 @@ public class ConfigManager
 	public static boolean useSpellbooks = true;
 	public static boolean enableLockpicking = true;
 	public static boolean enablePickpocketing = true;
+	public static boolean enablePickpocketingChance = false;
 	SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
@@ -49,6 +50,11 @@ public class ConfigManager
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePickpocketing = false;
 					else enablePickpocketing = true;
 				}
+				if(tokens[0].equalsIgnoreCase("enablepickpocketingchance"))
+				{
+					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePickpocketingChance = false;
+					else enablePickpocketingChance = true;
+				}
 			}
 			br.close();
 		}
@@ -83,6 +89,10 @@ public class ConfigManager
 			bw.write("enableLockpicking: " + (enableLockpicking ? "true" : "false"));
 			bw.newLine();
 			bw.write("enablePickpocketing: " + (enablePickpocketing ? "true" : "false"));
+			bw.newLine();
+			bw.write("#If you want to allow pickpocketing to fail(inventory is not opened)");
+			bw.newLine();
+			bw.write("enablePickpocketingChance: " + (enablePickpocketingChance ? "true" : "false"));
 			bw.newLine();
 			bw.flush();
 			bw.close();

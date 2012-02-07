@@ -18,7 +18,6 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
@@ -187,6 +186,22 @@ public class SRPGL implements Listener
 			if (ent instanceof Player) {
 				final String ents = ((Player) ent).getName();
 				EntityPlayer pick = ((CraftPlayer) plugin.getServer().getPlayer(ents)).getHandle();
+				Random r = new Random();
+				int c = r.nextInt(100) + 1;
+				if(c > SkillManager.progress.get(se).get(Skill.PICKPOCKETING) && ConfigManager.enablePickpocketingChance)
+				{
+					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + ents + "!");
+					((Player)ent).sendMessage(ChatColor.RED + "" + se + " tried to pickpocket you!");
+					SkillManager sm = new SkillManager();
+					if (sm.processExperience(se, Skill.PICKPOCKETING)) {
+						sm.incrementLevel(Skill.PICKPOCKETING, se);
+						SkillManager.progress.get(se).put(Skill.PICKPOCKETING, 0);
+						SkillManager.calculateLevel(se);
+					} else {
+						SkillManager.progress.get(se).put(Skill.PICKPOCKETING, SkillManager.progress.get(se).get(Skill.PICKPOCKETING) + 1);
+					}
+					return;
+				}
 				s.a(pick.inventory);
 				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
 

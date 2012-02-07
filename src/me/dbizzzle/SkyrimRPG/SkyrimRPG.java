@@ -108,6 +108,10 @@ public class SkyrimRPG extends JavaPlugin
 				bw.flush();
 				bw.write("enablePickpocketing: true");
 				bw.newLine();
+				bw.write("#If you want to allow pickpocketing to fail(inventory is not opened)");
+				bw.newLine();
+				bw.write("enablePickpocketingChance: false");
+				bw.newLine();
 				bw.flush();
 				bw.close();
 			}
