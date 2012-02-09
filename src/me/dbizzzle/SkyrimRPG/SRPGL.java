@@ -184,6 +184,11 @@ public class SRPGL implements Listener
 		if (s.isSneaking() && ConfigManager.enablePickpocketing) {
 			Entity ent = event.getRightClicked();
 			if (ent instanceof Player) {
+				if(((Player)ent).hasPermission("skyrimrpg.nopickpocket"))
+				{
+					se.sendMessage(ChatColor.RED + "You probably don't want to pickpocket this person.");
+					return;
+				}
 				final String ents = ((Player) ent).getName();
 				EntityPlayer pick = ((CraftPlayer) plugin.getServer().getPlayer(ents)).getHandle();
 				Random r = new Random();
