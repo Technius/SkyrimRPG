@@ -196,7 +196,7 @@ public class SRPGL implements Listener
 				if(c > SkillManager.progress.get(se).get(Skill.PICKPOCKETING) && ConfigManager.enablePickpocketingChance)
 				{
 					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + ents + "!");
-					((Player)ent).sendMessage(ChatColor.RED + "" + se + " tried to pickpocket you!");
+					((Player)ent).sendMessage(ChatColor.RED + "" + se.getName() + " tried to pickpocket you!");
 					SkillManager sm = new SkillManager();
 					if (sm.processExperience(se, Skill.PICKPOCKETING)) {
 						sm.incrementLevel(Skill.PICKPOCKETING, se);
