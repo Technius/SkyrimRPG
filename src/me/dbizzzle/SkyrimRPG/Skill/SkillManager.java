@@ -407,8 +407,31 @@ public class SkillManager
 						level = 1;
 						progress = 0;
 					}
-					pr.put(Skill.BLOCKING, Integer.valueOf(progress));
-					sk.put(Skill.BLOCKING, Integer.valueOf(level));
+					pr.put(Skill.RESTORATION, Integer.valueOf(progress));
+					sk.put(Skill.RESTORATION, Integer.valueOf(level));
+				}
+				if(l.startsWith("Sneak"))
+				{
+					if(tokens.length != 2) continue;
+					if(!tokens[0].equalsIgnoreCase("Sneak"))
+						continue;
+					String x = tokens[1].replaceAll(" ", "");
+					String[] sep = x.split("[,]",2);
+					if(sep.length != 2) continue;
+					int level = 1;
+					int progress = 0;
+					try
+					{
+						level = Integer.parseInt(sep[0]);
+						progress = Integer.parseInt(sep[1]);
+					}
+					catch(NumberFormatException nfe)
+					{
+						level = 1;
+						progress = 0;
+					}
+					pr.put(Skill.SNEAK, Integer.valueOf(progress));
+					sk.put(Skill.SNEAK, Integer.valueOf(level));
 				}
 			}
 			if(sk.get(Skill.ARCHERY)== null)sk.put(Skill.ARCHERY, 1);
@@ -421,6 +444,7 @@ public class SkillManager
 			if(sk.get(Skill.RESTORATION) == null)sk.put(Skill.RESTORATION, 1);
 			if(!sk.containsKey(Skill.BLOCKING))sk.put(Skill.BLOCKING, 1);
 			if(!sk.containsKey(Skill.ENCHANTING))sk.put(Skill.ENCHANTING, 1);
+			if(!sk.containsKey(Skill.SNEAK))sk.put(Skill.SNEAK, 1);
 			//
 			if(pr.get(Skill.ARCHERY)== null)pr.put(Skill.ARCHERY, 0);
 			if(pr.get(Skill.SWORDSMANSHIP)== null)pr.put(Skill.SWORDSMANSHIP, 0);
@@ -431,6 +455,7 @@ public class SkillManager
 			if(pr.get(Skill.AXECRAFT)== null)pr.put(Skill.AXECRAFT, 0);
 			if(pr.get(Skill.RESTORATION) == null)pr.put(Skill.RESTORATION, 0);
 			if(!pr.containsKey(Skill.ENCHANTING))pr.put(Skill.ENCHANTING, 0);
+			if(!pr.containsKey(Skill.SNEAK))pr.put(Skill.SNEAK, 0);
 			skills.put(player, sk);
 			progress.put(player, pr);
 			level.put(player, tl);
@@ -501,6 +526,8 @@ public class SkillManager
 			bw.newLine();
 			bw.write("Enchanting: " + getSkillLevel(Skill.ENCHANTING, player) + "," + getProgress(Skill.ENCHANTING, player));
 			bw.newLine();
+			bw.write("Sneak: " + getSkillLevel(Skill.SNEAK, player) + "," + getProgress(Skill.SNEAK, player));
+			bw.newLine();
 			bw.flush();
 			bw.close();
 		}
@@ -531,6 +558,7 @@ public class SkillManager
 		sk.put(Skill.RESTORATION, Integer.valueOf(1));
 		sk.put(Skill.AXECRAFT, Integer.valueOf(1));
 		sk.put(Skill.ENCHANTING, Integer.valueOf(1));
+		sk.put(Skill.SNEAK, Integer.valueOf(1));
 		HashMap<Skill, Integer> pr = new HashMap<Skill, Integer>();
 		pr.put(Skill.PICKPOCKETING, Integer.valueOf(0));
 		pr.put(Skill.ARCHERY, Integer.valueOf(0));
@@ -544,6 +572,7 @@ public class SkillManager
 		pr.put(Skill.RESTORATION, Integer.valueOf(0));
 		pr.put(Skill.AXECRAFT, Integer.valueOf(0));
 		pr.put(Skill.ENCHANTING, Integer.valueOf(0));
+		pr.put(Skill.SNEAK, Integer.valueOf(0));
 		skills.put(player, sk);
 		progress.put(player, pr);
 		level.put(player, 1);
