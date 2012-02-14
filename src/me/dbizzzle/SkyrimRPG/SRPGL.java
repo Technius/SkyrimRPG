@@ -11,6 +11,7 @@ import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -35,6 +36,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Door;
 
@@ -294,6 +296,37 @@ public class SRPGL implements Listener
 			if(!SpellManager.conjured.containsValue(z))return;
 			SpellManager.conjured.remove(z);
 			event.getDrops().clear();
+		}
+	}
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void sneakSkill(PlayerToggleSneakEvent event)
+	{
+		if(event.isCancelled())return;
+		Player player = event.getPlayer();
+		if(event.isSneaking())
+		{
+			for(Entity e:player.getNearbyEntities(50, 50, 50))
+			{
+				if(e instanceof Player)
+				{
+					Player t = (Player)e;
+					int alevel = SkillManager.skills.get(player).get(Skill.SNEAK);
+					Random r = new Random();
+					double d = e.getLocation().distance(player.getLocation());
+					if((alevel + d)> (r.nextInt(100) + 1))
+					{
+						plugin.sk.calculateLevel(player, Skill.SNEAK);
+						t.hidePlayer(player);
+					}
+				}
+			}
+		}
+		else if(!event.isSneaking())
+		{
+			for(Player p:player.getServer().getOnlinePlayers())
+			{
+				if(!p.canSee(player))p.showPlayer(player);
+			}
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGH)
