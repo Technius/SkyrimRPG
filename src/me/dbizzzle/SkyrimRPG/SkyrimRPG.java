@@ -112,6 +112,10 @@ public class SkyrimRPG extends JavaPlugin
 				bw.newLine();
 				bw.write("enablePickpocketingChance: false");
 				bw.newLine();
+				bw.write("#Item id of the casting tool(the item used for bindspell, default hands)");
+				bw.newLine();
+				bw.write("castingTool: 0");
+				bw.newLine();
 				bw.flush();
 				bw.close();
 			}

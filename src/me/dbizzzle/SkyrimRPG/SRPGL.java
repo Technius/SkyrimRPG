@@ -35,6 +35,7 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -145,7 +146,7 @@ public class SRPGL implements Listener
 				event.getPlayer().updateInventory();
 			}
 		}
-		else if(event.getPlayer().getItemInHand().getType() == Material.AIR)
+		else if(event.getPlayer().getItemInHand().getType().getId() == ConfigManager.wand)
 		{
 			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
 			{
@@ -298,6 +299,10 @@ public class SRPGL implements Listener
 			event.getDrops().clear();
 		}
 	}
+	public void sneakDetect(PlayerMoveEvent event)
+	{
+		
+	}
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void sneakSkill(PlayerToggleSneakEvent event)
 	{
@@ -311,13 +316,14 @@ public class SRPGL implements Listener
 				{
 					Player t = (Player)e;
 					int alevel = SkillManager.skills.get(player).get(Skill.SNEAK);
-					Random r = new Random();
 					double d = e.getLocation().distance(player.getLocation());
-					if((alevel + d)> (r.nextInt(100) + 1))
+					if(alevel/2 >= d)
 					{
 						plugin.sk.calculateLevel(player, Skill.SNEAK);
 						t.hidePlayer(player);
+						player.sendMessage(ChatColor.YELLOW + "Hidden");
 					}
+					else player.sendMessage(ChatColor.YELLOW + "Detected");
 				}
 			}
 		}
@@ -325,7 +331,11 @@ public class SRPGL implements Listener
 		{
 			for(Player p:player.getServer().getOnlinePlayers())
 			{
-				if(!p.canSee(player))p.showPlayer(player);
+				if(!p.canSee(player))
+				{
+					p.showPlayer(player);
+					player.sendMessage(ChatColor.YELLOW + "Now visible");
+				}
 			}
 		}
 	}

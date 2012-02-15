@@ -15,6 +15,7 @@ public class ConfigManager
 	public static boolean enableLockpicking = true;
 	public static boolean enablePickpocketing = true;
 	public static boolean enablePickpocketingChance = false;
+	public static int wand = 0;
 	SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
@@ -40,20 +41,24 @@ public class ConfigManager
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))useSpellbooks = false;
 					else useSpellbooks = true;
 				}
-				if(tokens[0].equalsIgnoreCase("enablelockpicking"))
+				else if(tokens[0].equalsIgnoreCase("enablelockpicking"))
 				{
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableLockpicking = false;
 					else enableLockpicking = true;
 				}
-				if(tokens[0].equalsIgnoreCase("enablepickpocketing"))
+				else if(tokens[0].equalsIgnoreCase("enablepickpocketing"))
 				{
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePickpocketing = false;
 					else enablePickpocketing = true;
 				}
-				if(tokens[0].equalsIgnoreCase("enablepickpocketingchance"))
+				else if(tokens[0].equalsIgnoreCase("enablepickpocketingchance"))
 				{
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePickpocketingChance = false;
 					else enablePickpocketingChance = true;
+				}
+				else if(tokens[0].equalsIgnoreCase("castingtool"))
+				{
+					try{wand = Integer.parseInt(tokens[1].replaceAll(" ", ""));}catch(NumberFormatException nfe){wand = 0;}
 				}
 			}
 			br.close();
@@ -93,6 +98,10 @@ public class ConfigManager
 			bw.write("#If you want to allow pickpocketing to fail(inventory is not opened)");
 			bw.newLine();
 			bw.write("enablePickpocketingChance: " + (enablePickpocketingChance ? "true" : "false"));
+			bw.newLine();
+			bw.write("#Item id of the casting tool(the item used for bindspell, default hands)");
+			bw.newLine();
+			bw.write("castingTool: " + wand);
 			bw.newLine();
 			bw.flush();
 			bw.close();
