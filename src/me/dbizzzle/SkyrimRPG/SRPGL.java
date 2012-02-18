@@ -159,7 +159,7 @@ public class SRPGL implements Listener
 			{
 				if(SpellManager.boundright.containsKey(event.getPlayer()))
 				{
-				plugin.sm.castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
+					plugin.sm.castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
 				}
 			}
 		}
