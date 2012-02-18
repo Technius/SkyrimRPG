@@ -58,16 +58,8 @@ public class SkyrimRPG extends JavaPlugin
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
 		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(), 0, 20);
-		try
-		{
-			latestversion = vm.getLatestVersion();
-			if(latestversion == null)log.info("[SkyrimRPG]Could not find new version");
-			else if(vm.compareVersion(latestversion, getDescription().getVersion())) this.getServer().getScheduler().scheduleSyncDelayedTask(this, new VC("New version available: " + latestversion), 0L);
-		}
-		catch(MalformedURLException mue)
-		{
-			log.info("[SkyrimRPG]Could not find new version");
-		}
+		VCThread check = new VCThread(this);
+		check.start();
 	}
 	
 	public void onDisable() 
@@ -153,5 +145,28 @@ public class SkyrimRPG extends JavaPlugin
 			log.info("[SkyrimRPG]" + message);
 		}
 		
+	}
+	private class VCThread extends Thread
+	{
+		private SkyrimRPG s;
+		private VCThread(SkyrimRPG i)
+		{
+			s = i;
+		}
+		@SuppressWarnings("deprecation")
+		public void run()
+		{
+			try
+			{
+				latestversion = vm.getLatestVersion();
+				if(latestversion == null)log.info("[SkyrimRPG]Could not find new version");
+				else if(vm.compareVersion(latestversion, s.getDescription().getVersion())) s.getServer().getScheduler().scheduleSyncDelayedTask(s, new VC("New version available: " + latestversion), 0L);
+			}
+			catch(MalformedURLException mue)
+			{
+				log.info("[SkyrimRPG]Could not find new version");
+			}
+			stop();
+		}
 	}
 }
