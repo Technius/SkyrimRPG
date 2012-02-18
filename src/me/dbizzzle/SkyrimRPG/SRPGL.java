@@ -308,6 +308,7 @@ public class SRPGL implements Listener
 	{
 		if(event.isCancelled())return;
 		Player player = event.getPlayer();
+		boolean detect = false;
 		if(event.isSneaking())
 		{
 			for(Entity e:player.getNearbyEntities(50, 50, 50))
@@ -321,20 +322,21 @@ public class SRPGL implements Listener
 					{
 						plugin.sk.calculateLevel(player, Skill.SNEAK);
 						t.hidePlayer(player);
-						player.sendMessage(ChatColor.YELLOW + "Hidden");
 					}
-					else player.sendMessage(ChatColor.YELLOW + "Detected");
+					else detect = true;
 				}
 			}
+			if(!detect)player.sendMessage(ChatColor.YELLOW + "Hidden");
+			else if(detect)player.sendMessage(ChatColor.YELLOW + "Detected");
 		}
 		else if(!event.isSneaking())
 		{
+			player.sendMessage(ChatColor.YELLOW + "Now visible");
 			for(Player p:player.getServer().getOnlinePlayers())
 			{
 				if(!p.canSee(player))
 				{
 					p.showPlayer(player);
-					player.sendMessage(ChatColor.YELLOW + "Now visible");
 				}
 			}
 		}
