@@ -14,7 +14,7 @@ import org.bukkit.plugin.Plugin;
  * Main API class of SkyrimRPG
  *
  */
-public class SkyUtility 
+public class SkyUtility
 {
 	private SkyrimRPG p;
 	private ConfigManager cm;

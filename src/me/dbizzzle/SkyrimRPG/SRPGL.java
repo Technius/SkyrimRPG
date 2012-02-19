@@ -1,5 +1,6 @@
 package me.dbizzzle.SkyrimRPG;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -53,6 +54,7 @@ public class SRPGL implements Listener
 	long delay = secondsDelay*20;
 
 	String pickpocketed = ChatColor.RED + "Somebody has pickpocketed you!"; //Configurable
+	ArrayList<Player> sneak = new ArrayList<Player>();
 	
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -309,9 +311,10 @@ public class SRPGL implements Listener
 		if(event.isCancelled())return;
 		Player player = event.getPlayer();
 		boolean detect = false;
-		if(event.isSneaking())
+		if(event.isSneaking() && !sneak.contains(player))
 		{
-			for(Entity e:player.getNearbyEntities(50, 50, 50))
+			List<Entity> a = player.getNearbyEntities(50, 50, 50);
+			for(Entity e:a)
 			{
 				if(e instanceof Player)
 				{
@@ -324,12 +327,14 @@ public class SRPGL implements Listener
 						t.hidePlayer(player);
 					}
 					else detect = true;
+					sneak.add(player);
 				}
 			}
 			if(!detect)player.sendMessage(ChatColor.YELLOW + "Hidden");
-			else if(detect)player.sendMessage(ChatColor.YELLOW + "Detected");
+			else if(detect && a.size() != 0)player.sendMessage(ChatColor.YELLOW + "Detected");
+			else player.sendMessage(ChatColor.YELLOW + "Hidden");
 		}
-		else if(!event.isSneaking())
+		else if(!event.isSneaking() && sneak.contains(player))
 		{
 			player.sendMessage(ChatColor.YELLOW + "Now visible");
 			for(Player p:player.getServer().getOnlinePlayers())
@@ -339,6 +344,7 @@ public class SRPGL implements Listener
 					p.showPlayer(player);
 				}
 			}
+			sneak.remove(player);
 		}
 	}
 	@EventHandler(priority = EventPriority.HIGH)
