@@ -1,10 +1,6 @@
 package me.dbizzzle.SkyrimRPG;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.logging.Logger;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
@@ -53,7 +49,7 @@ public class SkyrimRPG extends JavaPlugin
 		sk.setPlugin(this);
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new SRPGL(this), this);
-		if(!checkFiles())createFiles();
+		if(!checkFiles())cm.refreshConfig();
 		cm.loadConfig();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
 		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
@@ -66,57 +62,6 @@ public class SkyrimRPG extends JavaPlugin
 	{
 		for(Player p: this.getServer().getOnlinePlayers())sk.saveData(p);
 		log.info("[SkyrimRPG] Plugin disabled.");
-	}
-	public boolean createFiles()
-	{
-		File file = new File(this.getDataFolder().getPath());
-		if(!file.exists())file.mkdir();
-		File players = new File(file.getPath() + File.separator + "Players");
-		if(!players.exists())players.mkdir();
-		File config = new File(file.getPath() + File.separator + "config.txt");
-		File locks = new File(file.getPath() + File.separator + "Locks");
-		if(!locks.exists())locks.mkdir();
-		File magic = new File(file.getPath() + File.separator + "Magic");
-		if(!magic.exists())magic.mkdir();
-		File perks = new File(file.getPath() + File.separator + "Perks");
-		if(!perks.exists())perks.mkdir();
-		try
-		{
-			if(!config.exists())
-			{
-				FileOutputStream fos = new FileOutputStream(config);
-				fos.flush();
-				fos.close();
-				BufferedWriter bw = new BufferedWriter(new FileWriter(config));
-				bw.write("#SkyrimRPG configuration file");
-				bw.newLine();
-				bw.write("#Enable this if you want to use spellbooks");
-				bw.newLine();
-				bw.write("useSpellbooks: true");
-				bw.newLine();
-				bw.write("#Disable these if you don't like thievery");
-				bw.newLine();
-				bw.write("enableLockpicking: true");
-				bw.flush();
-				bw.write("enablePickpocketing: true");
-				bw.newLine();
-				bw.write("#If you want to allow pickpocketing to fail(inventory is not opened)");
-				bw.newLine();
-				bw.write("enablePickpocketingChance: false");
-				bw.newLine();
-				bw.write("#Item id of the casting tool(the item used for bindspell, default hands)");
-				bw.newLine();
-				bw.write("castingTool: 0");
-				bw.newLine();
-				bw.flush();
-				bw.close();
-			}
-			return true;
-		}
-		catch(IOException ioe)
-		{
-			return false;
-		}
 	}
 	public boolean checkFiles()
 	{

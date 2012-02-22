@@ -384,7 +384,7 @@ public class SkyrimCmd implements CommandExecutor
 							return true;
 						}
 						if(!plugin.checkFiles())
-						plugin.createFiles();
+						plugin.cm.refreshConfig();
 						cm.loadConfig();
 						player.sendMessage(ChatColor.GREEN + "Configuration file reloaded successfully.");
 					}
@@ -395,7 +395,6 @@ public class SkyrimCmd implements CommandExecutor
 							player.sendMessage(ChatColor.RED + "You don't have permission to do this");
 							return true;
 						}
-						if(!plugin.checkFiles())plugin.createFiles();
 						cm.refreshConfig();
 						player.sendMessage(ChatColor.GREEN + "Configuration file refreshed successfully.");
 					}

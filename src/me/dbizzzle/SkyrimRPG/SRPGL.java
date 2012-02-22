@@ -12,7 +12,6 @@ import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -330,13 +329,13 @@ public class SRPGL implements Listener
 					sneak.add(player);
 				}
 			}
-			if(!detect)player.sendMessage(ChatColor.YELLOW + "Hidden");
-			else if(detect && a.size() != 0)player.sendMessage(ChatColor.YELLOW + "Detected");
-			else player.sendMessage(ChatColor.YELLOW + "Hidden");
+			if(!detect && ConfigManager.enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Hidden");
+			else if(detect && a.size() != 0 && ConfigManager.enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Detected");
+			else if(ConfigManager.enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Hidden");
 		}
 		else if(!event.isSneaking() && sneak.contains(player))
 		{
-			player.sendMessage(ChatColor.YELLOW + "Now visible");
+			if(ConfigManager.enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Now visible");
 			for(Player p:player.getServer().getOnlinePlayers())
 			{
 				if(!p.canSee(player))
@@ -437,6 +436,14 @@ public class SRPGL implements Listener
 						SkillManager.calculateLevel(player);
 					}
 					else SkillManager.progress.get(player).put(Skill.AXECRAFT, SkillManager.progress.get(player).get(Skill.AXECRAFT) + 1);
+				}
+				if(sneak.contains(player) && event.getEntity() instanceof Player)
+				{
+					if(!((Player)event.getEntity()).canSee(player))
+					{
+						event.setDamage(event.getDamage()* 2);
+						player.sendMessage(ChatColor.GREEN + "Sneak attack for 2x damage!");
+					}
 				}
 			}
 			else if(e.getDamager() instanceof SmallFireball)

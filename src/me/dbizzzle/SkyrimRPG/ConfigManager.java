@@ -15,6 +15,7 @@ public class ConfigManager
 	public static boolean enableLockpicking = true;
 	public static boolean enablePickpocketing = true;
 	public static boolean enablePickpocketingChance = false;
+	public static boolean enableSneakMessage = false;
 	public static int wand = 0;
 	SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
@@ -23,7 +24,7 @@ public class ConfigManager
 	}
 	public void loadConfig()
 	{
-		if(!a.checkFiles())a.createFiles();
+		if(!a.checkFiles())refreshConfig();
 		File file = new File(a.getDataFolder().getPath());
 		if(!file.exists())file.mkdir();
 		File config = new File(file.getPath() + File.separator + "config.txt");
@@ -56,6 +57,11 @@ public class ConfigManager
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePickpocketingChance = false;
 					else enablePickpocketingChance = true;
 				}
+				else if(tokens[0].equalsIgnoreCase("enablesneakmessage"))
+				{
+					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableSneakMessage = false;
+					else enableSneakMessage = true;
+				}
 				else if(tokens[0].equalsIgnoreCase("castingtool"))
 				{
 					try{wand = Integer.parseInt(tokens[1].replaceAll(" ", ""));}catch(NumberFormatException nfe){wand = 0;}
@@ -70,7 +76,6 @@ public class ConfigManager
 	}
 	public boolean refreshConfig()
 	{
-		if(!a.checkFiles())a.createFiles();
 		File file = new File(a.getDataFolder().getPath());
 		if(!file.exists())file.mkdir();
 		File config = new File(file.getPath() + File.separator + "config.txt");
@@ -102,6 +107,10 @@ public class ConfigManager
 			bw.write("#Item id of the casting tool(the item used for bindspell, default hands)");
 			bw.newLine();
 			bw.write("castingTool: " + wand);
+			bw.newLine();
+			bw.write("#Enable/disable those annoying sneak messages");
+			bw.newLine();
+			bw.write("enableSneakMessage: " + (enableSneakMessage ? "true" : "false"));
 			bw.newLine();
 			bw.flush();
 			bw.close();
