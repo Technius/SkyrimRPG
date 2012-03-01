@@ -16,7 +16,11 @@ public class ConfigManager
 	public static boolean enablePickpocketing = true;
 	public static boolean enablePickpocketingChance = false;
 	public static boolean enableSneakMessage = false;
+	public static boolean enableLpCd = true;
+	public static boolean enablePpCd = true;
 	public static int wand = 0;
+	public static int PickpocketingCooldown = 10;
+	public static int LockpickingCooldown = 10;
 	SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
@@ -52,10 +56,28 @@ public class ConfigManager
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePickpocketing = false;
 					else enablePickpocketing = true;
 				}
+				else if(tokens[0].equalsIgnoreCase("enablelockpickingcooldown"))
+				{
+					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableLpCd = false;
+					else enableLpCd = true;
+				}
+				else if(tokens[0].equalsIgnoreCase("enablepickpocketingcooldown"))
+				{
+					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePpCd = false;
+					else enablePpCd = true;
+				}
 				else if(tokens[0].equalsIgnoreCase("enablepickpocketingchance"))
 				{
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePickpocketingChance = false;
 					else enablePickpocketingChance = true;
+				}
+				else if(tokens[0].equalsIgnoreCase("pickpocketingcooldown"))
+				{
+					try{PickpocketingCooldown = Integer.parseInt(tokens[1].replaceAll(" ", ""));}catch(NumberFormatException nfe){PickpocketingCooldown = 0;}
+				}
+				else if(tokens[0].equalsIgnoreCase("lockpickingcooldown"))
+				{
+					try{LockpickingCooldown = Integer.parseInt(tokens[1].replaceAll(" ", ""));}catch(NumberFormatException nfe){LockpickingCooldown = 0;}
 				}
 				else if(tokens[0].equalsIgnoreCase("enablesneakmessage"))
 				{
@@ -103,6 +125,18 @@ public class ConfigManager
 			bw.write("#If you want to allow pickpocketing to fail(inventory is not opened)");
 			bw.newLine();
 			bw.write("enablePickpocketingChance: " + (enablePickpocketingChance ? "true" : "false"));
+			bw.newLine();
+			bw.write("#Lockpicking and Pickpocketing cooldowns(in seconds), don't work if disabled");
+			bw.newLine();
+			bw.write("PickpocketingCooldown: " + PickpocketingCooldown);
+			bw.newLine();
+			bw.write("LockpickingCooldown: " + LockpickingCooldown);
+			bw.newLine();
+			bw.write("#Enable/disable pickpocketing and lockpicking cooldowns");
+			bw.newLine();
+			bw.write("enablePickpocketingCooldown: " + (enablePpCd ? "true" : "false"));
+			bw.newLine();
+			bw.write("enableLockpickingCooldown: " + (enableLpCd ? "true" : "false"));
 			bw.newLine();
 			bw.write("#Item id of the casting tool(the item used for bindspell, default hands)");
 			bw.newLine();

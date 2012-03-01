@@ -3,6 +3,7 @@ package me.dbizzzle.SkyrimRPG;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import me.dbizzzle.SkyrimRPG.Skill.Perk;
 import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
@@ -54,7 +55,8 @@ public class SRPGL implements Listener
 
 	String pickpocketed = ChatColor.RED + "Somebody has pickpocketed you!"; //Configurable
 	ArrayList<Player> sneak = new ArrayList<Player>();
-	
+	CopyOnWriteArrayList<Player> ppcd = new CopyOnWriteArrayList<Player>();
+	CopyOnWriteArrayList<Player> lpcd = new CopyOnWriteArrayList<Player>();
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event)
@@ -66,6 +68,11 @@ public class SRPGL implements Listener
 				Material btype = event.getClickedBlock().getType();
 				if (btype == Material.IRON_DOOR_BLOCK)
 				{
+					if(lpcd.contains(event.getPlayer()) && ConfigManager.enableLpCd)
+					{
+						event.getPlayer().sendMessage(ChatColor.RED + "You don't feel comfortable attempting to pick locks right now");
+						return;
+					}
 					Door d = (Door) btype.getNewData(event.getClickedBlock().getData());
 					if(!d.isOpen())
 					{
@@ -113,11 +120,18 @@ public class SRPGL implements Listener
 							SkillManager.progress.get(event.getPlayer()).put(Skill.LOCKPICKING, SkillManager.progress.get(event.getPlayer()).get(Skill.LOCKPICKING) + 1);
 						}
 					}
+					event.getPlayer().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.LOCKPICKING, event.getPlayer(), false));
+					return;
 				}
 				else if(btype == Material.CHEST)
 				{
 					if(event.isCancelled())
 					{
+						if(lpcd.contains(event.getPlayer()) && ConfigManager.enableLpCd)
+						{
+							event.getPlayer().sendMessage(ChatColor.RED + "You don't feel comfortable attempting to pick locks right now");
+							return;
+						}
 						SkillManager sm = new SkillManager();
 						if(pickLockSuccess(event.getPlayer()))
 						{
@@ -142,9 +156,11 @@ public class SRPGL implements Listener
 						} else {
 							SkillManager.progress.get(event.getPlayer()).put(Skill.LOCKPICKING, SkillManager.progress.get(event.getPlayer()).get(Skill.LOCKPICKING) + 1);
 						}
+						event.getPlayer().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.LOCKPICKING, event.getPlayer(), false));
 					}
 				}
 				event.getPlayer().updateInventory();
+				return;
 			}
 		}
 		else if(event.getPlayer().getItemInHand().getType().getId() == ConfigManager.wand)
@@ -188,6 +204,11 @@ public class SRPGL implements Listener
 		if (s.isSneaking() && ConfigManager.enablePickpocketing) {
 			Entity ent = event.getRightClicked();
 			if (ent instanceof Player) {
+				if(ppcd.contains(se) && ConfigManager.enablePpCd)
+				{
+					se.sendMessage(ChatColor.RED + "You are too afraid to pickpocket someone right now");
+					return;
+				}
 				if(((Player)ent).hasPermission("skyrimrpg.nopickpocket"))
 				{
 					se.sendMessage(ChatColor.RED + "You probably don't want to pickpocket this person.");
@@ -200,7 +221,7 @@ public class SRPGL implements Listener
 				if(c > SkillManager.progress.get(se).get(Skill.PICKPOCKETING) && ConfigManager.enablePickpocketingChance)
 				{
 					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + ents + "!");
-					((Player)ent).sendMessage(ChatColor.RED + "" + se.getName() + " tried to pickpocket you!");
+					((Player)ent).sendMessage(ChatColor.RED + se.getName() + " tried to pickpocket you!");
 					SkillManager sm = new SkillManager();
 					if (sm.processExperience(se, Skill.PICKPOCKETING)) {
 						sm.incrementLevel(Skill.PICKPOCKETING, se);
@@ -209,6 +230,7 @@ public class SRPGL implements Listener
 					} else {
 						SkillManager.progress.get(se).put(Skill.PICKPOCKETING, SkillManager.progress.get(se).get(Skill.PICKPOCKETING) + 1);
 					}
+					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false));
 					return;
 				}
 				s.a(pick.inventory);
@@ -234,6 +256,8 @@ public class SRPGL implements Listener
 						s.closeInventory();
 					}
 				}, delay);
+				se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false));
+				return;
 			}
 		}
 	}
@@ -519,5 +543,40 @@ public class SRPGL implements Listener
 		}
 		else SkillManager.progress.get(p).put(Skill.DESTRUCTION, SkillManager.progress.get(p).get(Skill.DESTRUCTION) + sp);
 		SpellManager.ftracker.remove(f);
+	}
+	private class Cooldown implements Runnable
+	{
+		private Skill skill;
+		private Player p;
+		private boolean r;
+		private Cooldown(Skill s, Player player, boolean remove)
+		{
+			skill = s;
+			p = player;
+			r = remove;
+		}
+		public void run() 
+		{
+			if(!r)
+			{
+				int cd = 0;
+				if(skill == Skill.PICKPOCKETING)
+				{
+					ppcd.add(p);
+					cd = ConfigManager.PickpocketingCooldown;
+				}
+				else if(skill == Skill.LOCKPICKING)
+				{
+					lpcd.add(p);
+					cd = ConfigManager.LockpickingCooldown;
+				}
+				p.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(skill, p, true), cd);
+			}
+			else
+			{
+				if(skill == Skill.PICKPOCKETING)ppcd.remove(p);
+				else if(skill == Skill.LOCKPICKING)lpcd.remove(p);
+			}
+		}
 	}
 }
