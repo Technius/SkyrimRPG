@@ -136,7 +136,7 @@ public class SRPGL implements Listener
 						if(pickLockSuccess(event.getPlayer()))
 						{
 							net.minecraft.server.TileEntityChest c = (net.minecraft.server.TileEntityChest)((org.bukkit.craftbukkit.CraftWorld)event.getPlayer().getWorld()).getTileEntityAt(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ());
-							c.a((net.minecraft.server.EntityHuman)((CraftPlayer)event.getPlayer()).getHandle());
+							((net.minecraft.server.EntityHuman)((CraftPlayer)event.getPlayer()).getHandle()).openContainer(c);
 							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
 							if(event.isCancelled())event.setCancelled(false);
 						}
@@ -233,7 +233,7 @@ public class SRPGL implements Listener
 					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false));
 					return;
 				}
-				s.a(pick.inventory);
+				s.openContainer(pick.inventory);
 				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
 
 				SkillManager sm = new SkillManager();
