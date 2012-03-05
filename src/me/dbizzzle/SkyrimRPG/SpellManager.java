@@ -17,7 +17,7 @@ import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Blaze;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -51,7 +51,7 @@ public class SpellManager
 		{
 			magicka.put(player, magicka.get(player) - 100);
 			if(conjured.containsKey(player))conjured.get(player).remove();
-			Blaze blaze = (Blaze)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.BLAZE);
+			Blaze blaze = (Blaze)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.BLAZE);
 			int alevel = SkillManager.getSkillLevel(Skill.CONJURATION, player);
 			blaze.setHealth(blaze.getHealth()/2 + alevel/10);
 			conjured.put(player, blaze);
@@ -118,7 +118,7 @@ public class SpellManager
 			player.sendMessage("You conjure up a zombie follower to fight for you");
 			magicka.put(player, magicka.get(player) - 60);
 			if(czombie.containsKey(player))czombie.get(player).remove();
-			Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), CreatureType.ZOMBIE);
+			Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.ZOMBIE);
 			int alevel = SkillManager.getSkillLevel(Skill.CONJURATION, player);
 			zombie.setHealth(zombie.getHealth()/2 + alevel/10);
 			czombie.put(player,zombie);
