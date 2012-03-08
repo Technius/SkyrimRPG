@@ -22,6 +22,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Zombie;
 import org.bukkit.util.Vector;
 
@@ -35,6 +36,7 @@ public class SpellManager
 	public static HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
 	public static HashMap<Player, Integer>magicka = new HashMap<Player,Integer>();
 	public static List<SmallFireball>flames = new ArrayList<SmallFireball>();
+	public static List<Snowball>frostbite = new ArrayList<Snowball>();
 	SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{
@@ -106,6 +108,26 @@ public class SpellManager
 		fireball.setYield(4F*(multiplier/100));
 		ftracker.add(fireball);
 	}
+	public void frostBite(Player player)
+	{
+		if(!hasEnough(player, 25))
+		{
+			magickaWarning(player, "Frostbite");
+			return;
+		}
+		else
+		{
+			magicka.put(player, magicka.get(player) - 25);
+			final Vector direction = player.getEyeLocation().getDirection().multiply(2);
+			for(int i = 0;i < 3; i++)
+			{
+				Snowball snowball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), Snowball.class);
+				snowball.setShooter(player);
+				snowball.setVelocity(direction.multiply(0.25));
+				frostbite.add(snowball);
+			}
+		}
+	}
 	public void raiseZombie(Player player)
 	{
 		if(!hasEnough(player, 90))
@@ -126,7 +148,7 @@ public class SpellManager
 	}
 	public enum Spell
 	{
-		RAISE_ZOMBIE(2),FIREBALL(1),HEALING(4),UFIREBALL(10101), FLAMES(3), CONJURE_FLAME_ATRONACH(5);
+		RAISE_ZOMBIE(2),FIREBALL(1),HEALING(4),UFIREBALL(10101), FLAMES(3), CONJURE_FLAME_ATRONACH(5), FROSTBITE(6);
 		private int id;
 		private Spell(int id)
 		{
@@ -188,6 +210,9 @@ public class SpellManager
 			return true;
 		case HEALING:
 			heal(player);
+			return true;
+		case FROSTBITE:
+			frostBite(player);
 			return true;
 		default:
 			return false;

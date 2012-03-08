@@ -23,6 +23,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,6 +34,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -41,6 +43,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Door;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class SRPGL implements Listener
 {
@@ -492,6 +496,33 @@ public class SRPGL implements Listener
 					}
 				}
 			}
+			else if(e.getDamager() instanceof Snowball)
+			{
+				Snowball sf = (Snowball)e.getDamager();
+				if(sf.getShooter() instanceof Player)
+				{
+					if(SpellManager.frostbite.contains(sf))
+					{
+						Player player = (Player)sf.getShooter();
+						int alevel = SkillManager.getSkillLevel(Skill.DESTRUCTION, player)/30;
+						int plevel = SkillManager.getSkillLevel(Skill.DESTRUCTION, player)/4 + 10;
+						int damage = 1 + alevel;
+						e.setDamage(damage);
+						if(e instanceof LivingEntity)
+						{
+							((LivingEntity) e).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, plevel, 1));
+						}
+						SkillManager sm = new SkillManager();
+						if(sm.processExperience(player, Skill.DESTRUCTION))
+						{
+							sm.incrementLevel(Skill.DESTRUCTION, player);
+							SkillManager.progress.get(player).put(Skill.DESTRUCTION, 0);
+							SkillManager.calculateLevel(player);
+						}
+						else SkillManager.progress.get(player).put(Skill.DESTRUCTION, SkillManager.progress.get(player).get(Skill.DESTRUCTION) + 1);
+					}
+				}
+			}
 			if(e.getEntity() instanceof Player)
 			{
 				Player player = (Player)e.getEntity();
@@ -510,6 +541,24 @@ public class SRPGL implements Listener
 					}
 					else SkillManager.progress.get(player).put(Skill.BLOCKING, SkillManager.progress.get(player).get(Skill.BLOCKING) + 1);
 				}
+			}
+		}
+	}
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onProjectileHit(ProjectileHitEvent event)
+	{
+		if(event.getEntity() instanceof SmallFireball)
+		{
+			if(SpellManager.flames.contains(event.getEntity()))
+			{
+				SpellManager.flames.remove(event.getEntity());
+			}
+		}
+		else if(event.getEntity() instanceof Snowball)
+		{
+			if(SpellManager.frostbite.contains(event.getEntity()))
+			{
+				SpellManager.frostbite.remove(event.getEntity());
 			}
 		}
 	}
