@@ -124,7 +124,7 @@ public class SRPGL implements Listener
 							SkillManager.progress.get(event.getPlayer()).put(Skill.LOCKPICKING, SkillManager.progress.get(event.getPlayer()).get(Skill.LOCKPICKING) + 1);
 						}
 					}
-					event.getPlayer().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.LOCKPICKING, event.getPlayer(), false));
+					event.getPlayer().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.LOCKPICKING, event.getPlayer(), false), ConfigManager.LockpickingCooldown);
 					return;
 				}
 				else if(btype == Material.CHEST)
@@ -234,7 +234,7 @@ public class SRPGL implements Listener
 					} else {
 						SkillManager.progress.get(se).put(Skill.PICKPOCKETING, SkillManager.progress.get(se).get(Skill.PICKPOCKETING) + 1);
 					}
-					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false));
+					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), ConfigManager.PickpocketingCooldown);
 					return;
 				}
 				s.openContainer(pick.inventory);
@@ -260,7 +260,7 @@ public class SRPGL implements Listener
 						s.closeInventory();
 					}
 				}, delay);
-				se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false));
+				se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), ConfigManager.PickpocketingCooldown);
 				return;
 			}
 		}
