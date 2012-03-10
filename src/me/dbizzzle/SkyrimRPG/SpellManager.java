@@ -118,12 +118,14 @@ public class SpellManager
 		else
 		{
 			magicka.put(player, magicka.get(player) - 25);
-			final Vector direction = player.getEyeLocation().getDirection().multiply(2);
 			for(int i = 0;i < 3; i++)
 			{
-				Snowball snowball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), Snowball.class);
+				Snowball snowball = player.launchProjectile(Snowball.class);
 				snowball.setShooter(player);
-				snowball.setVelocity(direction.multiply(0.25));
+				double y = snowball.getVelocity().getY();
+				Vector v = snowball.getVelocity().multiply(2.5);
+				v.setY(y);
+				snowball.setVelocity(v);
 				frostbite.add(snowball);
 			}
 		}
