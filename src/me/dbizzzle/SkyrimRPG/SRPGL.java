@@ -505,12 +505,12 @@ public class SRPGL implements Listener
 					{
 						Player player = (Player)sf.getShooter();
 						int alevel = SkillManager.getSkillLevel(Skill.DESTRUCTION, player)/30;
-						int plevel = SkillManager.getSkillLevel(Skill.DESTRUCTION, player)/4 + 10;
+						int plevel = SkillManager.getSkillLevel(Skill.DESTRUCTION, player)/5;
 						int damage = 1 + alevel;
 						e.setDamage(damage);
-						if(e instanceof LivingEntity)
+						if(event.getEntity() instanceof LivingEntity)
 						{
-							((LivingEntity) e).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, plevel, 1));
+							((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, plevel + 20, 1));
 						}
 						SkillManager sm = new SkillManager();
 						if(sm.processExperience(player, Skill.DESTRUCTION))
