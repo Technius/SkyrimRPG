@@ -526,9 +526,7 @@ public class SRPGL implements Listener
 			if(e.getEntity() instanceof Player)
 			{
 				Player player = (Player)e.getEntity();
-				EntityPlayer ep = ((CraftPlayer)player).getHandle();
-				boolean ib = ep.L();
-				if(ib && ToolComparer.getType(player.getItemInHand()).equalsIgnoreCase("Sword"))
+				if(player.isBlocking() && ToolComparer.getType(player.getItemInHand()).equalsIgnoreCase("Sword"))
 				{
 					SkillManager sm = new SkillManager();
 					int alevel = SkillManager.getSkillLevel(Skill.BLOCKING, player);
