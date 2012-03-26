@@ -13,6 +13,7 @@ import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -105,16 +106,25 @@ public class SRPGL implements Listener
 							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
 							if(event.isCancelled())event.setCancelled(false);
 							event.getClickedBlock().getWorld().playEffect(event.getClickedBlock().getLocation(), Effect.DOOR_TOGGLE, 0);
+							Location l = event.getClickedBlock().getLocation();
+							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
+							plugin.debug("Lockpicking: result=success, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
 						}
 						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel(Skill.LOCKPICKING, event.getPlayer())/2 + 10)
 						{
 							int newa = event.getPlayer().getItemInHand().getAmount() - 1;
 							event.getPlayer().setItemInHand(new org.bukkit.inventory.ItemStack(Material.REDSTONE_TORCH_ON, newa));
 							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed, and your lock pick broke.");
+							Location l = event.getClickedBlock().getLocation();
+							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
+							plugin.debug("Lockpicking: result=fail+break, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
 						}
 						else
 						{
 							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed!");
+							Location l = event.getClickedBlock().getLocation();
+							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
+							plugin.debug("Lockpicking: result=fail, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
 						}
 						if (sm.processExperience(event.getPlayer(), Skill.LOCKPICKING)) {
 							sm.incrementLevel(Skill.LOCKPICKING, event.getPlayer());
@@ -143,15 +153,24 @@ public class SRPGL implements Listener
 							((net.minecraft.server.EntityHuman)((CraftPlayer)event.getPlayer()).getHandle()).openContainer(c);
 							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
 							if(event.isCancelled())event.setCancelled(false);
+							Location l = event.getClickedBlock().getLocation();
+							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
+							plugin.debug("Lockpicking: result=success, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
 						}
 						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel(Skill.LOCKPICKING, event.getPlayer())/2 + 10)
 						{
 							event.getPlayer().getItemInHand().setAmount(event.getPlayer().getItemInHand().getAmount() - 1);
 							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed, and your lock pick broke.");
+							Location l = event.getClickedBlock().getLocation();
+							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
+							plugin.debug("Lockpicking: result=fail+break, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
 						}
 						else
 						{
 							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed!");
+							Location l = event.getClickedBlock().getLocation();
+							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
+							plugin.debug("Lockpicking: result=success, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
 						}
 						if (sm.processExperience(event.getPlayer(), Skill.LOCKPICKING)) {
 							sm.incrementLevel(Skill.LOCKPICKING, event.getPlayer());
@@ -211,11 +230,13 @@ public class SRPGL implements Listener
 				if(ppcd.contains(se) && ConfigManager.enablePpCd)
 				{
 					se.sendMessage(ChatColor.RED + "You are too afraid to pickpocket someone right now");
+					plugin.debug("Pickpocketing: result=cooldown, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
 					return;
 				}
 				if(((Player)ent).hasPermission("skyrimrpg.nopickpocket"))
 				{
 					se.sendMessage(ChatColor.RED + "You probably don't want to pickpocket this person.");
+					plugin.debug("Pickpocketing: result=denied, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
 					return;
 				}
 				final String ents = ((Player) ent).getName();
@@ -234,12 +255,13 @@ public class SRPGL implements Listener
 					} else {
 						SkillManager.progress.get(se).put(Skill.PICKPOCKETING, SkillManager.progress.get(se).get(Skill.PICKPOCKETING) + 1);
 					}
+					plugin.debug("Pickpocketing: result=fail, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
 					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), ConfigManager.PickpocketingCooldown);
 					return;
 				}
 				s.openContainer(pick.inventory);
 				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
-
+				plugin.debug("Pickpocketing: result=success, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
 				SkillManager sm = new SkillManager();
 				if (sm.processExperience(se, Skill.PICKPOCKETING)) {
 					sm.incrementLevel(Skill.PICKPOCKETING, se);
@@ -352,8 +374,13 @@ public class SRPGL implements Listener
 					{
 						plugin.sk.calculateLevel(player, Skill.SNEAK);
 						t.hidePlayer(player);
+						plugin.debug("Sneaking: result=hidden, player=" + player.getName());
 					}
-					else detect = true;
+					else
+					{
+						detect = true;
+						plugin.debug("Sneaking: result=visible, player=" + player.getName());
+					}
 					sneak.add(player);
 				}
 			}
@@ -369,6 +396,7 @@ public class SRPGL implements Listener
 				if(!p.canSee(player))
 				{
 					p.showPlayer(player);
+					plugin.debug("Sneaking: result=reveal, player=" + player.getName());
 				}
 			}
 			sneak.remove(player);

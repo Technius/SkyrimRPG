@@ -1,5 +1,5 @@
 name: SkyrimRPG
-version: 0.2.2b
+version: 0.2.3b-DEV-b369
 authors: [dbizzzle, Technius, ThatBox]
 main: me.dbizzzle.SkyrimRPG.SkyrimRPG
 softdepends: [Spout]

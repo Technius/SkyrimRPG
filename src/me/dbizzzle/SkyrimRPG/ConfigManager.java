@@ -21,6 +21,7 @@ public class ConfigManager
 	public static int wand = 0;
 	public static int PickpocketingCooldown = 10;
 	public static int LockpickingCooldown = 10;
+	public static boolean debug = false;
 	SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
@@ -84,6 +85,7 @@ public class ConfigManager
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableSneakMessage = false;
 					else enableSneakMessage = true;
 				}
+				else if(tokens[0].equalsIgnoreCase("debugmode"))debug = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
 				else if(tokens[0].equalsIgnoreCase("castingtool"))
 				{
 					try{wand = Integer.parseInt(tokens[1].replaceAll(" ", ""));}catch(NumberFormatException nfe){wand = 0;}
@@ -145,6 +147,10 @@ public class ConfigManager
 			bw.write("#Enable/disable those annoying sneak messages");
 			bw.newLine();
 			bw.write("enableSneakMessage: " + (enableSneakMessage ? "true" : "false"));
+			bw.newLine();
+			bw.write("#Enable/disable debug mode(Spams your console with useless info, not to be used unless you got errors)");
+			bw.newLine();
+			bw.write("debugMode: " + (debug ? "true" : "false"));
 			bw.newLine();
 			bw.flush();
 			bw.close();

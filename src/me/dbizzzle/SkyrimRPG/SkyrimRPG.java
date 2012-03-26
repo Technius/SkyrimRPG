@@ -114,4 +114,8 @@ public class SkyrimRPG extends JavaPlugin
 			stop();
 		}
 	}
+	public void debug(String message)
+	{
+		if(ConfigManager.debug)log.info("[DEBUG] " + message);
+	}
 }
