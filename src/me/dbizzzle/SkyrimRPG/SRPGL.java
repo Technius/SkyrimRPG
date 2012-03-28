@@ -563,7 +563,12 @@ public class SRPGL implements Listener
 					{
 						perkm = 1 + (0.2*(PerkManager.perks.get(player).get(Perk.SHIELD_WALL)));
 					}
-					plugin.debug("Blocking: player=" + player.getName() + ", damage=" + event.getDamage() + ", blocked=" + ((int)(perkm*(alevel/10))));
+					if(PerkManager.perks.get(player).containsKey(Perk.DEFLECT_ARROWS) && e.getDamager() instanceof Arrow)
+					{
+						e.setDamage(0);
+						plugin.debug("Blocking: player=" + player.getName() + ", damage=" + event.getDamage() + ", blocked=DEFLECT_ARROWS PERK");
+					}
+					else plugin.debug("Blocking: player=" + player.getName() + ", damage=" + event.getDamage() + ", blocked=" + ((int)(perkm*(alevel/10))));
 					e.setDamage(e.getDamage() - ((int)(perkm*(alevel/10))));
 					if(sm.processExperience(player, Skill.BLOCKING))
 					{

@@ -6,7 +6,8 @@ package me.dbizzzle.SkyrimRPG.Skill;
 public enum Perk 
 {
 	OVERDRAW(Skill.ARCHERY, 5, null, 20, 40, 60, 80, 100), SWORDSMAN(Skill.SWORDSMANSHIP, 5, null, 20, 40, 60, 80, 100),
-	BLADESMAN(Skill.SWORDSMANSHIP, 3, Perk.SWORDSMAN, 30 , 60, 90), SHIELD_WALL(Skill.BLOCKING, 5, null, 20, 40, 60, 80, 100);
+	BLADESMAN(Skill.SWORDSMANSHIP, 3, Perk.SWORDSMAN, 30 , 60, 90), SHIELD_WALL(Skill.BLOCKING, 5, null, 20, 40, 60, 80, 100)
+	, DEFLECT_ARROWS(Skill.BLOCKING, 1, Perk.SHIELD_WALL, 30);
 	private Skill parent;
 	private int maxlevel;
 	private int[] reqskilllvl;
