@@ -558,7 +558,13 @@ public class SRPGL implements Listener
 				{
 					SkillManager sm = new SkillManager();
 					int alevel = SkillManager.getSkillLevel(Skill.BLOCKING, player);
-					e.setDamage(e.getDamage() - (alevel/10));
+					double perkm = 1.0;
+					if(PerkManager.perks.get(player).containsKey(Perk.SHIELD_WALL))
+					{
+						perkm = 1 + (0.2*(PerkManager.perks.get(player).get(Perk.SHIELD_WALL)));
+					}
+					plugin.debug("Blocking: player=" + player.getName() + ", damage=" + event.getDamage() + ", blocked=" + ((int)(perkm*(alevel/10))));
+					e.setDamage(e.getDamage() - ((int)(perkm*(alevel/10))));
 					if(sm.processExperience(player, Skill.BLOCKING))
 					{
 						sm.incrementLevel(Skill.BLOCKING, player);

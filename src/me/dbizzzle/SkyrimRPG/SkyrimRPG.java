@@ -116,6 +116,6 @@ public class SkyrimRPG extends JavaPlugin
 	}
 	public void debug(String message)
 	{
-		if(ConfigManager.debug)log.info("[DEBUG] " + message);
+		if(ConfigManager.debug)log.info("[SkyrimRPG] [DEBUG] " + message);
 	}
 }

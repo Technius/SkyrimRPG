@@ -6,7 +6,7 @@ package me.dbizzzle.SkyrimRPG.Skill;
 public enum Perk 
 {
 	OVERDRAW(Skill.ARCHERY, 5, null, 20, 40, 60, 80, 100), SWORDSMAN(Skill.SWORDSMANSHIP, 5, null, 20, 40, 60, 80, 100),
-	BLADESMAN(Skill.SWORDSMANSHIP, 3, Perk.SWORDSMAN, 30 , 60, 90);
+	BLADESMAN(Skill.SWORDSMANSHIP, 3, Perk.SWORDSMAN, 30 , 60, 90), SHIELD_WALL(Skill.BLOCKING, 5, null, 20, 40, 60, 80, 100);
 	private Skill parent;
 	private int maxlevel;
 	private int[] reqskilllvl;
@@ -48,13 +48,17 @@ public enum Perk
 	 */
 	public String getName()
 	{
-		String sl = toString().toLowerCase().replaceAll("_", " ");
-		String[] st = sl.split("[ ]");
+		//Some people don't use underscores-Below two lines are deprecated
+		//String sl = toString().toLowerCase().replaceAll("_", " ");
+		//String[] st = sl.split("[ ]");
+		String[] st = toString().toLowerCase().split("[_]");
 		String m = Character.toUpperCase(st[0].charAt(0)) + st[0].substring(1);
 		for(String x: st)
 		{
 			if(x.equalsIgnoreCase(st[0]))continue;
-			m = m + " " + Character.toUpperCase(x.charAt(0)) + x.substring(1);
+			//Deprecated- Some people don't use underscores
+			//m = m + " " + Character.toUpperCase(x.charAt(0)) + x.substring(1);
+			m = m + "_" + Character.toUpperCase(x.charAt(0)) + x.substring(1);
 		}
 		return m;
 	}
