@@ -559,9 +559,9 @@ public class SRPGL implements Listener
 					SkillManager sm = new SkillManager();
 					int alevel = SkillManager.getSkillLevel(Skill.BLOCKING, player);
 					double perkm = 1.0;
-					if(PerkManager.perks.get(player).containsKey(Perk.SHIELD_WALL))
+					if(PerkManager.perks.get(player).containsKey(Perk.SWORD_WALL))
 					{
-						perkm = 1 + (0.2*(PerkManager.perks.get(player).get(Perk.SHIELD_WALL)));
+						perkm = 1 + (0.2*(PerkManager.perks.get(player).get(Perk.SWORD_WALL)));
 					}
 					if(PerkManager.perks.get(player).containsKey(Perk.DEFLECT_ARROWS) && e.getDamager() instanceof Arrow)
 					{
