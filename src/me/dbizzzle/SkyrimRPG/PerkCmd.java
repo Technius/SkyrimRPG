@@ -64,6 +64,8 @@ public class PerkCmd implements CommandExecutor
 						{
 						case ARCHERY: c = ChatColor.DARK_RED; break;
 						case SWORDSMANSHIP: c = ChatColor.DARK_RED; break;
+						case BLOCKING: c = ChatColor.DARK_RED; break;
+						case SNEAK: c = ChatColor.GRAY; break;
 						default: c = ChatColor.WHITE; break;
 						}
 						int l = PerkManager.perks.get(player).get(p);
