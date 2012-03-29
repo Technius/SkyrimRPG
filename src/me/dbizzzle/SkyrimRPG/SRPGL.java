@@ -561,7 +561,7 @@ public class SRPGL implements Listener
 					double perkm = 1.0;
 					if(PerkManager.perks.get(player).containsKey(Perk.SWORD_WALL))
 					{
-						perkm = 1 + (0.2*(PerkManager.perks.get(player).get(Perk.SWORD_WALL)));
+						perkm = 1 + (0.1*(PerkManager.perks.get(player).get(Perk.SWORD_WALL)));
 					}
 					if(PerkManager.perks.get(player).containsKey(Perk.DEFLECT_ARROWS) && e.getDamager() instanceof Arrow)
 					{
