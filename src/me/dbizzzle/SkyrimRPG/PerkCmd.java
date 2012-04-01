@@ -124,7 +124,10 @@ public class PerkCmd implements CommandExecutor
 					player.sendMessage(ChatColor.RED + s.getName() + " Perks" + ChatColor.GOLD +" - Required Skill Level - Max Level");
 					for(Perk p:pm.getPerksBySkill(s))
 					{
-						if(PerkManager.perks.get(player).containsKey(p))player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + p.getRequiredSkillLevels()[PerkManager.perks.get(player).get(p) - 1] + " - " + p.getMaxLevel());
+						String rsl;
+						if(PerkManager.perks.get(player).get(p) >= p.getRequiredSkillLevels().length)rsl = "MAX";
+						else rsl = "" + p.getRequiredSkillLevels()[PerkManager.perks.get(player).get(p)];
+						if(PerkManager.perks.get(player).containsKey(p))player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + rsl + " - " + p.getMaxLevel());
 						else player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + p.getRequiredSkillLevels()[0] + " - " + p.getMaxLevel());
 					}
 					return true;
