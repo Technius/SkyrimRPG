@@ -52,6 +52,8 @@ permissions:
          skyrimrpg.setlevel: true
          skyrimrpg.removeperk: true
          skyrimrpg.addperk: true
+         skyrimrpg.refresh: true
+         skyrimrpg.reload: true
    skyrimrpg.addspell:
       Description: Give a player a spell.
    skyrimrpg.removespell:
@@ -60,6 +62,10 @@ permissions:
       Description: List spells or find out what spells another person has.
    skyrimrpg.bindspell:
       Description: Binds a spell to left/right/both hands
+   skyrimrpg.refresh:
+      Description: Refreshes the config
+   skyrimrpg.reload:
+      Description: Reloads the config
    skyrimrpg.setlevel:
       Description: Sets the level of the specified skill
    skyrimrpg.removeperk:
