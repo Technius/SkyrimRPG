@@ -126,226 +126,18 @@ public class SkillManager
 				String delim = "[:]";
 				String tokens[] = l.split(delim, 2);
 				if(tokens.length != 2) continue;
-				if(l.startsWith("Archery"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Archery"))continue;
-					String x = tokens[1].replaceAll(" ", "");
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.ARCHERY, Integer.valueOf(progress));
-					sk.put(Skill.ARCHERY, Integer.valueOf(level));
-				}
-				if(l.startsWith("Swordsmanship"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Swordsmanship"))continue;
-					delim = "[ ]+";
-					String[] spaced = tokens[1].split(delim);
-					String x = "";
-					for(String p:spaced)x=x+p;
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.SWORDSMANSHIP, Integer.valueOf(progress));
-					sk.put(Skill.SWORDSMANSHIP, Integer.valueOf(level));
-				}
-				if(l.startsWith("PickPocket"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("PickPocket"))continue;
-					delim = "[ ]+";
-					String[] spaced = tokens[1].split(delim);
-					String x = "";
-					for(String p:spaced)x=x+p;
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.PICKPOCKETING, Integer.valueOf(progress));
-					sk.put(Skill.PICKPOCKETING, Integer.valueOf(level));
-				}
-				if(l.startsWith("Destruction"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Destruction"))continue;
-					delim = "[ ]+";
-					String[] spaced = tokens[1].split(delim);
-					String x = "";
-					for(String p:spaced)x=x+p;
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.DESTRUCTION, Integer.valueOf(progress));
-					sk.put(Skill.DESTRUCTION, Integer.valueOf(level));
-				}
-				if(l.startsWith("Conjuration"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Conjuration"))continue;
-					delim = "[ ]+";
-					String[] spaced = tokens[1].split(delim);
-					String x = "";
-					for(String p:spaced)x=x+p;
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.CONJURATION, Integer.valueOf(progress));
-					sk.put(Skill.CONJURATION, Integer.valueOf(level));
-				}
-				if(l.startsWith("Lockpicking"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Lockpicking"))continue;
-					delim = "[ ]+";
-					String[] spaced = tokens[1].split(delim);
-					String x = "";
-					for(String p:spaced)x=x+p;
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.LOCKPICKING, Integer.valueOf(progress));
-					sk.put(Skill.LOCKPICKING, Integer.valueOf(level));
-				}
-				if(l.startsWith("Axecraft"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Axecraft"))continue;
-					delim = "[ ]+";
-					String[] spaced = tokens[1].split(delim);
-					String x = "";
-					for(String p:spaced)x=x+p;
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.AXECRAFT, Integer.valueOf(progress));
-					sk.put(Skill.AXECRAFT, Integer.valueOf(level));
-				}
-				if(l.startsWith("Blocking"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Blocking"))continue;
-					delim = "[ ]+";
-					String[] spaced = tokens[1].split(delim);
-					String x = "";
-					for(String p:spaced)x=x+p;
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.BLOCKING, Integer.valueOf(progress));
-					sk.put(Skill.BLOCKING, Integer.valueOf(level));
-				}
-				if(l.startsWith("Enchanting"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Enchanting"))continue;
-					String x = tokens[1].replaceAll(" ", "");
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.ENCHANTING, Integer.valueOf(progress));
-					sk.put(Skill.ENCHANTING, Integer.valueOf(level));
-				}
-				if(l.startsWith("Level"))
+				if(l.startsWith("Archery"))loadSkill(tokens, Skill.ARCHERY, pr, sk);
+				else if(l.startsWith("Swordsmanship"))loadSkill(tokens, Skill.SWORDSMANSHIP, pr, sk);
+				else if(l.startsWith("PickPocket") || l.startsWith("Pickpocketing"))loadSkill(tokens, Skill.PICKPOCKETING, pr, sk);
+				else if(l.startsWith("Destruction"))loadSkill(tokens, Skill.DESTRUCTION, pr, sk);
+				else if(l.startsWith("Conjuration"))loadSkill(tokens, Skill.CONJURATION, pr, sk);
+				else if(l.startsWith("Lockpicking"))loadSkill(tokens, Skill.LOCKPICKING, pr, sk);
+				else if(l.startsWith("Axecraft"))loadSkill(tokens, Skill.AXECRAFT, pr, sk);
+				else if(l.startsWith("Blocking"))loadSkill(tokens, Skill.BLOCKING, pr, sk);
+				else if(l.startsWith("Enchanting"))loadSkill(tokens, Skill.ENCHANTING, pr, sk);
+				else if(l.startsWith("Restoration"))loadSkill(tokens, Skill.RESTORATION, pr, sk);
+				else if(l.startsWith("Sneak"))loadSkill(tokens, Skill.SNEAK, pr, sk);
+				else if(l.startsWith("Level"))
 				{
 					if(tokens.length != 2)continue;
 					if(!tokens[0].equalsIgnoreCase("Level"))continue;
@@ -359,7 +151,7 @@ public class SkillManager
 						tl = 1;
 					}
 				}
-				if(l.startsWith("Magicka"))
+				else if(l.startsWith("Magicka"))
 				{
 					if(tokens.length != 2)continue;
 					if(!tokens[0].equalsIgnoreCase("Magicka"))continue;
@@ -373,7 +165,7 @@ public class SkillManager
 						m = 0;
 					}
 				}
-				if(l.startsWith("Perk Points"))
+				else if(l.startsWith("Perk Points"))
 				{
 					if(tokens.length != 2)continue;
 					if(!tokens[0].equalsIgnoreCase("Perk Points"))continue;
@@ -386,52 +178,6 @@ public class SkillManager
 					{
 						pp = 0;
 					}
-				}
-				if(l.startsWith("Restoration"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Restoration"))
-						continue;
-					String x = tokens[1].replaceAll(" ", "");
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.RESTORATION, Integer.valueOf(progress));
-					sk.put(Skill.RESTORATION, Integer.valueOf(level));
-				}
-				if(l.startsWith("Sneak"))
-				{
-					if(tokens.length != 2) continue;
-					if(!tokens[0].equalsIgnoreCase("Sneak"))
-						continue;
-					String x = tokens[1].replaceAll(" ", "");
-					String[] sep = x.split("[,]",2);
-					if(sep.length != 2) continue;
-					int level = 1;
-					int progress = 0;
-					try
-					{
-						level = Integer.parseInt(sep[0]);
-						progress = Integer.parseInt(sep[1]);
-					}
-					catch(NumberFormatException nfe)
-					{
-						level = 1;
-						progress = 0;
-					}
-					pr.put(Skill.SNEAK, Integer.valueOf(progress));
-					sk.put(Skill.SNEAK, Integer.valueOf(level));
 				}
 			}
 			if(sk.get(Skill.ARCHERY)== null)sk.put(Skill.ARCHERY, 1);
@@ -510,7 +256,7 @@ public class SkillManager
 			bw.newLine();
 			bw.write("Swordsmanship: " + getSkillLevel(Skill.SWORDSMANSHIP, player) + "," + getProgress(Skill.SWORDSMANSHIP, player));
 			bw.newLine();
-			bw.write("PickPocket: " + getSkillLevel(Skill.PICKPOCKETING, player) + "," + getProgress(Skill.PICKPOCKETING, player));
+			bw.write("Pickpocketing: " + getSkillLevel(Skill.PICKPOCKETING, player) + "," + getProgress(Skill.PICKPOCKETING, player));
 			bw.newLine();
 			bw.write("Destruction: " + getSkillLevel(Skill.DESTRUCTION, player) + "," + getProgress(Skill.DESTRUCTION, player));
 			bw.newLine();
@@ -578,6 +324,27 @@ public class SkillManager
 		level.put(player, 1);
 		PerkManager.points.put(player, 0);
 		SpellManager.magicka.put(player, 0);
+	}
+	private void loadSkill(String[] tokens, Skill skill, HashMap<Skill, Integer> pr, HashMap<Skill, Integer> sk)
+	{
+		if(tokens.length != 2) return;
+		String x = tokens[1].replaceAll(" ", "");
+		String[] sep = x.split("[,]",2);
+		if(sep.length != 2) return;
+		int level = 1;
+		int progress = 0;
+		try
+		{
+			level = Integer.parseInt(sep[0]);
+			progress = Integer.parseInt(sep[1]);
+		}
+		catch(NumberFormatException nfe)
+		{
+			level = 1;
+			progress = 0;
+		}
+		pr.put(skill, Integer.valueOf(progress));
+		sk.put(skill, Integer.valueOf(level));
 	}
 	/**
 	 * Calculates if the player levels up or not
