@@ -44,6 +44,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Door;
+import org.bukkit.material.TrapDoor;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -71,7 +72,7 @@ public class SRPGL implements Listener
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				Material btype = event.getClickedBlock().getType();
-				if (btype == Material.IRON_DOOR_BLOCK)
+				if (btype == Material.IRON_DOOR_BLOCK || (btype == Material.WOOD_DOOR && event.isCancelled()))
 				{
 					if(lpcd.contains(event.getPlayer()) && ConfigManager.enableLpCd)
 					{
@@ -135,7 +136,48 @@ public class SRPGL implements Listener
 						}
 					}
 					event.getPlayer().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.LOCKPICKING, event.getPlayer(), false), ConfigManager.LockpickingCooldown);
-					return;
+				}
+				else if(btype == Material.TRAP_DOOR)
+				{
+					TrapDoor d = (TrapDoor)btype.getNewData(event.getClickedBlock().getData());
+					if(!d.isOpen())
+					{
+						if(pickLockSuccess(event.getPlayer()))
+						{
+							d.setOpen(true);
+							event.getClickedBlock().setData(d.getData(), true);
+							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
+							if(event.isCancelled())event.setCancelled(false);
+							event.getClickedBlock().getWorld().playEffect(event.getClickedBlock().getLocation(), Effect.DOOR_TOGGLE, 0);
+							Location l = event.getClickedBlock().getLocation();
+							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
+							plugin.debug("Lockpicking: result=success, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
+						}
+						else if(new Random().nextInt(100) + 1 > SkillManager.getSkillLevel(Skill.LOCKPICKING, event.getPlayer())/2 + 10)
+						{
+							int newa = event.getPlayer().getItemInHand().getAmount() - 1;
+							event.getPlayer().setItemInHand(new org.bukkit.inventory.ItemStack(Material.REDSTONE_TORCH_ON, newa));
+							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed, and your lock pick broke.");
+							Location l = event.getClickedBlock().getLocation();
+							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
+							plugin.debug("Lockpicking: result=fail+break, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
+						}
+						else
+						{
+							event.getPlayer().sendMessage(ChatColor.RED + "Lockpicking failed!");
+							Location l = event.getClickedBlock().getLocation();
+							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
+							plugin.debug("Lockpicking: result=fail, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
+						}
+						SkillManager sm = new SkillManager();
+						if (sm.processExperience(event.getPlayer(), Skill.LOCKPICKING)) {
+							sm.incrementLevel(Skill.LOCKPICKING, event.getPlayer());
+							SkillManager.progress.get(event.getPlayer()).put(Skill.LOCKPICKING, 0);
+							SkillManager.calculateLevel(event.getPlayer());
+						} else {
+							SkillManager.progress.get(event.getPlayer()).put(Skill.LOCKPICKING, SkillManager.progress.get(event.getPlayer()).get(Skill.LOCKPICKING) + 1);
+						}
+					}
 				}
 				else if(btype == Material.CHEST)
 				{
