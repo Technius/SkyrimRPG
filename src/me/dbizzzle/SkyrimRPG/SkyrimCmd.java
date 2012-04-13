@@ -384,7 +384,6 @@ public class SkyrimCmd implements CommandExecutor
 							return true;
 						}
 						if(!plugin.checkFiles())
-						plugin.cm.refreshConfig();
 						cm.loadConfig();
 						player.sendMessage(ChatColor.GREEN + "Configuration file reloaded successfully.");
 					}
