@@ -404,7 +404,7 @@ public class SRPGL implements Listener
 		boolean detect = false;
 		if(event.isSneaking() && !sneak.contains(player))
 		{
-			List<Entity> a = player.getNearbyEntities(50, 50, 50);
+			List<Entity> a = player.getNearbyEntities(60, 10, 60);
 			for(Entity e:a)
 			{
 				if(e instanceof Player)
@@ -417,7 +417,7 @@ public class SRPGL implements Listener
 						dmul = 1.15 + 0.05*PerkManager.perks.get(player).get(Perk.STEALTH);
 					}
 					double d = e.getLocation().distance(player.getLocation());
-					if(dmul*(alevel/2) <= d)
+					if(dmul*(alevel/2) + 10 >= d)
 					{
 						plugin.sk.calculateLevel(player, Skill.SNEAK);
 						t.hidePlayer(player);
