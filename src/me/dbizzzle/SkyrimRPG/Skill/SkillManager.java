@@ -274,6 +274,8 @@ public class SkillManager
 			bw.newLine();
 			bw.write("Sneak: " + getSkillLevel(Skill.SNEAK, player) + "," + getProgress(Skill.SNEAK, player));
 			bw.newLine();
+			bw.write("Armor: " + getSkillLevel(Skill.ARMOR, player) + "," + getProgress(Skill.ARMOR, player));
+			bw.newLine();
 			bw.flush();
 			bw.close();
 		}
