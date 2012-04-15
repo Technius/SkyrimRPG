@@ -601,9 +601,9 @@ public class SRPGL implements Listener
 			if(e.getEntity() instanceof Player)
 			{
 				Player player = (Player)e.getEntity();
+				SkillManager sm = new SkillManager();
 				if(player.isBlocking() && ToolComparer.getType(player.getItemInHand()).equalsIgnoreCase("Sword"))
 				{
-					SkillManager sm = new SkillManager();
 					int alevel = SkillManager.getSkillLevel(Skill.BLOCKING, player);
 					double perkm = 1.0;
 					if(PerkManager.perks.get(player).containsKey(Perk.SWORD_WALL))
@@ -624,6 +624,28 @@ public class SRPGL implements Listener
 						SkillManager.calculateLevel(player);
 					}
 					else SkillManager.progress.get(player).put(Skill.BLOCKING, SkillManager.progress.get(player).get(Skill.BLOCKING) + 1);
+				}
+				double red;
+				if((red = getDamageReduced(player)) > 0)
+				{
+					int a = armorCount(player);
+					int i = 0;
+					double alevel = SkillManager.getSkillLevel(Skill.ARMOR, player)/100;
+					if(alevel <= 0)alevel = 1;
+					while(i < a)
+					{
+						if(sm.processExperience(player, Skill.ARMOR))
+						{
+							sm.incrementLevel(Skill.ARMOR, player);
+							SkillManager.progress.get(player).put(Skill.ARMOR, 0);
+							SkillManager.calculateLevel(player);
+						}
+						else SkillManager.progress.get(player).put(Skill.ARMOR, SkillManager.progress.get(player).get(Skill.ARMOR) + 1);
+						i ++;
+					}
+					double d = event.getDamage()*(red*alevel);
+					if(d > event.getDamage()/2)d = 0.5;
+					event.setDamage((int) (event.getDamage() - event.getDamage()*d));
 				}
 			}
 		}
@@ -744,5 +766,38 @@ public class SRPGL implements Listener
 	    else if(chest.getType() == Material.IRON_CHESTPLATE)red = red + 0.24;
 	    else if(chest.getType() == Material.DIAMOND_CHESTPLATE)red = red + 0.32;
 	    return red;
+	}
+	public int armorCount(Player player)
+	{
+		org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+	    ItemStack boots = inv.getBoots();
+	    ItemStack helmet = inv.getHelmet();
+	    ItemStack chest = inv.getChestplate();
+	    ItemStack pants = inv.getLeggings();
+	    int i = 0;
+	    if(helmet.getType() == Material.LEATHER_HELMET)i = i + 1;
+	    else if(helmet.getType() == Material.GOLD_HELMET)i = i + 1;
+	    else if(helmet.getType() == Material.CHAINMAIL_HELMET)i = i + 1;
+	    else if(helmet.getType() == Material.IRON_HELMET)i = i + 1;
+	    else if(helmet.getType() == Material.DIAMOND_HELMET)i = i + 1;
+	    //
+	    if(boots.getType() == Material.LEATHER_BOOTS)i = i + 1;
+	    else if(boots.getType() == Material.GOLD_BOOTS)i = i + 1;
+	    else if(boots.getType() == Material.CHAINMAIL_BOOTS)i = i + 1;
+	    else if(boots.getType() == Material.IRON_BOOTS)i = i + 1;
+	    else if(boots.getType() == Material.DIAMOND_BOOTS)i = i + 1;
+	    //
+	    if(pants.getType() == Material.LEATHER_LEGGINGS)i = i + 1;
+	    else if(pants.getType() == Material.GOLD_LEGGINGS)i = i + 1;
+	    else if(pants.getType() == Material.CHAINMAIL_LEGGINGS)i = i + 1;
+	    else if(pants.getType() == Material.IRON_LEGGINGS)i = i + 1;
+	    else if(pants.getType() == Material.DIAMOND_LEGGINGS)i = i + 1;
+	    //
+	    if(chest.getType() == Material.LEATHER_CHESTPLATE)i = i + 1;
+	    else if(chest.getType() == Material.GOLD_CHESTPLATE)i = i + 1;
+	    else if(chest.getType() == Material.CHAINMAIL_CHESTPLATE)i = i + 1;
+	    else if(chest.getType() == Material.IRON_CHESTPLATE)i = i + 1;
+	    else if(chest.getType() == Material.DIAMOND_CHESTPLATE)i = i + 1;
+	    return i;
 	}
 }
