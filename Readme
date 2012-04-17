@@ -1,8 +1,12 @@
-SkyrimRPG is licensed under GPL.
+SkyrimRPG is licensed under LGPL.
 
 If you want to make a pull request please:
 - Use as least commits as possible
 - Use tabs instead of four/five spaces
-- Make sure your changes work before submitting
+- Make sure your changes work properly before submitting
+- Avoid adding content without the authors' acceptance
 
 Following these guidelines will make your pull request more likely to be accepted.
+
+Test it out at <http://www.skycraftmc.net/>.
+Find the documentation here: <http://dev.bukkit.org/server-mods/skyrimrpg/>
