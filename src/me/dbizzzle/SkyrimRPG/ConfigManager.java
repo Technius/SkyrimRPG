@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 
 public class ConfigManager 
 {
+	public static int skilllvlcap = 0;
 	public static boolean useSpellbooks = true;
 	public static boolean enableLockpicking = true;
 	public static boolean enablePickpocketing = true;
@@ -86,6 +87,10 @@ public class ConfigManager
 					else enableSneakMessage = true;
 				}
 				else if(tokens[0].equalsIgnoreCase("debugmode"))debug = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
+				else if(tokens[0].equalsIgnoreCase("skilllevelcap"))
+				{
+					try{skilllvlcap = Integer.parseInt(tokens[1].replaceAll(" ", ""));}catch(NumberFormatException nfe){skilllvlcap = 0;}
+				}
 				else if(tokens[0].equalsIgnoreCase("castingtool"))
 				{
 					try{wand = Integer.parseInt(tokens[1].replaceAll(" ", ""));}catch(NumberFormatException nfe){wand = 0;}
@@ -151,6 +156,10 @@ public class ConfigManager
 			bw.write("#Enable/disable debug mode(Spams your console with useless info, not to be used unless you got errors)");
 			bw.newLine();
 			bw.write("debugMode: " + (debug ? "true" : "false"));
+			bw.newLine();
+			bw.write("#The maximum level of all skills, put 0 for infinite");
+			bw.newLine();
+			bw.write("skillLevelCap: 0");
 			bw.newLine();
 			bw.flush();
 			bw.close();

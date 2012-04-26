@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import me.dbizzzle.SkyrimRPG.ConfigManager;
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 import me.dbizzzle.SkyrimRPG.SpellManager;
 
@@ -357,6 +358,7 @@ public class SkillManager
 	public boolean processExperience(Player player, Skill skill)
 	{
 		int alevel = SkillManager.getSkillLevel(skill, player);
+		if(alevel >= ConfigManager.skilllvlcap)return false;
 		int pro = SkillManager.getProgress(skill, player);
 		int t = 5;
 		for(int i = 1;i<alevel;i++)
