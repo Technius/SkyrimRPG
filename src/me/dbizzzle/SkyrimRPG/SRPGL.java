@@ -664,29 +664,38 @@ public class SRPGL implements Listener
 	    ItemStack chest = inv.getChestplate();
 	    ItemStack pants = inv.getLeggings();
 	    double red = 0.0;
-	    if(helmet.getType() == Material.LEATHER_HELMET)red = red + 0.04;
-	    else if(helmet.getType() == Material.GOLD_HELMET)red = red + 0.08;
-	    else if(helmet.getType() == Material.CHAINMAIL_HELMET)red = red + 0.08;
-	    else if(helmet.getType() == Material.IRON_HELMET)red = red + 0.08;
-	    else if(helmet.getType() == Material.DIAMOND_HELMET)red = red + 0.12;
-	    //
-	    if(boots.getType() == Material.LEATHER_BOOTS)red = red + 0.04;
-	    else if(boots.getType() == Material.GOLD_BOOTS)red = red + 0.04;
-	    else if(boots.getType() == Material.CHAINMAIL_BOOTS)red = red + 0.04;
-	    else if(boots.getType() == Material.IRON_BOOTS)red = red + 0.08;
-	    else if(boots.getType() == Material.DIAMOND_BOOTS)red = red + 0.12;
-	    //
-	    if(pants.getType() == Material.LEATHER_LEGGINGS)red = red + 0.08;
-	    else if(pants.getType() == Material.GOLD_LEGGINGS)red = red + 0.12;
-	    else if(pants.getType() == Material.CHAINMAIL_LEGGINGS)red = red + 0.16;
-	    else if(pants.getType() == Material.IRON_LEGGINGS)red = red + 0.20;
-	    else if(pants.getType() == Material.DIAMOND_LEGGINGS)red = red + 0.24;
-	    //
-	    if(chest.getType() == Material.LEATHER_CHESTPLATE)red = red + 0.12;
-	    else if(chest.getType() == Material.GOLD_CHESTPLATE)red = red + 0.20;
-	    else if(chest.getType() == Material.CHAINMAIL_CHESTPLATE)red = red + 0.20;
-	    else if(chest.getType() == Material.IRON_CHESTPLATE)red = red + 0.24;
-	    else if(chest.getType() == Material.DIAMOND_CHESTPLATE)red = red + 0.32;
+	    if(helmet != null)
+	    {
+		    if(helmet.getType() == Material.LEATHER_HELMET)red = red + 0.04;
+		    else if(helmet.getType() == Material.GOLD_HELMET)red = red + 0.08;
+		    else if(helmet.getType() == Material.CHAINMAIL_HELMET)red = red + 0.08;
+		    else if(helmet.getType() == Material.IRON_HELMET)red = red + 0.08;
+		    else if(helmet.getType() == Material.DIAMOND_HELMET)red = red + 0.12;
+	    }
+	    if(boots != null)
+	    {
+		    if(boots.getType() == Material.LEATHER_BOOTS)red = red + 0.04;
+		    else if(boots.getType() == Material.GOLD_BOOTS)red = red + 0.04;
+		    else if(boots.getType() == Material.CHAINMAIL_BOOTS)red = red + 0.04;
+		    else if(boots.getType() == Material.IRON_BOOTS)red = red + 0.08;
+		    else if(boots.getType() == Material.DIAMOND_BOOTS)red = red + 0.12;
+	    }
+	    if(pants != null)
+	    {
+		    if(pants.getType() == Material.LEATHER_LEGGINGS)red = red + 0.08;
+		    else if(pants.getType() == Material.GOLD_LEGGINGS)red = red + 0.12;
+		    else if(pants.getType() == Material.CHAINMAIL_LEGGINGS)red = red + 0.16;
+		    else if(pants.getType() == Material.IRON_LEGGINGS)red = red + 0.20;
+		    else if(pants.getType() == Material.DIAMOND_LEGGINGS)red = red + 0.24;
+	    }
+	    if(chest != null)
+	    {
+		    if(chest.getType() == Material.LEATHER_CHESTPLATE)red = red + 0.12;
+		    else if(chest.getType() == Material.GOLD_CHESTPLATE)red = red + 0.20;
+		    else if(chest.getType() == Material.CHAINMAIL_CHESTPLATE)red = red + 0.20;
+		    else if(chest.getType() == Material.IRON_CHESTPLATE)red = red + 0.24;
+		    else if(chest.getType() == Material.DIAMOND_CHESTPLATE)red = red + 0.32;
+	    }
 	    return red;
 	}
 	public int armorCount(Player player)
@@ -697,29 +706,10 @@ public class SRPGL implements Listener
 	    ItemStack chest = inv.getChestplate();
 	    ItemStack pants = inv.getLeggings();
 	    int i = 0;
-	    if(helmet.getType() == Material.LEATHER_HELMET)i = i + 1;
-	    else if(helmet.getType() == Material.GOLD_HELMET)i = i + 1;
-	    else if(helmet.getType() == Material.CHAINMAIL_HELMET)i = i + 1;
-	    else if(helmet.getType() == Material.IRON_HELMET)i = i + 1;
-	    else if(helmet.getType() == Material.DIAMOND_HELMET)i = i + 1;
-	    //
-	    if(boots.getType() == Material.LEATHER_BOOTS)i = i + 1;
-	    else if(boots.getType() == Material.GOLD_BOOTS)i = i + 1;
-	    else if(boots.getType() == Material.CHAINMAIL_BOOTS)i = i + 1;
-	    else if(boots.getType() == Material.IRON_BOOTS)i = i + 1;
-	    else if(boots.getType() == Material.DIAMOND_BOOTS)i = i + 1;
-	    //
-	    if(pants.getType() == Material.LEATHER_LEGGINGS)i = i + 1;
-	    else if(pants.getType() == Material.GOLD_LEGGINGS)i = i + 1;
-	    else if(pants.getType() == Material.CHAINMAIL_LEGGINGS)i = i + 1;
-	    else if(pants.getType() == Material.IRON_LEGGINGS)i = i + 1;
-	    else if(pants.getType() == Material.DIAMOND_LEGGINGS)i = i + 1;
-	    //
-	    if(chest.getType() == Material.LEATHER_CHESTPLATE)i = i + 1;
-	    else if(chest.getType() == Material.GOLD_CHESTPLATE)i = i + 1;
-	    else if(chest.getType() == Material.CHAINMAIL_CHESTPLATE)i = i + 1;
-	    else if(chest.getType() == Material.IRON_CHESTPLATE)i = i + 1;
-	    else if(chest.getType() == Material.DIAMOND_CHESTPLATE)i = i + 1;
+	    if(helmet != null)i++;
+	    if(boots != null)i++;
+	    if(chest != null)i++;
+	    if(pants != null)i++;
 	    return i;
 	}
 }
