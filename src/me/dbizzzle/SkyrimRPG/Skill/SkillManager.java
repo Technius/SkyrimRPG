@@ -138,6 +138,7 @@ public class SkillManager
 				else if(l.startsWith("Enchanting"))loadSkill(tokens, Skill.ENCHANTING, pr, sk);
 				else if(l.startsWith("Restoration"))loadSkill(tokens, Skill.RESTORATION, pr, sk);
 				else if(l.startsWith("Sneak"))loadSkill(tokens, Skill.SNEAK, pr, sk);
+				else if(l.startsWith("Armor"))loadSkill(tokens, Skill.ARMOR, pr, sk);
 				else if(l.startsWith("Level"))
 				{
 					if(tokens.length != 2)continue;
@@ -181,28 +182,11 @@ public class SkillManager
 					}
 				}
 			}
-			if(sk.get(Skill.ARCHERY)== null)sk.put(Skill.ARCHERY, 1);
-			if(sk.get(Skill.SWORDSMANSHIP)== null)sk.put(Skill.SWORDSMANSHIP, 1);
-			if(sk.get(Skill.PICKPOCKETING)== null)sk.put(Skill.PICKPOCKETING, 1);
-			if(sk.get(Skill.DESTRUCTION)== null)sk.put(Skill.DESTRUCTION, 1);
-			if(sk.get(Skill.LOCKPICKING)== null)sk.put(Skill.LOCKPICKING, 1);
-			if(sk.get(Skill.CONJURATION)== null)sk.put(Skill.CONJURATION, 1);
-			if(sk.get(Skill.AXECRAFT)== null)sk.put(Skill.AXECRAFT, 1);
-			if(sk.get(Skill.RESTORATION) == null)sk.put(Skill.RESTORATION, 1);
-			if(!sk.containsKey(Skill.BLOCKING))sk.put(Skill.BLOCKING, 1);
-			if(!sk.containsKey(Skill.ENCHANTING))sk.put(Skill.ENCHANTING, 1);
-			if(!sk.containsKey(Skill.SNEAK))sk.put(Skill.SNEAK, 1);
-			//
-			if(pr.get(Skill.ARCHERY)== null)pr.put(Skill.ARCHERY, 0);
-			if(pr.get(Skill.SWORDSMANSHIP)== null)pr.put(Skill.SWORDSMANSHIP, 0);
-			if(pr.get(Skill.PICKPOCKETING)== null)pr.put(Skill.PICKPOCKETING, 0);
-			if(pr.get(Skill.DESTRUCTION)== null)pr.put(Skill.DESTRUCTION, 0);
-			if(pr.get(Skill.LOCKPICKING)== null)pr.put(Skill.LOCKPICKING, 0);
-			if(pr.get(Skill.CONJURATION)== null)pr.put(Skill.CONJURATION, 0);
-			if(pr.get(Skill.AXECRAFT)== null)pr.put(Skill.AXECRAFT, 0);
-			if(pr.get(Skill.RESTORATION) == null)pr.put(Skill.RESTORATION, 0);
-			if(!pr.containsKey(Skill.ENCHANTING))pr.put(Skill.ENCHANTING, 0);
-			if(!pr.containsKey(Skill.SNEAK))pr.put(Skill.SNEAK, 0);
+			for(Skill s:Skill.values())
+			{
+				if(!sk.containsKey(s))sk.put(s, 1);
+				if(!pr.containsKey(s))pr.put(s, 0);
+			}
 			skills.put(player, sk);
 			progress.put(player, pr);
 			level.put(player, tl);
@@ -253,30 +237,11 @@ public class SkillManager
 			bw.newLine();
 			bw.write("#Skill: level, progress");
 			bw.newLine();
-			bw.write("Archery: " + getSkillLevel(Skill.ARCHERY, player) + "," + getProgress(Skill.ARCHERY,player));
-			bw.newLine();
-			bw.write("Swordsmanship: " + getSkillLevel(Skill.SWORDSMANSHIP, player) + "," + getProgress(Skill.SWORDSMANSHIP, player));
-			bw.newLine();
-			bw.write("Pickpocketing: " + getSkillLevel(Skill.PICKPOCKETING, player) + "," + getProgress(Skill.PICKPOCKETING, player));
-			bw.newLine();
-			bw.write("Destruction: " + getSkillLevel(Skill.DESTRUCTION, player) + "," + getProgress(Skill.DESTRUCTION, player));
-			bw.newLine();
-			bw.write("Conjuration: " + getSkillLevel(Skill.CONJURATION, player) + "," + getProgress(Skill.CONJURATION, player));
-			bw.newLine();
-			bw.write("Lockpicking: " + getSkillLevel(Skill.LOCKPICKING, player) + "," + getProgress(Skill.LOCKPICKING, player));
-			bw.newLine();
-			bw.write("Axecraft: " + getSkillLevel(Skill.AXECRAFT, player) + "," + getProgress(Skill.AXECRAFT, player));
-			bw.newLine();
-			bw.write("Blocking: " + getSkillLevel(Skill.BLOCKING, player) + "," + getProgress(Skill.BLOCKING, player));
-			bw.newLine();
-			bw.write("Restoration: " + getSkillLevel(Skill.RESTORATION, player) + "," + getProgress(Skill.RESTORATION, player));
-			bw.newLine();
-			bw.write("Enchanting: " + getSkillLevel(Skill.ENCHANTING, player) + "," + getProgress(Skill.ENCHANTING, player));
-			bw.newLine();
-			bw.write("Sneak: " + getSkillLevel(Skill.SNEAK, player) + "," + getProgress(Skill.SNEAK, player));
-			bw.newLine();
-			bw.write("Armor: " + getSkillLevel(Skill.ARMOR, player) + "," + getProgress(Skill.ARMOR, player));
-			bw.newLine();
+			for(Skill s:Skill.values())
+			{
+				bw.write(s.getName() + ": " + getSkillLevel(s, player) + "," + getProgress(s, player));
+				bw.newLine();
+			}
 			bw.flush();
 			bw.close();
 		}
@@ -296,32 +261,12 @@ public class SkillManager
 	public void resetSkills(Player player)
 	{
 		HashMap<Skill, Integer> sk = new HashMap<Skill, Integer>();
-		sk.put(Skill.PICKPOCKETING, Integer.valueOf(1));
-		sk.put(Skill.ARCHERY, Integer.valueOf(1));
-		sk.put(Skill.SWORDSMANSHIP, Integer.valueOf(1));
-		sk.put(Skill.LOCKPICKING, Integer.valueOf(1));
-		sk.put(Skill.DESTRUCTION, Integer.valueOf(1));
-		sk.put(Skill.CONJURATION, Integer.valueOf(1));
-		sk.put(Skill.ARCHERY, Integer.valueOf(1));
-		sk.put(Skill.BLOCKING, Integer.valueOf(1));
-		sk.put(Skill.RESTORATION, Integer.valueOf(1));
-		sk.put(Skill.AXECRAFT, Integer.valueOf(1));
-		sk.put(Skill.ENCHANTING, Integer.valueOf(1));
-		sk.put(Skill.SNEAK, Integer.valueOf(1));
 		HashMap<Skill, Integer> pr = new HashMap<Skill, Integer>();
-		pr.put(Skill.PICKPOCKETING, Integer.valueOf(0));
-		pr.put(Skill.ARCHERY, Integer.valueOf(0));
-		pr.put(Skill.SWORDSMANSHIP, Integer.valueOf(0));
-		pr.put(Skill.RESTORATION, Integer.valueOf(0));
-		pr.put(Skill.LOCKPICKING, Integer.valueOf(0));
-		pr.put(Skill.DESTRUCTION, Integer.valueOf(0));
-		pr.put(Skill.CONJURATION, Integer.valueOf(0));
-		pr.put(Skill.ARCHERY, Integer.valueOf(0));
-		pr.put(Skill.BLOCKING, Integer.valueOf(0));
-		pr.put(Skill.RESTORATION, Integer.valueOf(0));
-		pr.put(Skill.AXECRAFT, Integer.valueOf(0));
-		pr.put(Skill.ENCHANTING, Integer.valueOf(0));
-		pr.put(Skill.SNEAK, Integer.valueOf(0));
+		for(Skill s:Skill.values())
+		{
+			sk.put(s, 1);
+			pr.put(s, 0);
+		}
 		skills.put(player, sk);
 		progress.put(player, pr);
 		level.put(player, 1);
