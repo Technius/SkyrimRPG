@@ -431,11 +431,12 @@ public class SkyrimCmd implements CommandExecutor
 					player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + SkillManager.getSkillLevel(Skill.SWORDSMANSHIP, player));
 					player.sendMessage(ChatColor.RED + "Axecraft: Level " + SkillManager.getSkillLevel(Skill.AXECRAFT, player));
 					player.sendMessage(ChatColor.RED + "Blocking: Level " + SkillManager.getSkillLevel(Skill.BLOCKING, player));
+					player.sendMessage(ChatColor.RED + "Armor: Level " + SkillManager.getSkillLevel(Skill.ARMOR, player));
 					player.sendMessage(ChatColor.BLUE + "Destruction: Level " + SkillManager.getSkillLevel(Skill.DESTRUCTION, player));
-					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + SkillManager.getSkillLevel(Skill.CONJURATION, player));
 					break;
 				case 2:
 					player.sendMessage(ChatColor.GOLD + "Stats Page 2 of 2");
+					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + SkillManager.getSkillLevel(Skill.CONJURATION, player));
 					player.sendMessage(ChatColor.BLUE + "Restoration: Level " + SkillManager.getSkillLevel(Skill.RESTORATION, player));
 					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + SkillManager.getSkillLevel(Skill.PICKPOCKETING, player));
 					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + SkillManager.getSkillLevel(Skill.LOCKPICKING, player));
