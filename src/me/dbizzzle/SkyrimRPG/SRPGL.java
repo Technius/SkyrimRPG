@@ -572,6 +572,7 @@ public class SRPGL implements Listener
 					}
 					double d = event.getDamage()*(red*alevel);
 					if(d > event.getDamage()/2)d = 0.5;
+					plugin.debug("Armor: player=" + player.getName() + ", damage=" + event.getDamage() + ", blockedpercent=" + d*100);
 					event.setDamage((int) (event.getDamage() - event.getDamage()*d));
 				}
 			}
