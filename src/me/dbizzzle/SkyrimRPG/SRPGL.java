@@ -570,9 +570,9 @@ public class SRPGL implements Listener
 						sm.calculateLevel(player, Skill.ARMOR);
 						i ++;
 					}
-					double d = event.getDamage()*(red*alevel);
-					if(d > event.getDamage()/2)d = 0.5;
-					plugin.debug("Armor: player=" + player.getName() + ", damage=" + event.getDamage() + ", blockedpercent=" + d*100);
+					double d = (red*alevel)*1.5;
+					if(d > 0.5)d = 0.5;
+					plugin.debug("Armor: player=" + player.getName() + ", damage=" + event.getDamage() + ", blocked%=" + d*100);
 					event.setDamage((int) (event.getDamage() - event.getDamage()*d));
 				}
 			}
