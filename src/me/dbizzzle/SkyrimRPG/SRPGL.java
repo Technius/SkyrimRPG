@@ -386,7 +386,7 @@ public class SRPGL implements Listener
 						dmul = 1.15 + 0.05*PerkManager.perks.get(player).get(Perk.STEALTH);
 					}
 					double d = e.getLocation().distance(player.getLocation());
-					if(dmul*(alevel/2) + 10 >= d)
+					if(d + dmul*(10 + alevel/5) >= 70)
 					{
 						plugin.sk.calculateLevel(player, Skill.SNEAK);
 						t.hidePlayer(player);
