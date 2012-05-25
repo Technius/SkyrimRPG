@@ -563,17 +563,18 @@ public class SRPGL implements Listener
 				{
 					int a = armorCount(player);
 					int i = 0;
-					double alevel = SkillManager.getSkillLevel(Skill.ARMOR, player)/100;
-					if(alevel <= 0)alevel = 1;
+					double alevel = SkillManager.skills.get(player).get(Skill.ARMOR);
+					if(alevel <= 0)alevel = 0.01;
+					else alevel = alevel/100;
 					while(i < a)
 					{
 						sm.calculateLevel(player, Skill.ARMOR);
 						i ++;
 					}
-					double d = (red*alevel)*1.5;
+					double d = red*alevel*0.75;
 					if(d > 0.5)d = 0.5;
-					plugin.debug("Armor: player=" + player.getName() + ", damage=" + event.getDamage() + ", blocked%=" + d*100);
-					event.setDamage((int) (event.getDamage() - event.getDamage()*d));
+					plugin.debug("Armor: player=" + player.getName() + ", damage=" + e.getDamage() + ", blocked%=" + (d*100));
+					e.setDamage((int) (event.getDamage() - event.getDamage()*d));
 				}
 			}
 		}

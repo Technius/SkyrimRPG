@@ -310,6 +310,7 @@ public class SkillManager
 		{
 			t=t+2;
 		}
+		if(skill == Skill.ARMOR)t *=4;
 		if(pro >= t)
 		{
 			return true;
