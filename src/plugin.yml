@@ -43,17 +43,33 @@ commands:
          /perk <args>
 permissions:
    skyrimrpg.*:
-      Description: Implies all.
+      Description: Gives all SkyrimRPG permissions
+      Children:
+         skyrimrpg.cheats.*: true
+         skyrimrpg.user: true
+         skyrimrpg.refresh: true
+         skyrimrpg.reload: true
+   skyrimrpg.cheats.*:
+      Description: Allows you cheat on everything SkyrimRPG
+      Children:
+          skyrimrpg.cheats.spells: true
+          skyrimrpg.cheats.perks: true
+          skyrimrpg.setlevel: true
+   skyrimrpg.cheats.spells:
+      Description: Allows you to add and remove spells
       Children:
          skyrimrpg.addspell: true
          skyrimrpg.removespell: true
+   skyrimrpg.cheats.perks:
+      Description: Allows you to add and remove perks
+      Children:
+         skyrimrpg.addperk: true
+         skyrimrpg.removeperk: true
+   skyrimrpg.user:
+      Description: Permission nodes for a "normal" user
+      Children:
          skyrimrpg.listspells: true
          skyrimrpg.bindspell: true
-         skyrimrpg.setlevel: true
-         skyrimrpg.removeperk: true
-         skyrimrpg.addperk: true
-         skyrimrpg.refresh: true
-         skyrimrpg.reload: true
    skyrimrpg.addspell:
       Description: Give a player a spell.
    skyrimrpg.removespell:
