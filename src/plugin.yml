@@ -1,5 +1,5 @@
 name: SkyrimRPG
-version: 0.2.3b
+version: 0.2.4b
 authors: [dbizzzle, Technius, ThatBox]
 main: me.dbizzzle.SkyrimRPG.SkyrimRPG
 softdepends: [Spout]
@@ -49,6 +49,13 @@ permissions:
          skyrimrpg.user: true
          skyrimrpg.refresh: true
          skyrimrpg.reload: true
+         skyrimrpg.nopickpocket: true
+   skyrimrpg.admin:
+      Description: Gives all SkyrimRPG admin permissions
+      Children:
+         skyrimrpg.refresh: true
+         skyrimrpg.reload: true
+         skyrimrpg.newversion: true
    skyrimrpg.cheats.*:
       Description: Allows you cheat on everything SkyrimRPG
       Children:

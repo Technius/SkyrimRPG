@@ -166,7 +166,7 @@ public class ConfigManager
 			bw.newLine();
 			bw.write("skillLevelCap: 0");
 			bw.newLine();
-			bw.write("#Announce in the console when a new dev build is out");
+			bw.write("#Announce in the console and to players with skyrimrpg.newversion when a new dev build is out");
 			bw.newLine();
 			bw.write("announceDevBuild: true");
 			bw.newLine();

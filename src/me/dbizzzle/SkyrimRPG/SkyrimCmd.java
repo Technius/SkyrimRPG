@@ -342,7 +342,12 @@ public class SkyrimCmd implements CommandExecutor
 				case 0:
 					player.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + plugin.getDescription().getVersion());
 					player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
-					if(plugin.vm.compareVersion(plugin.latestversion, plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))player.sendMessage(ChatColor.GOLD + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "A new version is available: " + plugin.latestversion + "!" + ChatColor.RED + "!" + ChatColor.GOLD + "!" + ChatColor.RED + "!");
+					if(plugin.vm.compareVersion(plugin.latestversion, plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))
+					{
+						if(plugin.latestversion.indexOf("DEV") > -1 && !ConfigManager.announceDevBuild);
+						else player.sendMessage(ChatColor.RED + "!!!!" + ChatColor.GOLD + "A new " + (plugin.latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 
+								+ " is available: " + plugin.latestversion + ChatColor.RED + "!!!!");
+					}
 					player.sendMessage("========================");
 					player.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
 					if(player.hasPermission("skyrimrpg.setlevel"))player.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level>" + ChatColor.YELLOW + " - sets the level of the specified skill");
