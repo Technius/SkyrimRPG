@@ -191,7 +191,13 @@ public class ConfigManager
 			bw.newLine();
 			bw.write("#Worlds this plugin is disabled on (Comma seperated list)");
 			bw.newLine();
-			bw.write("disabledWorlds: ");
+			String a = "";
+			for(World w:disabledWorlds)
+			{
+				if(a.isEmpty())a = w.getName();
+				else a = a + "," + w.getName();
+			}
+			bw.write("disabledWorlds: " + a);
 			bw.newLine();
 			bw.flush();
 			bw.close();
