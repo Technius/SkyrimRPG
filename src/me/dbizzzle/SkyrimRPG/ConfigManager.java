@@ -23,6 +23,7 @@ public class ConfigManager
 	public static int PickpocketingCooldown = 10;
 	public static int LockpickingCooldown = 10;
 	public static boolean debug = false;
+	public static boolean announceDevBuild = true;
 	SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
@@ -62,6 +63,10 @@ public class ConfigManager
 				{
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableLpCd = false;
 					else enableLpCd = true;
+				}
+				else if(tokens[0].equalsIgnoreCase("announcedevbuild"))
+				{
+					announceDevBuild = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
 				}
 				else if(tokens[0].equalsIgnoreCase("enablepickpocketingcooldown"))
 				{
@@ -160,6 +165,10 @@ public class ConfigManager
 			bw.write("#The maximum level of all skills, put 0 for infinite");
 			bw.newLine();
 			bw.write("skillLevelCap: 0");
+			bw.newLine();
+			bw.write("#Announce in the console when a new dev build is out");
+			bw.newLine();
+			bw.write("announceDevBuild: true");
 			bw.newLine();
 			bw.flush();
 			bw.close();
