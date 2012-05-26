@@ -67,6 +67,7 @@ public class SRPGL implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
+		if(ConfigManager.disabledWorlds.contains(event.getPlayer().getWorld()))return;
 		if(event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON && ConfigManager.enableLockpicking)
 		{
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
@@ -246,6 +247,7 @@ public class SRPGL implements Listener
 	}
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+		if(ConfigManager.disabledWorlds.contains(event.getPlayer().getWorld()))return;
 		Player se = event.getPlayer();
 		final EntityPlayer s = ((CraftPlayer) event.getPlayer()).getHandle();
 		if (s.isSneaking() && ConfigManager.enablePickpocketing) {
@@ -369,6 +371,7 @@ public class SRPGL implements Listener
 	public void sneakSkill(PlayerToggleSneakEvent event)
 	{
 		if(event.isCancelled())return;
+		if(ConfigManager.disabledWorlds.contains(event.getPlayer().getWorld()))return;
 		Player player = event.getPlayer();
 		boolean detect = false;
 		if(event.isSneaking() && !sneak.contains(player))
@@ -422,6 +425,7 @@ public class SRPGL implements Listener
 	public void onEntityDamage(EntityDamageEvent event)
 	{
 		if(event.isCancelled())return;
+		if(ConfigManager.disabledWorlds.contains(event.getEntity().getWorld()))return;
 		if(event instanceof EntityDamageByEntityEvent)
 		{
 			EntityDamageByEntityEvent e = (EntityDamageByEntityEvent)event;
