@@ -231,8 +231,8 @@ public class SpellManager
 	}
 	public void addSpell(Player p, Spell s)
 	{
-		saveSpells(p);
 		if(!spells.get(p).contains(s))spells.get(p).add(s);
+		saveSpells(p);
 	}
 	public boolean removeSpell(Player p, Spell s)
 	{

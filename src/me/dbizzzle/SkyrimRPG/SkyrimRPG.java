@@ -71,8 +71,6 @@ public class SkyrimRPG extends JavaPlugin
 		if(!players.exists())return false;
 		File config = new File(file.getPath() + File.separator + "config.txt");
 		if(!config.exists())return false;
-		File locks = new File(file.getPath() + File.separator + "Locks");
-		if(!locks.exists())return false;
 		File magic = new File(file.getPath() + File.separator + "Magic");
 		if(!magic.exists())return false;
 		File perks = new File(file.getPath() + File.separator + "Perks");

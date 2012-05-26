@@ -135,7 +135,7 @@ public class SkyrimCmd implements CommandExecutor
 						if(!sm.hasSpell(player, s))
 						{
 							player.sendMessage(ChatColor.GREEN + "You had the spell " + s.name() + " added to you.");
-							sm.removeSpell(player, s);
+							sm.addSpell(player, s);
 						}
 						else player.sendMessage(ChatColor.RED + "You already learned that spell.");
 					}
@@ -156,7 +156,7 @@ public class SkyrimCmd implements CommandExecutor
 							{
 								player.sendMessage(ChatColor.GREEN + "You have given " + s1.getDisplayName() + " to " + spell.getName());
 								spell.sendMessage(ChatColor.GREEN + "You had the spell " + s1.getDisplayName() + " given to you.");
-								sm.removeSpell(spell, s1);
+								sm.addSpell(spell, s1);
 							}
 							else player.sendMessage(ChatColor.RED + spell.getName() + " has already learned that spell.");
 						}
@@ -165,10 +165,7 @@ public class SkyrimCmd implements CommandExecutor
 							player.sendMessage(ChatColor.RED + "Invalid Spell.");
 						}
 					} 
-					else 
-					{
-						player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
-					}
+					else player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
 					return true;
 				default:
 					player.sendMessage(ChatColor.RED + "Usage: /addspell <player> <spell>");
