@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
+import me.dbizzzle.SkyrimRPG.Spell;
 
 import org.bukkit.entity.Player;
 

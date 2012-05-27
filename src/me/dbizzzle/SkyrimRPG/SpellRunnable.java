@@ -1,6 +1,6 @@
 package me.dbizzzle.SkyrimRPG;
 
-import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
+import me.dbizzzle.SkyrimRPG.Spell;
 
 import org.bukkit.entity.Player;
 

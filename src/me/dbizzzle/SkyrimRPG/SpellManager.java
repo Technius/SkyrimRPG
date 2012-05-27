@@ -148,39 +148,6 @@ public class SpellManager
 			czombie.put(player,zombie);
 		}
 	}
-	public enum Spell
-	{
-		RAISE_ZOMBIE(2),FIREBALL(1),HEALING(4),UFIREBALL(10101), FLAMES(3), CONJURE_FLAME_ATRONACH(5), FROSTBITE(6);
-		private int id;
-		private Spell(int id)
-		{
-			this.id = id;
-		}
-		public int getId(Spell s)
-		{
-			return id;
-		}
-		public static Spell getById(int id)
-		{
-			for(Spell s:Spell.values())
-			{
-				if(s.getId(s) == id)return s;
-			}
-			return null;
-		}
-		public String getDisplayName()
-		{
-			String sl = toString().toLowerCase().replaceAll("_", " ");
-			String[] st = sl.split("[ ]");
-			String m = Character.toUpperCase(st[0].charAt(0)) + st[0].substring(1);
-			for(String x: st)
-			{
-				if(x.equalsIgnoreCase(st[0]))continue;
-				m = m + " " + Character.toUpperCase(x.charAt(0)) + x.substring(1);
-			}
-			return m;
-		}
-	}
 	public boolean hasSpell(Player player, Spell spell)
 	{
 		return spells.get(player).contains(spell);
@@ -245,11 +212,11 @@ public class SpellManager
 		if(s == null)return false;
 		if(hasSpell(p, s))
 		{
-			p.sendMessage(ChatColor.RED + "You already know how to cast " + s.toString());
+			p.sendMessage(ChatColor.RED + "You already know how to cast " + s.getDisplayName());
 			return false;
 		}
 		addSpell(p, s);
-		p.sendMessage(ChatColor.GREEN + "You have learned how to cast " + s.toString());
+		p.sendMessage(ChatColor.GREEN + "You have learned how to cast " + s.getDisplayName());
 		return true;
 	}
 	public void saveSpells(Player p)

@@ -2,7 +2,7 @@ package me.dbizzzle.SkyrimRPG;
 
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
-import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
+import me.dbizzzle.SkyrimRPG.Spell;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -52,7 +52,7 @@ public class SkyrimCmd implements CommandExecutor
 						return true;
 					}
 					Spell s = null;
-					try{s = SpellManager.Spell.valueOf(args[1].toUpperCase());}
+					try{s = Spell.valueOf(args[1].toUpperCase());}
 					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
 					if(!sm.hasSpell(player, s))
 					{
@@ -104,7 +104,7 @@ public class SkyrimCmd implements CommandExecutor
 					Spell s;
 					try
 					{
-						s = SpellManager.Spell.valueOf(args[1].toUpperCase());
+						s = Spell.valueOf(args[1].toUpperCase());
 						if(!sm.hasSpell(spell, s))
 						{
 							spell.sendMessage(ChatColor.GREEN + "You were given the spell " + s.name());
@@ -131,7 +131,7 @@ public class SkyrimCmd implements CommandExecutor
 					Spell s;
 					try
 					{
-						s = SpellManager.Spell.valueOf(args[1].toUpperCase());
+						s = Spell.valueOf(args[1].toUpperCase());
 						if(!sm.hasSpell(player, s))
 						{
 							player.sendMessage(ChatColor.GREEN + "You had the spell " + s.name() + " added to you.");
@@ -151,7 +151,7 @@ public class SkyrimCmd implements CommandExecutor
 						Spell s1;
 						try
 						{
-							s1 = SpellManager.Spell.valueOf(args[1].toUpperCase());
+							s1 = Spell.valueOf(args[1].toUpperCase());
 							if(!sm.hasSpell(spell, s1))
 							{
 								player.sendMessage(ChatColor.GREEN + "You have given " + s1.getDisplayName() + " to " + spell.getName());
@@ -192,7 +192,7 @@ public class SkyrimCmd implements CommandExecutor
 					Spell s;
 					try
 					{
-						s = SpellManager.Spell.valueOf(args[1].toUpperCase());
+						s = Spell.valueOf(args[1].toUpperCase());
 						if(sm.hasSpell(spell, s))
 						{
 							spell.sendMessage(ChatColor.RED + "You had the spell " + s.name() + " removed.");
@@ -219,7 +219,7 @@ public class SkyrimCmd implements CommandExecutor
 					Spell s;
 					try
 					{
-						s = SpellManager.Spell.valueOf(args[1].toUpperCase());
+						s = Spell.valueOf(args[1].toUpperCase());
 						if(sm.hasSpell(player, s))
 						{
 							player.sendMessage(ChatColor.GREEN + "You had the spell " + s.name() + " removed.");
@@ -239,7 +239,7 @@ public class SkyrimCmd implements CommandExecutor
 						Spell s1;
 						try
 						{
-							s1 = SpellManager.Spell.valueOf(args[1].toUpperCase());
+							s1 = Spell.valueOf(args[1].toUpperCase());
 							if(sm.hasSpell(spell, s1))
 							{
 								player.sendMessage(ChatColor.GREEN + "You had the spell " + s1.getDisplayName() + " removed from " + spell.getName());
