@@ -64,7 +64,7 @@ public class SkyrimRPG extends JavaPlugin
 		cm.loadConfig();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
 		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(), 0, 20);
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(this), 0, 20);
 		VCThread check = new VCThread(this);
 		check.start();
 	}

@@ -370,7 +370,7 @@ public class SkyrimCmd implements CommandExecutor
 							player.sendMessage(ChatColor.RED + "No such skill!");
 							return true;
 						}
-						int l = SkillManager.getSkillLevel(skill, player);
+						int l = plugin.getSkillManager().getSkillLevel(skill, player);
 						try{ l = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){sender.sendMessage(ChatColor.RED + "That is not a valid number."); return true;}
 						sk.setLevel(skill, player, l);
 						player.sendMessage(ChatColor.GREEN + skill.getName() + " set to level " + l);
@@ -429,20 +429,20 @@ public class SkyrimCmd implements CommandExecutor
 					player.sendMessage(ChatColor.RED + "Combat" + ChatColor.WHITE + "|" + ChatColor.BLUE + "Magic" + ChatColor.WHITE + "|" + ChatColor.GRAY + "Stealth");
 					player.sendMessage(ChatColor.GREEN + "Level: " + SkillManager.level.get(player));
 					player.sendMessage(ChatColor.BLUE + "Magicka: " + SpellManager.magicka.get(player));
-					player.sendMessage(ChatColor.RED + "Archery: Level " + SkillManager.getSkillLevel(Skill.ARCHERY, player));
-					player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + SkillManager.getSkillLevel(Skill.SWORDSMANSHIP, player));
-					player.sendMessage(ChatColor.RED + "Axecraft: Level " + SkillManager.getSkillLevel(Skill.AXECRAFT, player));
-					player.sendMessage(ChatColor.RED + "Blocking: Level " + SkillManager.getSkillLevel(Skill.BLOCKING, player));
-					player.sendMessage(ChatColor.RED + "Armor: Level " + SkillManager.getSkillLevel(Skill.ARMOR, player));
-					player.sendMessage(ChatColor.BLUE + "Destruction: Level " + SkillManager.getSkillLevel(Skill.DESTRUCTION, player));
+					player.sendMessage(ChatColor.RED + "Archery: Level " + plugin.getSkillManager().getSkillLevel(Skill.ARCHERY, player));
+					player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + plugin.getSkillManager().getSkillLevel(Skill.SWORDSMANSHIP, player));
+					player.sendMessage(ChatColor.RED + "Axecraft: Level " + plugin.getSkillManager().getSkillLevel(Skill.AXECRAFT, player));
+					player.sendMessage(ChatColor.RED + "Blocking: Level " + plugin.getSkillManager().getSkillLevel(Skill.BLOCKING, player));
+					player.sendMessage(ChatColor.RED + "Armor: Level " + plugin.getSkillManager().getSkillLevel(Skill.ARMOR, player));
+					player.sendMessage(ChatColor.BLUE + "Destruction: Level " + plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, player));
 					break;
 				case 2:
 					player.sendMessage(ChatColor.GOLD + "Stats Page 2 of 2");
-					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + SkillManager.getSkillLevel(Skill.CONJURATION, player));
-					player.sendMessage(ChatColor.BLUE + "Restoration: Level " + SkillManager.getSkillLevel(Skill.RESTORATION, player));
-					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + SkillManager.getSkillLevel(Skill.PICKPOCKETING, player));
-					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + SkillManager.getSkillLevel(Skill.LOCKPICKING, player));
-					player.sendMessage(ChatColor.GRAY + "Sneak: Level " + SkillManager.getSkillLevel(Skill.SNEAK, player));
+					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + plugin.getSkillManager().getSkillLevel(Skill.CONJURATION, player));
+					player.sendMessage(ChatColor.BLUE + "Restoration: Level " + plugin.getSkillManager().getSkillLevel(Skill.RESTORATION, player));
+					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, player));
+					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + plugin.getSkillManager().getSkillLevel(Skill.LOCKPICKING, player));
+					player.sendMessage(ChatColor.GRAY + "Sneak: Level " + plugin.getSkillManager().getSkillLevel(Skill.SNEAK, player));
 					break;
 				default:
 					player.sendMessage(ChatColor.GOLD + "Stats Page " + page + " of 2");

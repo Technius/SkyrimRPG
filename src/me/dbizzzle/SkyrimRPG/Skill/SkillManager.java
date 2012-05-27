@@ -39,7 +39,7 @@ public class SkillManager
 			progress.get(player).put(s, progress.get(player).get(s) + 1);
 		}
 	}
-	public static int calculateLevel(Player player)
+	public int calculateLevel(Player player)
 	{
 		int lvl = 0;
 		int tot = 0;
@@ -59,7 +59,7 @@ public class SkillManager
 		}
 		return level.get(player).intValue();
 	}
-	public static boolean isLevelingUp(Player player)
+	public boolean isLevelingUp(Player player)
 	{
 		int tot = 0;
 		int cl = level.get(player).intValue();
@@ -70,11 +70,11 @@ public class SkillManager
 		if(tot > cl * Skill.values().length)return true;
 		return false;
 	}
-	public static HashMap<Skill, Integer> getSkills (Player player)
+	public HashMap<Skill, Integer> getSkills (Player player)
 	{
 		return skills.get(player);
 	}
-	public static int getProgress(Skill skill, Player player)
+	public int getProgress(Skill skill, Player player)
 	{
 		return progress.get(player).get(skill).intValue();
 	}
@@ -195,7 +195,7 @@ public class SkillManager
 			resetSkills(player);
 		}
 	}
-	public static int getSkillLevel(Skill skill, Player player)
+	public int getSkillLevel(Skill skill, Player player)
 	{
 		return skills.get(player).get(skill).intValue();
 	}
@@ -294,9 +294,9 @@ public class SkillManager
 	 */
 	public boolean processExperience(Player player, Skill skill)
 	{
-		int alevel = SkillManager.getSkillLevel(skill, player);
+		int alevel = getSkillLevel(skill, player);
 		if(alevel >= ConfigManager.skilllvlcap && ConfigManager.skilllvlcap > 0)return false;
-		int pro = SkillManager.getProgress(skill, player);
+		int pro = getProgress(skill, player);
 		int t = 5;
 		for(int i = 1;i<alevel;i++)
 		{
