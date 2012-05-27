@@ -88,7 +88,7 @@ public class PerkCmd implements CommandExecutor
 			case 2:
 				if(args[0].equalsIgnoreCase("unlock"))
 				{
-					PerkManager pm = new PerkManager(plugin);
+					PerkManager pm = plugin.getPerkManager();
 					Perk p;
 					try
 					{
@@ -119,7 +119,7 @@ public class PerkCmd implements CommandExecutor
 				else if(args[0].equalsIgnoreCase("all"))
 				{
 					Skill s;
-					PerkManager pm = new PerkManager(plugin);
+					PerkManager pm = plugin.getPerkManager();
 					try{s = Skill.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){player.sendMessage(ChatColor.RED + "No such skill: " + args[1]);return true;}
 					player.sendMessage(ChatColor.RED + s.getName() + " Perks" + ChatColor.GOLD +" - Required Skill Level - Max Level");
 					for(Perk p:pm.getPerksBySkill(s))
@@ -140,7 +140,7 @@ public class PerkCmd implements CommandExecutor
 			case 3:
 				if(args[0].equalsIgnoreCase("unlock"))
 				{
-					PerkManager pm = new PerkManager(plugin);
+					PerkManager pm = plugin.getPerkManager();
 					Perk p;
 					try
 					{

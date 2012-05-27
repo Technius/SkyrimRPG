@@ -190,7 +190,7 @@ public class SkillManager
 			skills.put(player, sk);
 			progress.put(player, pr);
 			level.put(player, tl);
-			PerkManager.points.put(player, pp);
+			p.getPerkManager().setPoints(player, pp);
 			SpellManager.magicka.put(player, m);
 			br.close();
 		}
@@ -229,7 +229,7 @@ public class SkillManager
 			bw.newLine();
 			bw.write("#SPENT Perk Points");
 			bw.newLine();
-			bw.write("Perk Points: " + PerkManager.points.get(player));
+			bw.write("Perk Points: " + p.getPerkManager().getPoints(player));
 			bw.newLine();
 			bw.write("#Skill: level, progress");
 			bw.newLine();
@@ -266,7 +266,8 @@ public class SkillManager
 		skills.put(player, sk);
 		progress.put(player, pr);
 		level.put(player, 1);
-		PerkManager.points.put(player, 0);
+		p.getPerkManager().setPoints(player, 0);
+		p.getPerkManager().defaultPerks(player);
 		SpellManager.magicka.put(player, 0);
 	}
 	private void loadSkill(String[] tokens, Skill skill, HashMap<Skill, Integer> pr, HashMap<Skill, Integer> sk)

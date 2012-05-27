@@ -3,6 +3,8 @@ package me.dbizzzle.SkyrimRPG;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.logging.Logger;
+
+import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -32,9 +34,14 @@ public class SkyrimRPG extends JavaPlugin
 	private SpellManager sm = new SpellManager(this);
 	private SkillManager sk = new SkillManager(this);
 	private SpellTimer st = new SpellTimer(this);
+	private PerkManager pm = new PerkManager(this);
 	ConfigManager cm = new ConfigManager(this);
 	VersionManager vm = new VersionManager();
 	String latestversion;
+	public PerkManager getPerkManager()
+	{
+		return pm;
+	}
 	public SkillManager getSkillManager()
 	{
 		return sk;

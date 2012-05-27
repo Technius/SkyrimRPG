@@ -21,10 +21,14 @@ public class PerkManager
 		p = s;
 	}
 	public static HashMap<Player, HashMap<Perk, Integer>> perks = new HashMap<Player, HashMap<Perk, Integer>>();
-	public static HashMap<Player, Integer>points = new HashMap<Player, Integer>();
+	private HashMap<Player, Integer>points = new HashMap<Player, Integer>();
 	public int getPoints(Player player)
 	{
 		return p.getSkillManager().getLevel(player) - points.get(player) - 1;
+	}
+	public void setPoints(Player player, int points)
+	{
+		this.points.put(player, points);
 	}
 	public boolean hasEnough(Player player)
 	{
