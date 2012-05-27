@@ -29,12 +29,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class SkyrimRPG extends JavaPlugin 
 {
 	public Logger log = Logger.getLogger("Minecraft");
-	SpellManager sm = new SpellManager(this);
-	SkillManager sk = new SkillManager(this);
-	SpellTimer st = new SpellTimer(this);
+	private SpellManager sm = new SpellManager(this);
+	private SkillManager sk = new SkillManager(this);
+	private SpellTimer st = new SpellTimer(this);
 	ConfigManager cm = new ConfigManager(this);
 	VersionManager vm = new VersionManager();
 	String latestversion;
+	public SkillManager getSkillManager()
+	{
+		return sk;
+	}
+	public SpellManager getSpellManager()
+	{
+		return sm;
+	}
+	public SpellTimer getSpellTimer()
+	{
+		return st;
+	}
 	public void onEnable() 
 	{
 		getCommand("addspell").setExecutor(new SkyrimCmd(sm, this, cm, sk));

@@ -1,30 +1,31 @@
 package me.dbizzzle.SkyrimRPG;
 
+import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
+
 import org.bukkit.entity.Player;
 
 public class SpellRunnable implements Runnable
 {
-	int type = 0;
+	private SpellTimer t;
+	private Spell spell;
 	Player p;
-	public SpellRunnable(String spell, Player player)
+	public SpellRunnable(SpellTimer timer, Spell spell, Player player)
 	{
 		p = player;
-		if(spell.equalsIgnoreCase("fireball"))
-		{
-			type = 1;
-		}
+		this.spell = spell;
+		t = timer;
 	}
 	public void run()
 	{
-		switch(type)
+		switch(spell)
 		{
-		case 1:
-			if(SpellTimer.fireballcharge.contains(p))
+		case FIREBALL:
+			if(t.chargingFireballs().contains(p))
 			{
-				SpellTimer.fireballcharged.add(p);
+				t.chargedFireballs().add(p);
 				p.sendMessage("Fireball charged!");
 			}
-			SpellTimer.fireballcharge.remove(p);
+			t.chargingFireballs().remove(p);
 			break;
 		}
 	}

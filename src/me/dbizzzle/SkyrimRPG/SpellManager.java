@@ -194,15 +194,15 @@ public class SpellManager
 		switch(spell)
 		{
 		case FIREBALL:
-			p.st.chargeFireball(player);
+			p.getSpellTimer().chargeFireball(player);
 			return true;
 		case RAISE_ZOMBIE:
 			raiseZombie(player);
 			return true;
 		case UFIREBALL:
-			int m = p.st.unchargeFireball(player);
+			int m = p.getSpellTimer().unchargeFireball(player);
 			if(m == -1) return false;
-			p.sm.shootFireball(player, m);
+			shootFireball(player, m);
 			return true;
 		case FLAMES:
 			flames(player);

@@ -5,24 +5,34 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import me.dbizzzle.SkyrimRPG.SpellManager.Spell;
+
 import org.bukkit.entity.Player;
 
 public class SpellTimer 
 {
 	static final int MAX_FIREBALL = 250;
-	static List<Player> fireballcharge = new ArrayList<Player>();
-	static List<Player> fireballcharged = new ArrayList<Player>();
+	private List<Player> fireballcharge = new ArrayList<Player>();
+	private List<Player> fireballcharged = new ArrayList<Player>();
 	static HashMap<Player, Integer> fballstart = new HashMap<Player,Integer>();
 	private SkyrimRPG p;
 	public SpellTimer(SkyrimRPG p)
 	{
 		this.p = p;
 	}
+	public List<Player> chargingFireballs()
+	{
+		return fireballcharge;
+	}
+	public List<Player> chargedFireballs()
+	{
+		return fireballcharged;
+	}
 	public void chargeFireball(Player player)
 	{
-		if(!p.sm.hasEnough(player, 100))
+		if(!p.getSpellManager().hasEnough(player, 100))
 		{
-			p.sm.magickaWarning(player, "Fireball");
+			p.getSpellManager().magickaWarning(player, "Fireball");
 			return;
 		}
 		else
@@ -31,7 +41,7 @@ public class SpellTimer
 			SpellManager.magicka.put(player, SpellManager.magicka.get(player) - 30);
 			if(fireballcharge.contains(player))return;
 			fireballcharge.add(player);
-			p.getServer().getScheduler().scheduleSyncDelayedTask(p, new SpellRunnable("fireball", player), 50);
+			p.getServer().getScheduler().scheduleSyncDelayedTask(p, new SpellRunnable(p.getSpellTimer(),Spell.FIREBALL, player), 50);
 			fballstart.put(player, Integer.valueOf(Calendar.getInstance().get(Calendar.MILLISECOND) + (Calendar.getInstance().get(Calendar.SECOND)*1000)));
 		}
 	}

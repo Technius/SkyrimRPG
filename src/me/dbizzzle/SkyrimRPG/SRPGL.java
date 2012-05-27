@@ -217,14 +217,14 @@ public class SRPGL implements Listener
 			{
 				if(SpellManager.boundleft.containsKey(event.getPlayer()))
 				{
-					plugin.sm.castSpell(SpellManager.boundleft.get(event.getPlayer()), event.getPlayer());
+					plugin.getSpellManager().castSpell(SpellManager.boundleft.get(event.getPlayer()), event.getPlayer());
 				}
 			}
 			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				if(SpellManager.boundright.containsKey(event.getPlayer()))
 				{
-					plugin.sm.castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
+					plugin.getSpellManager().castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
 				}
 			}
 		}
@@ -236,7 +236,7 @@ public class SRPGL implements Listener
 				ItemStack b = event.getPlayer().getItemInHand();
 				if(b.getDurability() != 0)
 				{
-					if(plugin.sm.useBook(event.getPlayer(), b.getDurability()))
+					if(plugin.getSpellManager().useBook(event.getPlayer(), b.getDurability()))
 					{
 						b.setAmount(b.getAmount() - 1);
 						event.getPlayer().setItemInHand(b);
@@ -391,7 +391,7 @@ public class SRPGL implements Listener
 					double d = e.getLocation().distance(player.getLocation());
 					if(d + dmul*(10 + alevel/5) >= 70)
 					{
-						plugin.sk.calculateLevel(player, Skill.SNEAK);
+						plugin.getSkillManager().calculateLevel(player, Skill.SNEAK);
 						t.hidePlayer(player);
 						plugin.debug("Sneaking: result=hidden, player=" + player.getName());
 					}
