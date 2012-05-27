@@ -249,6 +249,10 @@ public class SpellManager
 			this.p.log.severe("[SkyrimRPG]FAILED TO SAVE SPELLS");
 		}
 	}
+	public void clearData()
+	{
+		spells.clear();
+	}
 	public void loadSpells(Player p)
 	{
 		List<Spell>l = new ArrayList<Spell>();

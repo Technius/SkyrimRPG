@@ -95,10 +95,14 @@ public class SkillManager
 	public void loadData(Player player)
 	{
 		loadSkills(player);
-		SpellManager sm = new SpellManager(p);
-		sm.loadSpells(player);
-		PerkManager pm = new PerkManager(p);
-		pm.loadPerks(player);
+		p.getSpellManager().loadSpells(player);
+		p.getPerkManager().loadPerks(player);
+	}
+	public void clearData()
+	{
+		skills.clear();
+		progress.clear();
+		level.clear();
 	}
 	public void loadSkills(Player player)
 	{

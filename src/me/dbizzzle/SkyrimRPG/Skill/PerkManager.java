@@ -160,4 +160,9 @@ public class PerkManager
 		HashMap<Perk, Integer> pt = new HashMap<Perk, Integer>();
 		perks.put(player, pt);
 	}
+	public void clearData()
+	{
+		perks.clear();
+		points.clear();
+	}
 }

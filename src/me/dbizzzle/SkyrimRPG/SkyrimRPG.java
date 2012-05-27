@@ -80,6 +80,9 @@ public class SkyrimRPG extends JavaPlugin
 	{
 		for(Player p: this.getServer().getOnlinePlayers())sk.saveData(p);
 		log.info("[SkyrimRPG] Plugin disabled.");
+		sk.clearData();
+		sm.clearData();
+		pm.clearData();
 	}
 	public boolean checkFiles()
 	{
