@@ -83,7 +83,7 @@ public class SRPGL implements Listener
 					Door d = (Door) btype.getNewData(event.getClickedBlock().getData());
 					if(!d.isOpen())
 					{
-						SkillManager sm = new SkillManager();
+						SkillManager sm = plugin.getSkillManager();
 						if(pickLockSuccess(event.getPlayer()))
 						{
 							d.setOpen(true);
@@ -164,7 +164,7 @@ public class SRPGL implements Listener
 							String bl = l.getX() + "," + l.getY() + "," + l.getZ();
 							plugin.debug("Lockpicking: result=fail, player=" + event.getPlayer() + ", block=" + bl + " , world=" + l.getWorld());
 						}
-						SkillManager sm = new SkillManager();
+						SkillManager sm = plugin.getSkillManager();
 						sm.calculateLevel(event.getPlayer(), Skill.LOCKPICKING);
 					}
 				}
@@ -177,7 +177,7 @@ public class SRPGL implements Listener
 							event.getPlayer().sendMessage(ChatColor.RED + "You don't feel comfortable attempting to pick locks right now");
 							return;
 						}
-						SkillManager sm = new SkillManager();
+						SkillManager sm = plugin.getSkillManager();
 						if(pickLockSuccess(event.getPlayer()))
 						{
 							net.minecraft.server.TileEntityChest c = (net.minecraft.server.TileEntityChest)((org.bukkit.craftbukkit.CraftWorld)event.getPlayer().getWorld()).getTileEntityAt(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ());
@@ -273,7 +273,7 @@ public class SRPGL implements Listener
 				{
 					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + ents + "!");
 					((Player)ent).sendMessage(ChatColor.RED + se.getName() + " tried to pickpocket you!");
-					SkillManager sm = new SkillManager();
+					SkillManager sm = plugin.getSkillManager();
 					sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
 					plugin.debug("Pickpocketing: result=fail, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
 					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), ConfigManager.PickpocketingCooldown);
@@ -282,7 +282,7 @@ public class SRPGL implements Listener
 				s.openContainer(pick.inventory);
 				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
 				plugin.debug("Pickpocketing: result=success, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
-				SkillManager sm = new SkillManager();
+				SkillManager sm = plugin.getSkillManager();
 				sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
 				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 					@SuppressWarnings("deprecation")
@@ -303,15 +303,12 @@ public class SRPGL implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		SkillManager sm = new SkillManager(plugin);
-		sm.loadData(event.getPlayer());
+		plugin.getSkillManager().loadData(event.getPlayer());
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
-		SkillManager sm = new SkillManager();
-		sm.setPlugin(plugin);
-		sm.saveData(event.getPlayer());
+		plugin.getSkillManager().saveData(event.getPlayer());
 	}
 
 	public boolean pickLockSuccess(Player pla)
@@ -435,7 +432,7 @@ public class SRPGL implements Listener
 				Arrow a = (Arrow)e.getDamager();
 				if(a.getShooter() instanceof Player)
 				{
-					SkillManager sm = new SkillManager();
+					SkillManager sm = plugin.getSkillManager();
 					Player shooter = (Player)a.getShooter();
 					int alevel = SkillManager.getSkillLevel(Skill.ARCHERY, shooter);
 					double perkm = 1;
@@ -451,7 +448,7 @@ public class SRPGL implements Listener
 			}
 			else if(e.getDamager() instanceof Player)
 			{
-				SkillManager sm = new SkillManager();
+				SkillManager sm = plugin.getSkillManager();
 				Player player = (Player)e.getDamager();
 				if(SpellManager.czombie.containsKey(player))
 				{
@@ -515,7 +512,7 @@ public class SRPGL implements Listener
 						int alevel = SkillManager.getSkillLevel(Skill.DESTRUCTION, player)/20;
 						int damage = 1 + alevel;
 						e.setDamage(damage);
-						SkillManager sm = new SkillManager();
+						SkillManager sm = plugin.getSkillManager();
 						sm.calculateLevel(player, Skill.DESTRUCTION);
 					}
 				}
@@ -536,7 +533,7 @@ public class SRPGL implements Listener
 						{
 							((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, plevel + 20, 1));
 						}
-						SkillManager sm = new SkillManager();
+						SkillManager sm = plugin.getSkillManager();
 						sm.calculateLevel(player, Skill.DESTRUCTION);
 					}
 				}
@@ -544,7 +541,7 @@ public class SRPGL implements Listener
 			if(e.getEntity() instanceof Player)
 			{
 				Player player = (Player)e.getEntity();
-				SkillManager sm = new SkillManager();
+				SkillManager sm = plugin.getSkillManager();
 				if(player.isBlocking() && ToolComparer.getType(player.getItemInHand()).equalsIgnoreCase("Sword"))
 				{
 					int alevel = SkillManager.getSkillLevel(Skill.BLOCKING, player);
@@ -623,7 +620,7 @@ public class SRPGL implements Listener
 			l.setFireTicks(60);
 			sp = sp+1;
 		}
-		SkillManager sm = new SkillManager();
+		SkillManager sm = plugin.getSkillManager();
 		sm.calculateLevel(p, Skill.DESTRUCTION);
 		SpellManager.ftracker.remove(f);
 	}

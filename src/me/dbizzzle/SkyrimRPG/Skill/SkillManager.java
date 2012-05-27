@@ -24,11 +24,7 @@ public class SkillManager
 	public static HashMap<Player, HashMap<Skill, Integer>> skills = new HashMap<Player, HashMap<Skill, Integer>>();
 	public static HashMap<Player, HashMap<Skill, Integer>> progress = new HashMap<Player, HashMap<Skill, Integer>>();
 	public static HashMap<Player, Integer> level = new HashMap<Player,Integer>();
-	SkyrimRPG p = null;
-	public SkillManager()
-	{
-		
-	}
+	private SkyrimRPG p = null;
 	public SkillManager(SkyrimRPG a)
 	{
 		p = a;
@@ -202,10 +198,6 @@ public class SkillManager
 	public static int getSkillLevel(Skill skill, Player player)
 	{
 		return skills.get(player).get(skill).intValue();
-	}
-	public void setPlugin(SkyrimRPG plugin)
-	{
-		p = plugin;
 	}
 	public void saveSkills(Player player)
 	{
