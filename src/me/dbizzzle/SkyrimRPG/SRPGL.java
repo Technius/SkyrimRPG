@@ -571,7 +571,9 @@ public class SRPGL implements Listener
 						sm.calculateLevel(player, Skill.ARMOR);
 						i ++;
 					}
-					double d = red*alevel*0.75;
+					double d = red*alevel*1.25;
+					//0.5 full diamond at level 84: 0.75
+					//0.5 full diamond at level 50: 1.25
 					if(d > 0.5)d = 0.5;
 					plugin.debug("Armor: player=" + player.getName() + ", damage=" + e.getDamage() + ", blocked%=" + (d*100));
 					e.setDamage((int) (event.getDamage() - event.getDamage()*d));
