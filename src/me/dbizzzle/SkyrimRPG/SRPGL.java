@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import me.dbizzzle.SkyrimRPG.Skill.Perk;
-import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import net.minecraft.server.EntityPlayer;
@@ -381,9 +380,9 @@ public class SRPGL implements Listener
 					Player t = (Player)e;
 					int alevel = SkillManager.skills.get(player).get(Skill.SNEAK);
 					double dmul = 1.0;
-					if(PerkManager.perks.get(player).containsKey(Perk.STEALTH))
+					if(plugin.getPerkManager().hasPerk(player, Perk.STEALTH))
 					{
-						dmul = 1.15 + 0.05*PerkManager.perks.get(player).get(Perk.STEALTH);
+						dmul = 1.15 + 0.05*plugin.getPerkManager().getPerkLevel(player, Perk.STEALTH);
 					}
 					double d = e.getLocation().distance(player.getLocation());
 					if(d + dmul*(10 + alevel/5) >= 70)
@@ -436,9 +435,9 @@ public class SRPGL implements Listener
 					Player shooter = (Player)a.getShooter();
 					int alevel = plugin.getSkillManager().getSkillLevel(Skill.ARCHERY, shooter);
 					double perkm = 1;
-					if(PerkManager.perks.get(shooter).containsKey(Perk.OVERDRAW))
+					if(plugin.getPerkManager().hasPerk(shooter, Perk.OVERDRAW))
 					{
-						perkm = 1 + (0.2*(PerkManager.perks.get(shooter).get(Perk.OVERDRAW)));
+						perkm = 1 + (0.2*plugin.getPerkManager().getPerkLevel(shooter, Perk.OVERDRAW));
 					}
 					e.setDamage((int)((e.getDamage() + (alevel/10))*(1 + perkm)));
 					sm.calculateLevel(shooter, Skill.ARCHERY);
@@ -473,14 +472,14 @@ public class SRPGL implements Listener
 				{
 					int alevel = plugin.getSkillManager().getSkillLevel(Skill.SWORDSMANSHIP, player);
 					double perkm = 1;
-					if(PerkManager.perks.get(player).containsKey(Perk.SWORDSMAN))
+					if(plugin.getPerkManager().hasPerk(player, Perk.SWORDSMAN))
 					{
-						perkm = 1 + (0.2*(PerkManager.perks.get(player).get(Perk.SWORDSMAN)));
+						perkm = 1 + (0.2*plugin.getPerkManager().getPerkLevel(player, Perk.SWORDSMAN));
 					}
-					if(PerkManager.perks.get(player).containsKey(Perk.BLADESMAN))
+					if(plugin.getPerkManager().hasPerk(player, Perk.BLADESMAN))
 					{
 						int a = new Random().nextInt(100);
-						if(a < 5 + (5*PerkManager.perks.get(player).get(Perk.BLADESMAN)))perkm = perkm + 0.25 + (PerkManager.perks.get(player).get(Perk.BLADESMAN)*0.083);
+						if(a < 5 + (5*plugin.getPerkManager().getPerkLevel(player, Perk.BLADESMAN)))perkm = perkm + 0.25 + plugin.getPerkManager().getPerkLevel(player, Perk.BLADESMAN);
 					}
 					e.setDamage((int)(e.getDamage() + (alevel/10)*perkm));
 					sm.calculateLevel(player, Skill.SWORDSMANSHIP);
@@ -546,11 +545,11 @@ public class SRPGL implements Listener
 				{
 					int alevel = plugin.getSkillManager().getSkillLevel(Skill.BLOCKING, player);
 					double perkm = 1.0;
-					if(PerkManager.perks.get(player).containsKey(Perk.SWORD_WALL))
+					if(plugin.getPerkManager().hasPerk(player, Perk.SWORD_WALL))
 					{
-						perkm = 1 + (0.1*(PerkManager.perks.get(player).get(Perk.SWORD_WALL)));
+						perkm = 1 + (0.1*plugin.getPerkManager().getPerkLevel(player, Perk.SWORD_WALL));
 					}
-					if(PerkManager.perks.get(player).containsKey(Perk.DEFLECT_ARROWS) && e.getDamager() instanceof Arrow)
+					if(plugin.getPerkManager().hasPerk(player, Perk.DEFLECT_ARROWS) && e.getDamager() instanceof Arrow)
 					{
 						e.setDamage(0);
 						plugin.debug("Blocking: player=" + player.getName() + ", damage=" + event.getDamage() + ", blocked=DEFLECT_ARROWS PERK");

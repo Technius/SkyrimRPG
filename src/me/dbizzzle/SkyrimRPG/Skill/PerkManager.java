@@ -20,7 +20,7 @@ public class PerkManager
 	{
 		p = s;
 	}
-	public static HashMap<Player, HashMap<Perk, Integer>> perks = new HashMap<Player, HashMap<Perk, Integer>>();
+	private HashMap<Player, HashMap<Perk, Integer>> perks = new HashMap<Player, HashMap<Perk, Integer>>();
 	private HashMap<Player, Integer>points = new HashMap<Player, Integer>();
 	public int getPoints(Player player)
 	{
@@ -41,6 +41,11 @@ public class PerkManager
 		if(perk.getRequiedPerk() != null && !perks.get(player).containsKey(perk.getRequiedPerk()))return false;
 		return true;
 	}
+	public Perk[] getPerks(Player player)
+	{
+		java.util.Set<Perk> s = perks.get(player).keySet();
+		return s.toArray(new Perk[s.size()]);
+	}
 	public void unlock(Player player, Perk perk, int level)
 	{
 		perks.get(player).put(perk, level);
@@ -51,6 +56,25 @@ public class PerkManager
 		List<Perk> l = new ArrayList<Perk>();
 		for(Perk as:Perk.values())if(as.getSkill() == s)l.add(as);
 		return l;
+	}
+	public boolean hasPerk(Player player, Perk perk)
+	{
+		return perks.get(player).containsKey(perk);
+	}
+	public void addPerk(Player player, Perk perk, int level)
+	{
+		if(level > perk.getMaxLevel())throw new IllegalArgumentException("The perk" + perk.getName() + " has a maximum level of" + level);
+		if(level <= 0)throw new IllegalArgumentException("Perk level for " + perk.getName() + " must be between 1 and " + perk.getMaxLevel());
+		perks.get(player).put(perk, level);
+	}
+	public boolean removePerk(Player player, Perk perk)
+	{
+		return perks.get(player).remove(perk) != null;
+	}
+	public int getPerkLevel(Player player, Perk perk)
+	{
+		if(!hasPerk(player, perk))return 0;
+		return perks.get(player).get(perk);
 	}
 	public void loadPerks(Player player)
 	{
@@ -92,7 +116,7 @@ public class PerkManager
 					}
 					pt.put(p, level);
 				}
-				PerkManager.perks.put(player, pt);
+				this.perks.put(player, pt);
 			}
 			catch(IOException ioe)
 			{
@@ -118,9 +142,9 @@ public class PerkManager
 			BufferedWriter bw = new BufferedWriter(new FileWriter(plist));
 			bw.write("#Don't edit this unless you like errors");
 			bw.newLine();
-			for(Perk p:PerkManager.perks.get(player).keySet())
+			for(Perk p:this.perks.get(player).keySet())
 			{
-				bw.write(p.toString() + "," + PerkManager.perks.get(player).get(p));
+				bw.write(p.toString() + "," + this.perks.get(player).get(p));
 				bw.newLine();
 			}
 			bw.flush();
