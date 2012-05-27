@@ -24,7 +24,7 @@ public class PerkManager
 	public static HashMap<Player, Integer>points = new HashMap<Player, Integer>();
 	public int getPoints(Player player)
 	{
-		return SkillManager.level.get(player) - points.get(player) - 1;
+		return p.getSkillManager().getLevel(player) - points.get(player) - 1;
 	}
 	public boolean hasEnough(Player player)
 	{
