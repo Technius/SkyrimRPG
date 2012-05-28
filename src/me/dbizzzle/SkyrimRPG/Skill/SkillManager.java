@@ -253,10 +253,8 @@ public class SkillManager
 	public void saveData(Player player)
 	{
 		saveSkills(player);
-		SpellManager sm = new SpellManager(p);
-		sm.saveSpells(player);
-		PerkManager pm = new PerkManager(p);
-		pm.savePerks(player);
+		p.getSpellManager().saveSpells(player);
+		p.getPerkManager().savePerks(player);
 	}
 	public void resetSkills(Player player)
 	{
