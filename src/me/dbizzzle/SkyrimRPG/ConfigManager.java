@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import me.dbizzzle.SkyrimRPG.Skill.Skill;
+
 import org.bukkit.World;
 
 public class ConfigManager 
@@ -28,6 +30,7 @@ public class ConfigManager
 	public static boolean debug = false;
 	public static boolean announceDevBuild = true;
 	public static ArrayList<World> disabledWorlds = new ArrayList<World>();
+	public static ArrayList<Skill> disabledSkills = new ArrayList<Skill>();
 	SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
@@ -114,6 +117,16 @@ public class ConfigManager
 						if(w != null && !disabledWorlds.contains(w))disabledWorlds.add(w);
 					}
 				}
+				else if(tokens[0].equalsIgnoreCase("disabledskills"))
+				{
+					String[] a = tokens[1].split("[,]+");
+					for(String x:a)
+					{
+						Skill s;
+						try{s = Skill.valueOf(x.toUpperCase().replaceAll(" ", ""));}catch(IllegalArgumentException iae){continue;}
+						if(!disabledSkills.contains(s))disabledSkills.add(s);
+					}
+				}
 			}
 			br.close();
 		}
@@ -198,6 +211,14 @@ public class ConfigManager
 				else a = a + "," + w.getName();
 			}
 			bw.write("disabledWorlds: " + a);
+			bw.newLine();
+			a = " ";
+			for(Skill s:disabledSkills)
+			{
+				if(a.isEmpty())a = s.toString();
+				else a = a + "," + s.toString();
+			}
+			bw.write("disabledSkills: " + a);
 			bw.newLine();
 			bw.flush();
 			bw.close();

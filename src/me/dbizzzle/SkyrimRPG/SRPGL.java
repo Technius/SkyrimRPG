@@ -426,7 +426,7 @@ public class SRPGL implements Listener
 		{
 			EntityDamageByEntityEvent e = (EntityDamageByEntityEvent)event;
 			if(e.getDamager() instanceof Player && e.getEntity() instanceof Player && !event.getEntity().getWorld().getPVP())return;
-			if((e.getDamager() instanceof Arrow))
+			if((e.getDamager() instanceof Arrow) && !ConfigManager.disabledSkills.contains(Skill.ARCHERY))
 			{
 				Arrow a = (Arrow)e.getDamager();
 				if(a.getShooter() instanceof Player)
@@ -468,7 +468,7 @@ public class SRPGL implements Listener
 				}
 				String t = ToolComparer.getType(player.getItemInHand());
 				if(t == null) return;
-				if(t.equalsIgnoreCase("Sword"))
+				if(t.equalsIgnoreCase("Sword") && !ConfigManager.disabledSkills.contains(Skill.SWORDSMANSHIP))
 				{
 					int alevel = plugin.getSkillManager().getSkillLevel(Skill.SWORDSMANSHIP, player);
 					double perkm = 1;
@@ -484,7 +484,7 @@ public class SRPGL implements Listener
 					e.setDamage((int)(e.getDamage() + (alevel/10)*perkm));
 					sm.calculateLevel(player, Skill.SWORDSMANSHIP);
 				}
-				else if(t.equalsIgnoreCase("Axe"))
+				else if(t.equalsIgnoreCase("Axe") && !ConfigManager.disabledSkills.contains(Skill.AXECRAFT))
 				{
 					int alevel = plugin.getSkillManager().getSkillLevel(Skill.AXECRAFT, player);
 					int crit = new Random().nextInt(99);
@@ -541,7 +541,7 @@ public class SRPGL implements Listener
 			{
 				Player player = (Player)e.getEntity();
 				SkillManager sm = plugin.getSkillManager();
-				if(player.isBlocking() && ToolComparer.getType(player.getItemInHand()).equalsIgnoreCase("Sword"))
+				if(player.isBlocking() && ToolComparer.getType(player.getItemInHand()).equalsIgnoreCase("Sword") && !ConfigManager.disabledSkills.contains(Skill.BLOCKING))
 				{
 					int alevel = plugin.getSkillManager().getSkillLevel(Skill.BLOCKING, player);
 					double perkm = 1.0;
@@ -559,7 +559,7 @@ public class SRPGL implements Listener
 					sm.calculateLevel(player, Skill.BLOCKING);
 				}
 				double red;
-				if((red = getDamageReduced(player)) > 0)
+				if((red = getDamageReduced(player)) > 0 && !ConfigManager.disabledSkills.contains(Skill.ARMOR))
 				{
 					int a = armorCount(player);
 					int i = 0;
