@@ -268,7 +268,7 @@ public class SRPGL implements Listener
 				EntityPlayer pick = ((CraftPlayer) plugin.getServer().getPlayer(ents)).getHandle();
 				Random r = new Random();
 				int c = r.nextInt(100) + 1;
-				if(c > SkillManager.progress.get(se).get(Skill.PICKPOCKETING) && ConfigManager.enablePickpocketingChance)
+				if(c > plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, se) && ConfigManager.enablePickpocketingChance)
 				{
 					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + ents + "!");
 					((Player)ent).sendMessage(ChatColor.RED + se.getName() + " tried to pickpocket you!");
