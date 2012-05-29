@@ -47,7 +47,8 @@ public class DiseaseManager
 	
 	public void brainRot(Player p)
 	{
-		SpellManager.magicka.put(p, SpellManager.magicka.get(p) - 25);
+		//fix later
+		//SpellManager.magicka.put(p, SpellManager.magicka.get(p) - 25);
 	}
 	
 	public void cureDisease(Player p, Disease d)

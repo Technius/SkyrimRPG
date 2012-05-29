@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
-import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Blaze;
@@ -34,13 +33,26 @@ public class SpellManager
 	public static HashMap<Player, List<Spell>>spells = new HashMap<Player, List<Spell>>();
 	public static HashMap<Player, Spell>boundleft = new HashMap<Player,Spell>();
 	public static HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
-	public static HashMap<Player, Integer>magicka = new HashMap<Player,Integer>();
+	private HashMap<Player, Integer>magicka = new HashMap<Player,Integer>();
 	public static List<SmallFireball>flames = new ArrayList<SmallFireball>();
 	public static List<Snowball>frostbite = new ArrayList<Snowball>();
 	SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{
 		this.p = p;
+	}
+	public int getMagicka(Player player)
+	{
+		return magicka.get(player);
+	}
+	public void setMagicka(Player player, int magicka)
+	{
+		this.magicka.put(player, magicka);
+	}
+	public void subtractMagicka(Player player, int magicka)
+	{
+		if(this.magicka.get(player) - magicka < 0)this.magicka.put(player, 0);
+		else this.magicka.put(player, this.magicka.get(player) - magicka);
 	}
 	public void cflameatronach(Player player)
 	{
@@ -193,7 +205,7 @@ public class SpellManager
 	}
 	public boolean hasEnough(Player p, int magicka)
 	{
-		if(SpellManager.magicka.get(p) >= magicka)return true;
+		if(this.magicka.get(p) >= magicka)return true;
 		else return false;
 	}
 	public void addSpell(Player p, Spell s)

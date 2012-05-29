@@ -195,7 +195,7 @@ public class SkillManager
 			progress.put(player, pr);
 			level.put(player, tl);
 			p.getPerkManager().setPoints(player, pp);
-			SpellManager.magicka.put(player, m);
+			p.getSpellManager().setMagicka(player, m);
 			br.close();
 		}
 		catch(IOException ioe)
@@ -229,7 +229,7 @@ public class SkillManager
 			bw.newLine();
 			bw.write("#Magicka");
 			bw.newLine();
-			bw.write("Magicka: " + SpellManager.magicka.get(player));
+			bw.write("Magicka: " + p.getSpellManager().getMagicka(player));
 			bw.newLine();
 			bw.write("#SPENT Perk Points");
 			bw.newLine();
@@ -270,7 +270,7 @@ public class SkillManager
 		level.put(player, 1);
 		p.getPerkManager().setPoints(player, 0);
 		p.getPerkManager().defaultPerks(player);
-		SpellManager.magicka.put(player, 0);
+		p.getSpellManager().setMagicka(player, 0);
 	}
 	private void loadSkill(String[] tokens, Skill skill, HashMap<Skill, Integer> pr, HashMap<Skill, Integer> sk)
 	{

@@ -428,7 +428,7 @@ public class SkyrimCmd implements CommandExecutor
 					player.sendMessage(ChatColor.GOLD + "Stats Page 1 of 2");
 					player.sendMessage(ChatColor.RED + "Combat" + ChatColor.WHITE + "|" + ChatColor.BLUE + "Magic" + ChatColor.WHITE + "|" + ChatColor.GRAY + "Stealth");
 					player.sendMessage(ChatColor.GREEN + "Level: " + plugin.getSkillManager().getLevel(player));
-					player.sendMessage(ChatColor.BLUE + "Magicka: " + SpellManager.magicka.get(player));
+					player.sendMessage(ChatColor.BLUE + "Magicka: " + plugin.getSpellManager().getMagicka(player));
 					player.sendMessage(ChatColor.RED + "Archery: Level " + plugin.getSkillManager().getSkillLevel(Skill.ARCHERY, player));
 					player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + plugin.getSkillManager().getSkillLevel(Skill.SWORDSMANSHIP, player));
 					player.sendMessage(ChatColor.RED + "Axecraft: Level " + plugin.getSkillManager().getSkillLevel(Skill.AXECRAFT, player));
