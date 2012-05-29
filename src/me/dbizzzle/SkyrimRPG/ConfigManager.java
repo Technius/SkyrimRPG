@@ -212,7 +212,7 @@ public class ConfigManager
 			}
 			bw.write("disabledWorlds: " + a);
 			bw.newLine();
-			a = " ";
+			a = "";
 			for(Skill s:disabledSkills)
 			{
 				if(a.isEmpty())a = s.toString();
