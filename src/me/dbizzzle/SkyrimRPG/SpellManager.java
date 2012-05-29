@@ -56,58 +56,37 @@ public class SpellManager
 	}
 	public void cflameatronach(Player player)
 	{
-		if(!hasEnough(player, 100))
-		{
-			magickaWarning(player, "Conjure Flame Atronach");
-			return;
-		}
-		else
-		{
-			magicka.put(player, magicka.get(player) - 100);
-			if(conjured.containsKey(player))conjured.get(player).remove();
-			Blaze blaze = (Blaze)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.BLAZE);
-			int alevel = p.getSkillManager().getSkillLevel(Skill.CONJURATION, player);
-			blaze.setHealth(blaze.getHealth()/2 + alevel/10);
-			conjured.put(player, blaze);
-			player.sendMessage("You conjure up a flame atronach to fight for you");
-		}
+		if(!checkMagicka(player, Spell.CONJURE_FLAME_ATRONACH))return;
+		magicka.put(player, magicka.get(player) - 100);
+		if(conjured.containsKey(player))conjured.get(player).remove();
+		Blaze blaze = (Blaze)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.BLAZE);
+		int alevel = p.getSkillManager().getSkillLevel(Skill.CONJURATION, player);
+		blaze.setHealth(blaze.getHealth()/2 + alevel/10);
+		conjured.put(player, blaze);
+		player.sendMessage("You conjure up a flame atronach to fight for you");
 	}
 	public void heal(Player p)
 	{
-		if(!hasEnough(p, 20))
-		{
-			magickaWarning(p, "Healing");
-			return;
-		}
-		else
-		{
-			magicka.put(p, magicka.get(p) - 20);
-			int health = this.p.getSkillManager().getSkillLevel(Skill.RESTORATION, p)/20 + 2;
-			if(health + p.getHealth() > 20)health = 20 - p.getHealth();
-			p.setHealth(health + p.getHealth());
-			p.sendMessage(ChatColor.GREEN + "You are healed for " + health/2 + " hearts");
-		}
+		if(!checkMagicka(p, Spell.HEALING))return;
+		magicka.put(p, magicka.get(p) - 20);
+		int health = this.p.getSkillManager().getSkillLevel(Skill.RESTORATION, p)/20 + 2;
+		if(health + p.getHealth() > 20)health = 20 - p.getHealth();
+		p.setHealth(health + p.getHealth());
+		p.sendMessage(ChatColor.GREEN + "You are healed for " + health/2 + " hearts");
 	}
 	public void flames(Player player)
 	{
-		if(!hasEnough(player, 20))
+		if(!checkMagicka(player, Spell.FLAMES))return;
+		subtractMagicka(player, 20);
+		final Vector direction = player.getEyeLocation().getDirection().multiply(2);
+		for(int i = 0;i < 3; i++)
 		{
-			magickaWarning(player, "Flames");
-			return;
-		}
-		else
-		{
-			magicka.put(player, magicka.get(player) - 20);
-			final Vector direction = player.getEyeLocation().getDirection().multiply(2);
-			for(int i = 0;i < 3; i++)
-			{
-				SmallFireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), SmallFireball.class);
-				fireball.setShooter(player);
-				fireball.setVelocity(direction.multiply(0.25));
-				fireball.setYield(0);
-				fireball.setIsIncendiary(false);
-				flames.add(fireball);
-			}
+			SmallFireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), SmallFireball.class);
+			fireball.setShooter(player);
+			fireball.setVelocity(direction.multiply(0.25));
+			fireball.setYield(0);
+			fireball.setIsIncendiary(false);
+			flames.add(fireball);
 		}
 	}
 	public void shootFireball(Player shooter, int multiplier)
@@ -122,43 +101,29 @@ public class SpellManager
 	}
 	public void frostBite(Player player)
 	{
-		if(!hasEnough(player, 25))
+		if(!checkMagicka(player, Spell.FROSTBITE))return;
+		magicka.put(player, magicka.get(player) - 25);
+		for(int i = 0;i < 3; i++)
 		{
-			magickaWarning(player, "Frostbite");
-			return;
-		}
-		else
-		{
-			magicka.put(player, magicka.get(player) - 25);
-			for(int i = 0;i < 3; i++)
-			{
-				Snowball snowball = player.launchProjectile(Snowball.class);
-				snowball.setShooter(player);
-				double y = snowball.getVelocity().getY();
-				Vector v = snowball.getVelocity().multiply(2.5);
-				v.setY(y);
-				snowball.setVelocity(v);
+			Snowball snowball = player.launchProjectile(Snowball.class);
+			snowball.setShooter(player);
+			double y = snowball.getVelocity().getY();
+			Vector v = snowball.getVelocity().multiply(2.5);
+			v.setY(y);
+			snowball.setVelocity(v);
 				frostbite.add(snowball);
-			}
 		}
 	}
 	public void raiseZombie(Player player)
 	{
-		if(!hasEnough(player, 90))
-		{
-			magickaWarning(player, "Raise Zombie");
-			return;
-		}
-		else
-		{
-			player.sendMessage("You conjure up a zombie follower to fight for you");
-			magicka.put(player, magicka.get(player) - 60);
-			if(czombie.containsKey(player))czombie.get(player).remove();
-			Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.ZOMBIE);
-			int alevel = p.getSkillManager().getSkillLevel(Skill.CONJURATION, player);
-			zombie.setHealth(zombie.getHealth()/2 + alevel/10);
-			czombie.put(player,zombie);
-		}
+		if(!checkMagicka(player, Spell.RAISE_ZOMBIE))return;
+		player.sendMessage("You conjure up a zombie follower to fight for you");
+		magicka.put(player, magicka.get(player) - 60);
+		if(czombie.containsKey(player))czombie.get(player).remove();
+		Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.ZOMBIE);
+		int alevel = p.getSkillManager().getSkillLevel(Skill.CONJURATION, player);
+		zombie.setHealth(zombie.getHealth()/2 + alevel/10);
+		czombie.put(player,zombie);
 	}
 	public boolean hasSpell(Player player, Spell spell)
 	{
@@ -167,6 +132,15 @@ public class SpellManager
 	public void resetSpells(Player player)
 	{
 		spells.put(player, new ArrayList<Spell>());
+	}
+	private boolean checkMagicka(Player player, Spell spell)
+	{
+		if(magicka.get(player) < spell.getBaseCost())
+		{
+			player.sendMessage(ChatColor.RED + "You need at least " + spell.getBaseCost() + " magicka to cast " + spell.getDisplayName() + "!");
+			return false;
+		}
+		return true;
 	}
 	public boolean castSpell(Spell spell, Player player)
 	{
