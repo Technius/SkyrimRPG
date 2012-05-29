@@ -378,7 +378,7 @@ public class SRPGL implements Listener
 				if(e instanceof Player)
 				{
 					Player t = (Player)e;
-					int alevel = SkillManager.skills.get(player).get(Skill.SNEAK);
+					int alevel = plugin.getSkillManager().getSkillLevel(Skill.SNEAK, t);
 					double dmul = 1.0;
 					if(plugin.getPerkManager().hasPerk(player, Perk.STEALTH))
 					{
@@ -563,7 +563,7 @@ public class SRPGL implements Listener
 				{
 					int a = armorCount(player);
 					int i = 0;
-					double alevel = SkillManager.skills.get(player).get(Skill.ARMOR);
+					double alevel = plugin.getSkillManager().getSkillLevel(Skill.ARMOR, player);
 					if(alevel <= 0)alevel = 0.01;
 					else alevel = alevel/100;
 					while(i < a)

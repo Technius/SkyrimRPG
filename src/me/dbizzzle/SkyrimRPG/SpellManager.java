@@ -70,7 +70,7 @@ public class SpellManager
 		else
 		{
 			magicka.put(p, magicka.get(p) - 20);
-			int health = SkillManager.skills.get(p).get(Skill.RESTORATION)/20 + 2;
+			int health = this.p.getSkillManager().getSkillLevel(Skill.RESTORATION, p)/20 + 2;
 			if(health + p.getHealth() > 20)health = 20 - p.getHealth();
 			p.setHealth(health + p.getHealth());
 			p.sendMessage(ChatColor.GREEN + "You are healed for " + health/2 + " hearts");

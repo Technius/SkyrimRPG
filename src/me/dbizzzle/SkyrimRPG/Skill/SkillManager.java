@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
 public class SkillManager 
 {
 	Logger log = Logger.getLogger("Minecraft");
-	public static HashMap<Player, HashMap<Skill, Integer>> skills = new HashMap<Player, HashMap<Skill, Integer>>();
+	private HashMap<Player, HashMap<Skill, Integer>> skills = new HashMap<Player, HashMap<Skill, Integer>>();
 	private HashMap<Player, HashMap<Skill, Integer>> progress = new HashMap<Player, HashMap<Skill, Integer>>();
 	private HashMap<Player, Integer> level = new HashMap<Player,Integer>();
 	private SkyrimRPG p = null;
