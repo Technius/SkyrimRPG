@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 import me.dbizzzle.SkyrimRPG.ConfigManager;
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
-import me.dbizzzle.SkyrimRPG.SpellManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
