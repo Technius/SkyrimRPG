@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class DiseaseManager 
 {
-	public static HashMap<Player, List<Disease>> diseasePlayer = new HashMap<Player, List<Disease>>();
+	public HashMap<Player, List<Disease>> diseasePlayer = new HashMap<Player, List<Disease>>();
 	
 	public enum Disease
 	{
@@ -39,7 +39,7 @@ public class DiseaseManager
 		return diseasePlayer.get(p).contains(d);
 	}
 	
-	public static void addDisease(Player p, Disease d)
+	public void addDisease(Player p, Disease d)
 	{
 		if(!diseasePlayer.get(p).contains(d))
 			diseasePlayer.get(p).add(d);
