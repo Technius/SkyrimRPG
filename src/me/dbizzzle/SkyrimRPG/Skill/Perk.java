@@ -5,9 +5,11 @@ package me.dbizzzle.SkyrimRPG.Skill;
  */
 public enum Perk 
 {
-	OVERDRAW(Skill.ARCHERY, 5, null, 20, 40, 60, 80, 100), SWORDSMAN(Skill.SWORDSMANSHIP, 5, null, 20, 40, 60, 80, 100),
-	BLADESMAN(Skill.SWORDSMANSHIP, 3, Perk.SWORDSMAN, 30 , 60, 90), SWORD_WALL(Skill.BLOCKING, 5, null, 20, 40, 60, 80, 100)
-	, DEFLECT_ARROWS(Skill.BLOCKING, 1, Perk.SWORD_WALL, 30), STEALTH(Skill.SNEAK, 5, null, 20, 40, 60, 80, 100);
+	OVERDRAW(Skill.ARCHERY, 5, null, 20, 40, 60, 80, 100),
+	SWORDSMAN(Skill.SWORDSMANSHIP, 5, null, 20, 40, 60, 80, 100),BLADESMAN(Skill.SWORDSMANSHIP, 3, Perk.SWORDSMAN, 30 , 60, 90), 
+	SWORD_WALL(Skill.BLOCKING, 5, null, 20, 40, 60, 80, 100), 
+	DEFLECT_ARROWS(Skill.BLOCKING, 1, Perk.SWORD_WALL, 30), STEALTH(Skill.SNEAK, 5, null, 20, 40, 60, 80, 100),
+	LIGHT_FINGERS(Skill.PICKPOCKETING, 5, null, 20, 40, 60, 80, 100);
 	private Skill parent;
 	private int maxlevel;
 	private int[] reqskilllvl;

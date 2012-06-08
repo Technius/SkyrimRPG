@@ -250,10 +250,11 @@ public class SRPGL implements Listener
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if(ConfigManager.disabledWorlds.contains(event.getPlayer().getWorld()))return;
 		Player se = event.getPlayer();
-		final EntityPlayer s = ((CraftPlayer) event.getPlayer()).getHandle();
+		final EntityPlayer s = ((CraftPlayer)se).getHandle();
 		if (s.isSneaking() && ConfigManager.enablePickpocketing) {
 			Entity ent = event.getRightClicked();
 			if (ent instanceof Player) {
+				final Player victim = (Player) ent;
 				if(ppcd.contains(se) && ConfigManager.enablePpCd)
 				{
 					se.sendMessage(ChatColor.RED + "You are too afraid to pickpocket someone right now");
@@ -263,17 +264,20 @@ public class SRPGL implements Listener
 				if(((Player)ent).hasPermission("skyrimrpg.nopickpocket"))
 				{
 					se.sendMessage(ChatColor.RED + "You probably don't want to pickpocket this person.");
-					plugin.debug("Pickpocketing: result=denied, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
+					plugin.debug("Pickpocketing: result=denied, player=" + se.getName() + ", " + "target= " + victim.getName());
 					return;
 				}
-				final String ents = ((Player) ent).getName();
-				EntityPlayer pick = ((CraftPlayer) plugin.getServer().getPlayer(ents)).getHandle();
+				EntityPlayer pick = ((CraftPlayer) victim).getHandle();
 				Random r = new Random();
-				int c = r.nextInt(100) + 1;
-				if(c > plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, se) && ConfigManager.enablePickpocketingChance)
+				double c = r.nextInt(100) + 1;
+				double mul = 1.0;
+				if(plugin.getPerkManager().hasPerk(se, Perk.LIGHT_FINGERS))mul = mul + (0.2*plugin.getPerkManager().getPerkLevel(se, Perk.LIGHT_FINGERS));
+				mul = mul - (0.25*plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, victim));
+				c = c * mul;
+				if(c > plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, se)&& ConfigManager.enablePickpocketingChance)
 				{
-					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + ents + "!");
-					((Player)ent).sendMessage(ChatColor.RED + se.getName() + " tried to pickpocket you!");
+					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + victim.getName() + "!");
+					victim.sendMessage(ChatColor.RED + se.getName() + " tried to pickpocket you!");
 					SkillManager sm = plugin.getSkillManager();
 					sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
 					plugin.debug("Pickpocketing: result=fail, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
@@ -281,18 +285,16 @@ public class SRPGL implements Listener
 					return;
 				}
 				s.openContainer(pick.inventory);
-				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + ents + "!");
+				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + victim.getName() + "!");
 				plugin.debug("Pickpocketing: result=success, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
 				SkillManager sm = plugin.getSkillManager();
 				sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
 				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 					@SuppressWarnings("deprecation")
 					public void run() {
-						Player picked = plugin.getServer().getPlayer(ents);
-						if(picked == null)return;
-						if(!picked.isOnline())return;
-						picked.sendMessage(pickpocketed);
-						picked.updateInventory();
+						if(!victim.isOnline())return;
+						victim.sendMessage(pickpocketed);
+						victim.updateInventory();
 						s.closeInventory();
 					}
 				}, delay);
