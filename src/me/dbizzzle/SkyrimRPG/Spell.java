@@ -9,6 +9,7 @@ public enum Spell
 	private Spell(int id, int basecost)
 	{
 		this.id = id;
+		this.basecost = basecost;
 	}
 	public int getId(Spell s)
 	{
