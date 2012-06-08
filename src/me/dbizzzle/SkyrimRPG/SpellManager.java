@@ -56,7 +56,6 @@ public class SpellManager
 	}
 	public void cflameatronach(Player player)
 	{
-		if(!checkMagicka(player, Spell.CONJURE_FLAME_ATRONACH))return;
 		magicka.put(player, magicka.get(player) - 100);
 		if(conjured.containsKey(player))conjured.get(player).remove();
 		Blaze blaze = (Blaze)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.BLAZE);
@@ -67,7 +66,6 @@ public class SpellManager
 	}
 	public void heal(Player p)
 	{
-		if(!checkMagicka(p, Spell.HEALING))return;
 		magicka.put(p, magicka.get(p) - 20);
 		int health = this.p.getSkillManager().getSkillLevel(Skill.RESTORATION, p)/20 + 2;
 		if(health + p.getHealth() > 20)health = 20 - p.getHealth();
@@ -76,7 +74,6 @@ public class SpellManager
 	}
 	public void flames(Player player)
 	{
-		if(!checkMagicka(player, Spell.FLAMES))return;
 		subtractMagicka(player, 20);
 		final Vector direction = player.getEyeLocation().getDirection().multiply(2);
 		for(int i = 0;i < 3; i++)
@@ -101,7 +98,6 @@ public class SpellManager
 	}
 	public void frostBite(Player player)
 	{
-		if(!checkMagicka(player, Spell.FROSTBITE))return;
 		magicka.put(player, magicka.get(player) - 25);
 		for(int i = 0;i < 3; i++)
 		{
@@ -116,7 +112,6 @@ public class SpellManager
 	}
 	public void raiseZombie(Player player)
 	{
-		if(!checkMagicka(player, Spell.RAISE_ZOMBIE))return;
 		player.sendMessage("You conjure up a zombie follower to fight for you");
 		magicka.put(player, magicka.get(player) - 60);
 		if(czombie.containsKey(player))czombie.get(player).remove();
@@ -144,6 +139,7 @@ public class SpellManager
 	}
 	public boolean castSpell(Spell spell, Player player)
 	{
+		if(!checkMagicka(player, spell))return true;;
 		switch(spell)
 		{
 		case FIREBALL:
