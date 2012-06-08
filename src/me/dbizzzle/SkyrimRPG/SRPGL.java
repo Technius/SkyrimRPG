@@ -214,16 +214,18 @@ public class SRPGL implements Listener
 		{
 			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
 			{
-				if(SpellManager.boundleft.containsKey(event.getPlayer()))
+				Spell s = plugin.getSpellManager().getBoundLeft(event.getPlayer());
+				if(s != null)
 				{
-					plugin.getSpellManager().castSpell(SpellManager.boundleft.get(event.getPlayer()), event.getPlayer());
+					plugin.getSpellManager().castSpell(s, event.getPlayer());
 				}
 			}
 			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
-				if(SpellManager.boundright.containsKey(event.getPlayer()))
+				Spell s = plugin.getSpellManager().getBoundRight(event.getPlayer());
+				if(s != null)
 				{
-					plugin.getSpellManager().castSpell(SpellManager.boundright.get(event.getPlayer()), event.getPlayer());
+					plugin.getSpellManager().castSpell(s, event.getPlayer());
 				}
 			}
 		}

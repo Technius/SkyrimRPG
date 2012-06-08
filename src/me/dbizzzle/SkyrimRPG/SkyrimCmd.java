@@ -45,8 +45,8 @@ public class SkyrimCmd implements CommandExecutor
 					else if(args[0].equalsIgnoreCase("both"))mode = 3;
 					if(args[1].equalsIgnoreCase("none"))
 					{
-						if(mode == 1 ||mode == 3)SpellManager.boundleft.remove(player);
-						if(mode == 2 ||mode == 3)SpellManager.boundright.remove(player);
+						if(mode == 1 ||mode == 3)plugin.getSpellManager().bindLeft(player, null);
+						if(mode == 2 ||mode == 3)plugin.getSpellManager().bindRight(player, null);
 						if(mode == 3)player.sendMessage(ChatColor.GREEN + "Spell bindings removed from both hands");
 						else player.sendMessage(ChatColor.GREEN + "Spell bindings removed from " + (mode == 1 ? "left" : "right") + " hand");
 						return true;
@@ -63,13 +63,13 @@ public class SkyrimCmd implements CommandExecutor
 					{
 						if(s == Spell.FIREBALL)
 						{
-							SpellManager.boundleft.put(player, Spell.FIREBALL);
-							SpellManager.boundright.put(player, Spell.UFIREBALL);
+							plugin.getSpellManager().bindLeft(player, Spell.FIREBALL);
+							plugin.getSpellManager().bindRight(player, Spell.UFIREBALL);
 						}
 						else
 						{
-							if(mode == 1 ||mode == 3)SpellManager.boundleft.put(player, s);
-							if(mode == 2 ||mode == 3)SpellManager.boundright.put(player, s);
+							if(mode == 1 ||mode == 3)plugin.getSpellManager().bindLeft(player, s);
+							if(mode == 2 ||mode == 3)plugin.getSpellManager().bindRight(player, s);
 						}
 						String sl = s.toString().toLowerCase().replaceAll("_", " ");
 						String[] st = sl.split("[ ]");

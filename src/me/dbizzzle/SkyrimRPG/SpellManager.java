@@ -31,8 +31,8 @@ public class SpellManager
 	public static HashMap<Player, Zombie>czombie = new HashMap<Player,Zombie>();
 	public static HashMap<Player, LivingEntity>conjured = new HashMap<Player, LivingEntity>();
 	public static HashMap<Player, List<Spell>>spells = new HashMap<Player, List<Spell>>();
-	public static HashMap<Player, Spell>boundleft = new HashMap<Player,Spell>();
-	public static HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
+	private HashMap<Player, Spell>boundleft = new HashMap<Player,Spell>();
+	private HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
 	private HashMap<Player, Integer>magicka = new HashMap<Player,Integer>();
 	public static List<SmallFireball>flames = new ArrayList<SmallFireball>();
 	public static List<Snowball>frostbite = new ArrayList<Snowball>();
@@ -238,6 +238,8 @@ public class SpellManager
 	public void clearData()
 	{
 		spells.clear();
+		boundleft.clear();
+		boundright.clear();
 	}
 	public void loadSpells(Player p)
 	{
@@ -266,5 +268,23 @@ public class SpellManager
 		{
 			this.p.log.severe("[SkyrimRPG]FAILED TO LOAD SPELLS");
 		}
+	}
+	public void bindRight(Player player, Spell s)
+	{
+		if(s == null)boundright.remove(player);
+		else boundright.put(player, s);
+	}
+	public void bindLeft(Player player, Spell s)
+	{
+		if(s == null)boundleft.remove(player);
+		else boundleft.put(player, s);
+	}
+	public Spell getBoundLeft(Player player)
+	{
+		return boundleft.get(player);
+	}
+	public Spell getBoundRight(Player player)
+	{
+		return boundright.get(player);
 	}
 }
