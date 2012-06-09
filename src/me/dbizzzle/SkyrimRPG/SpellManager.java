@@ -132,7 +132,7 @@ public class SpellManager
 	{
 		if(magicka.get(player) < spell.getBaseCost())
 		{
-			player.sendMessage(ChatColor.RED + "You need at least " + spell.getBaseCost() + " magicka to cast " + spell.getDisplayName() + "!");
+			player.sendMessage(ChatColor.RED + "You need at least " + spell.getBaseCost() + " magicka to cast " + spell.getDisplayName() + "; You have " + getMagicka(player) + "!");
 			return false;
 		}
 		return true;
