@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import me.dbizzzle.SkyrimRPG.Skill.Perk;
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
+import me.dbizzzle.SkyrimRPG.event.PlayerPickpocketEvent;
 import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;
@@ -62,6 +63,12 @@ public class SRPGL implements Listener
 	ArrayList<Player> sneak = new ArrayList<Player>();
 	CopyOnWriteArrayList<Player> ppcd = new CopyOnWriteArrayList<Player>();
 	CopyOnWriteArrayList<Player> lpcd = new CopyOnWriteArrayList<Player>();
+	public void clearData()
+	{
+		ppcd.clear();
+		lpcd.clear();
+		sneak.clear();
+	}
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event)
@@ -282,8 +289,12 @@ public class SRPGL implements Listener
 					sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
 					plugin.debug("Pickpocketing: result=fail, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
 					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), ConfigManager.PickpocketingCooldown);
+					se.getServer().getPluginManager().callEvent(new PlayerPickpocketEvent(event.getPlayer(), victim, false));
 					return;
 				}
+				PlayerPickpocketEvent e = new PlayerPickpocketEvent(event.getPlayer(), victim, true);
+				se.getServer().getPluginManager().callEvent(e);
+				if(e.isCancelled())return;
 				s.openContainer(pick.inventory);
 				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + victim.getName() + "!");
 				plugin.debug("Pickpocketing: result=success, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());

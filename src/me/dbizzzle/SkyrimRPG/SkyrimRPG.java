@@ -35,6 +35,7 @@ public class SkyrimRPG extends JavaPlugin
 	private SkillManager sk = new SkillManager(this);
 	private SpellTimer st = new SpellTimer(this);
 	private PerkManager pm = new PerkManager(this);
+	private SRPGL listen = new SRPGL(this);
 	ConfigManager cm = new ConfigManager(this);
 	VersionManager vm = new VersionManager();
 	String latestversion;
@@ -66,7 +67,7 @@ public class SkyrimRPG extends JavaPlugin
 		getCommand("skyrimrpg").setExecutor(new SkyrimCmd(sm, this, cm, sk));
 		getCommand("skystats").setExecutor(new SkyrimCmd(sm, this, cm, sk));
 		PluginManager pm = this.getServer().getPluginManager();
-		pm.registerEvents(new SRPGL(this), this);
+		pm.registerEvents(listen, this);
 		if(!checkFiles())cm.refreshConfig();
 		cm.loadConfig();
 		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
@@ -83,6 +84,7 @@ public class SkyrimRPG extends JavaPlugin
 		sk.clearData();
 		sm.clearData();
 		pm.clearData();
+		listen.clearData();
 	}
 	public boolean checkFiles()
 	{
