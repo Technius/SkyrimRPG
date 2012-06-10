@@ -22,7 +22,7 @@ public class PerkCmd implements CommandExecutor
 		if(player != null)
 		{
 			player.sendMessage(ChatColor.GOLD + "Perk Menu");
-			player.sendMessage(ChatColor.GOLD + "Available Perk Points: " + ChatColor.BLUE + new PerkManager(plugin).getPoints(player));
+			player.sendMessage(ChatColor.GOLD + "Available Perk Points: " + ChatColor.BLUE + plugin.getPerkManager().getPoints(player));
 			player.sendMessage(ChatColor.YELLOW + "<Required>" + ChatColor.GOLD + "[Optional]");
 			player.sendMessage(ChatColor.GREEN + "/perk unlock <perk> [level] " + ChatColor.RED + "- Unlocks a perk, if all requirements have been met");
 			player.sendMessage(ChatColor.GREEN + "/perk list [page number] " + ChatColor.RED + "- Lists your perks");
