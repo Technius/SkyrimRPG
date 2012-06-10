@@ -282,7 +282,7 @@ public class SkyrimCmd implements CommandExecutor
 					if (spell != null) 
 					{
 						plugin.log.info("[SkyrimRPG]Spells " + spell.getName() + " know");
-						for(Spell s:SpellManager.spells.get(spell))
+						for(Spell s:sm.getSpells(spell))
 						{
 							plugin.log.info("[SkyrimRPG]" + s.getDisplayName());
 						}
@@ -298,7 +298,7 @@ public class SkyrimCmd implements CommandExecutor
 				if (args.length == 0) 
 				{
 					player.sendMessage(ChatColor.BLUE + "Spells you know");
-					for(Spell s:SpellManager.spells.get(player))
+					for(Spell s:sm.getSpells(player))
 					{
 						player.sendMessage(ChatColor.GREEN + s.getDisplayName());
 					}
@@ -309,7 +309,7 @@ public class SkyrimCmd implements CommandExecutor
 					if (spell != null) 
 					{
 						player.sendMessage(ChatColor.BLUE + "Spells " + spell.getName() + " knows");
-						for(Spell s:SpellManager.spells.get(spell))
+						for(Spell s:sm.getSpells(spell))
 						{
 							player.sendMessage(ChatColor.GREEN + s.getDisplayName());
 						}
