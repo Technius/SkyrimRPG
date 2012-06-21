@@ -36,8 +36,8 @@ public class SkyrimRPG extends JavaPlugin
 	private SpellTimer st = new SpellTimer(this);
 	private PerkManager pm = new PerkManager(this);
 	private SRPGL listen = new SRPGL(this);
-	ConfigManager cm = new ConfigManager(this);
-	VersionManager vm = new VersionManager();
+	private ConfigManager cm = new ConfigManager(this);
+	private VersionManager vm = new VersionManager();
 	String latestversion;
 	public PerkManager getPerkManager()
 	{
@@ -54,6 +54,10 @@ public class SkyrimRPG extends JavaPlugin
 	public SpellTimer getSpellTimer()
 	{
 		return st;
+	}
+	public VersionManager getVersionManager()
+	{
+		return vm;
 	}
 	public void onEnable() 
 	{

@@ -339,7 +339,7 @@ public class SkyrimCmd implements CommandExecutor
 				case 0:
 					player.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + plugin.getDescription().getVersion());
 					player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
-					if(plugin.vm.compareVersion(plugin.latestversion, plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))
+					if(plugin.getVersionManager().compareVersion(plugin.latestversion, plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))
 					{
 						if(plugin.latestversion.indexOf("DEV") > -1 && !ConfigManager.announceDevBuild);
 						else player.sendMessage(ChatColor.RED + "!!!!" + ChatColor.GOLD + "A new " + (plugin.latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 

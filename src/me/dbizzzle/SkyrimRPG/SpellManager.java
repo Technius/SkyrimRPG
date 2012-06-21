@@ -36,7 +36,7 @@ public class SpellManager
 	private HashMap<Player, Integer>magicka = new HashMap<Player,Integer>();
 	public static List<SmallFireball>flames = new ArrayList<SmallFireball>();
 	public static List<Snowball>frostbite = new ArrayList<Snowball>();
-	SkyrimRPG p;
+	private SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{
 		this.p = p;
