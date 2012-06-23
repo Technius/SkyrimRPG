@@ -301,7 +301,8 @@ public class SkillManager
 	public boolean processExperience(Player player, Skill skill)
 	{
 		int alevel = getSkillLevel(skill, player);
-		if(alevel >= ConfigManager.skilllvlcap && ConfigManager.skilllvlcap > 0)return false;
+		int scap = (Integer)p.getConfigManager().getValue("skillLevelCap");
+		if(alevel >= scap && scap > 0)return false;
 		int pro = getProgress(skill, player);
 		int t = 5;
 		for(int i = 1;i<alevel;i++)

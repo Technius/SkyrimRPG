@@ -59,6 +59,10 @@ public class SkyrimRPG extends JavaPlugin
 	{
 		return vm;
 	}
+	public ConfigManager getConfigManager()
+	{
+		return cm;
+	}
 	public void onEnable() 
 	{
 		getCommand("addspell").setExecutor(new SkyrimCmd(sm, this, cm, sk));

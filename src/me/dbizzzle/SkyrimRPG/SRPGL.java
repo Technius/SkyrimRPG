@@ -238,7 +238,7 @@ public class SRPGL implements Listener
 		}
 		else if(event.getPlayer().getItemInHand().getType() == Material.BOOK)
 		{
-			if(!ConfigManager.useSpellbooks)return;
+			if(!(Boolean)plugin.getConfigManager().getValue("useSpellBooks"))return;
 			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				ItemStack b = event.getPlayer().getItemInHand();
