@@ -614,7 +614,7 @@ public class SRPGL implements Listener
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	//@EventHandler(priority = EventPriority.HIGHEST)
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if(!(event.getEntity() instanceof Fireball))return;
@@ -631,7 +631,7 @@ public class SRPGL implements Listener
 		{
 			if(!(x instanceof LivingEntity))continue;
 			LivingEntity l = (LivingEntity) x;
-			l.damage(7 + (alevel/10));
+			l.damage(7 + (alevel/10), p);
 			l.getWorld().createExplosion(f.getLocation(), 0);
 			l.setFireTicks(60);
 			sp = sp+1;
