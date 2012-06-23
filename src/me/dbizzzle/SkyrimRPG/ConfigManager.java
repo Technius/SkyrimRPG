@@ -131,6 +131,7 @@ public class ConfigManager
 						if(!disabledSkills.contains(s))disabledSkills.add(s);
 					}
 				}
+				else if(tokens[0].equalsIgnoreCase("useSpellPermissions"))spellPerms.data = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
 			}
 			br.close();
 		}
@@ -202,6 +203,10 @@ public class ConfigManager
 			bw.write("#Announce in the console and to players with skyrimrpg.newversion when a new dev build is out");
 			bw.newLine();
 			bw.write("announceDevBuild: true");
+			bw.newLine();
+			bw.write("#If a player needs \"skyrimrpg.spells.<spellname>\" or \"skyrimrpg.spells.*\" in order to cast a spell");
+			bw.newLine();
+			bw.write("useSpellPermissions: false");
 			bw.newLine();
 			bw.newLine();
 			bw.write("#\"List\" settings");

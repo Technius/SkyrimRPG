@@ -256,7 +256,7 @@ public class SpellManager
 			{
 				if(s.startsWith("#"))continue;
 				s.replaceAll(" ", "");
-				l.add(Spell.valueOf(s));
+				l.add(Spell.valueOf(s.toUpperCase()));
 			}
 			spells.put(p, l);
 		}
