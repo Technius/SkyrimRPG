@@ -56,32 +56,36 @@ public class SkyrimCmd implements CommandExecutor
 					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
 					if(!sm.hasSpell(player, s))
 					{
-						player.sendMessage(ChatColor.RED + "You have not yet learned this spell.");
+						player.sendMessage(ChatColor.RED + "You have not yet learned this spell!");
 						return true;
+					}
+					if((Boolean) plugin.getConfigManager().getValue("useSpellPermissions") && !player.hasPermission("skyrimrpg.spells.*"))
+					{
+						if(!player.hasPermission("skyrimrpg.spells." + s.getDisplayName()))
+						{
+							player.sendMessage(ChatColor.RED + "You are not allowed to use this spell!");return true;
+						}
+					}
+					else if(s == Spell.FIREBALL)
+					{
+						plugin.getSpellManager().bindLeft(player, Spell.FIREBALL);
+						plugin.getSpellManager().bindRight(player, Spell.UFIREBALL);
 					}
 					else
 					{
-						if(s == Spell.FIREBALL)
-						{
-							plugin.getSpellManager().bindLeft(player, Spell.FIREBALL);
-							plugin.getSpellManager().bindRight(player, Spell.UFIREBALL);
-						}
-						else
-						{
-							if(mode == 1 ||mode == 3)plugin.getSpellManager().bindLeft(player, s);
-							if(mode == 2 ||mode == 3)plugin.getSpellManager().bindRight(player, s);
-						}
-						String sl = s.toString().toLowerCase().replaceAll("_", " ");
-						String[] st = sl.split("[ ]");
-						String m = Character.toUpperCase(st[0].charAt(0)) + st[0].substring(1);
-						for(String x: st)
-						{
-							if(x.equalsIgnoreCase(st[0]))continue;
-							m = m + " " + Character.toUpperCase(x.charAt(0)) + x.substring(1);
-						}
-						if(mode != 3)player.sendMessage(ChatColor.GREEN + m + " bound to " + (mode == 1 ? "left" : "right") + " hand");
-						else player.sendMessage(ChatColor.GREEN + m + " bound to both hands");
+						if(mode == 1 ||mode == 3)plugin.getSpellManager().bindLeft(player, s);
+						if(mode == 2 ||mode == 3)plugin.getSpellManager().bindRight(player, s);
 					}
+					String sl = s.toString().toLowerCase().replaceAll("_", " ");
+					String[] st = sl.split("[ ]");
+					String m = Character.toUpperCase(st[0].charAt(0)) + st[0].substring(1);
+					for(String x: st)
+					{
+						if(x.equalsIgnoreCase(st[0]))continue;
+						m = m + " " + Character.toUpperCase(x.charAt(0)) + x.substring(1);
+					}
+					if(mode != 3)player.sendMessage(ChatColor.GREEN + m + " bound to " + (mode == 1 ? "left" : "right") + " hand");
+					else player.sendMessage(ChatColor.GREEN + m + " bound to both hands");
 				}
 			}
 			else

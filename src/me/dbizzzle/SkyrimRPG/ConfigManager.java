@@ -31,7 +31,7 @@ public class ConfigManager
 	public static boolean announceDevBuild = true;
 	public static ArrayList<World> disabledWorlds = new ArrayList<World>();
 	public static ArrayList<Skill> disabledSkills = new ArrayList<Skill>();
-	private ConfigKey<Boolean> spellPerms = new ConfigKey<Boolean>("spellPerms", false);
+	private ConfigKey<Boolean> spellPerms = new ConfigKey<Boolean>("useSpellPermissions", false);
 	SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
