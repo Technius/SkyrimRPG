@@ -2,14 +2,17 @@ package me.dbizzzle.SkyrimRPG;
 
 public enum Spell
 {
-	RAISE_ZOMBIE(2, 90),FIREBALL(1, 100),HEALING(4, 20),UFIREBALL(10101, 0), FLAMES(3, 20), 
-	CONJURE_FLAME_ATRONACH(5, 100), FROSTBITE(6, 25);
+	RAISE_ZOMBIE(2, 90, null),HEALING(4, 20, null),
+	UFIREBALL(10101, 0, null), FIREBALL(1, 100, UFIREBALL),FLAMES(3, 20, null), 
+	CONJURE_FLAME_ATRONACH(5, 100, null), FROSTBITE(6, 25, null);
 	private int id;
 	private int basecost;
-	private Spell(int id, int basecost)
+	private Spell partner;
+	private Spell(int id, int basecost, Spell partner)
 	{
 		this.id = id;
 		this.basecost = basecost;
+		this.partner = partner;
 	}
 	public int getId(Spell s)
 	{
@@ -26,6 +29,10 @@ public enum Spell
 			if(s.getId(s) == id)return s;
 		}
 		return null;
+	}
+	public Spell getPartner()
+	{
+		return partner;
 	}
 	public String getDisplayName()
 	{

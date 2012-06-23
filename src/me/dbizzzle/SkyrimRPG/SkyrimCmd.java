@@ -66,10 +66,10 @@ public class SkyrimCmd implements CommandExecutor
 							player.sendMessage(ChatColor.RED + "You are not allowed to use this spell!");return true;
 						}
 					}
-					else if(s == Spell.FIREBALL)
+					else if(s.getPartner() != null)
 					{
-						plugin.getSpellManager().bindLeft(player, Spell.FIREBALL);
-						plugin.getSpellManager().bindRight(player, Spell.UFIREBALL);
+						plugin.getSpellManager().bindLeft(player, s);
+						plugin.getSpellManager().bindRight(player, s.getPartner());
 					}
 					else
 					{
