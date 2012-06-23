@@ -29,14 +29,28 @@ public enum Spell
 	}
 	public String getDisplayName()
 	{
-		String sl = toString().toLowerCase();
-		String[] st = sl.split("[ ]");
-		String m = Character.toUpperCase(st[0].charAt(0)) + st[0].substring(1);
-		for(String x: st)
+		return toString().replaceAll("_", " ");
+	}
+	public String toString()
+	{
+		String s1 = "";
+		String[] t = name().toLowerCase().split("_");
+		boolean a = false;
+		for(String t1: t)
 		{
-			if(x.equalsIgnoreCase(st[0]))continue;
-			m = m + " " + Character.toUpperCase(x.charAt(0)) + x.substring(1);
+			if(!a)a = true;
+			else s1 = s1 + "_";
+			boolean o = false;
+			for(char c:t1.toCharArray())
+			{
+				if(!o)
+				{
+					o = true;
+					s1 = "" + Character.toUpperCase(c);
+				}
+				else s1 = s1 + c;
+			}
 		}
-		return m;
+		return s1;
 	}
 }

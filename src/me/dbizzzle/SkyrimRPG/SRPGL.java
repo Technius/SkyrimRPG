@@ -224,6 +224,13 @@ public class SRPGL implements Listener
 				Spell s = plugin.getSpellManager().getBoundLeft(event.getPlayer());
 				if(s != null)
 				{
+					if((Boolean) plugin.getConfigManager().getValue("useSpellPermissions") && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
+					{
+						if(!event.getPlayer().hasPermission("skyrimrpg.spells." + s.getDisplayName()))
+						{
+							event.getPlayer().sendMessage(ChatColor.RED + "You are not allowed to use this spell!");return;
+						}
+					}
 					plugin.getSpellManager().castSpell(s, event.getPlayer());
 				}
 			}
@@ -232,6 +239,13 @@ public class SRPGL implements Listener
 				Spell s = plugin.getSpellManager().getBoundRight(event.getPlayer());
 				if(s != null)
 				{
+					if((Boolean) plugin.getConfigManager().getValue("useSpellPermissions") && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
+					{
+						if(!event.getPlayer().hasPermission("skyrimrpg.spells." + s.getDisplayName()))
+						{
+							event.getPlayer().sendMessage(ChatColor.RED + "You are not allowed to use this spell!");return;
+						}
+					}
 					plugin.getSpellManager().castSpell(s, event.getPlayer());
 				}
 			}

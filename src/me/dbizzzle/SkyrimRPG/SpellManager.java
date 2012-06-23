@@ -194,11 +194,11 @@ public class SpellManager
 		if(s == null)return false;
 		if(hasSpell(p, s))
 		{
-			p.sendMessage(ChatColor.RED + "You already know how to cast " + s.getDisplayName());
+			p.sendMessage(ChatColor.RED + "You already know how to cast " + s.toString());
 			return false;
 		}
 		addSpell(p, s);
-		p.sendMessage(ChatColor.GREEN + "You have learned how to cast " + s.getDisplayName());
+		p.sendMessage(ChatColor.GREEN + "You have learned how to cast " + s.toString());
 		return true;
 	}
 	public void saveSpells(Player p)
@@ -228,7 +228,7 @@ public class SpellManager
 		}
 		catch(IOException ioe)
 		{
-			this.p.log.severe("[SkyrimRPG]FAILED TO SAVE SPELLS");
+			this.p.log.severe("[SkyrimRPG]FAILED TO SAVE SPELLS: " + ioe.getMessage());
 		}
 	}
 	public void clearData()

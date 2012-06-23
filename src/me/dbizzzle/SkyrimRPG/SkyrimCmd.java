@@ -76,16 +76,8 @@ public class SkyrimCmd implements CommandExecutor
 						if(mode == 1 ||mode == 3)plugin.getSpellManager().bindLeft(player, s);
 						if(mode == 2 ||mode == 3)plugin.getSpellManager().bindRight(player, s);
 					}
-					String sl = s.toString().toLowerCase().replaceAll("_", " ");
-					String[] st = sl.split("[ ]");
-					String m = Character.toUpperCase(st[0].charAt(0)) + st[0].substring(1);
-					for(String x: st)
-					{
-						if(x.equalsIgnoreCase(st[0]))continue;
-						m = m + " " + Character.toUpperCase(x.charAt(0)) + x.substring(1);
-					}
-					if(mode != 3)player.sendMessage(ChatColor.GREEN + m + " bound to " + (mode == 1 ? "left" : "right") + " hand");
-					else player.sendMessage(ChatColor.GREEN + m + " bound to both hands");
+					if(mode != 3)player.sendMessage(ChatColor.GREEN + s.toString() + " bound to " + (mode == 1 ? "left" : "right") + " hand");
+					else player.sendMessage(ChatColor.GREEN + s.toString() + " bound to both hands");
 				}
 			}
 			else
