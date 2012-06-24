@@ -99,6 +99,7 @@ public class SkyrimCmd implements CommandExecutor
 				if(player == null)return noConsole(sender);
 				Spell s = null;
 				try{s = Spell.valueOf(args[0].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[0] + "!");}
+				if(sm.hasSpell(player, s))return msgret(sender, ChatColor.RED + "You already have the spell " + s.toString() + "!");
 				sm.addSpell(player, s);
 				player.sendMessage(ChatColor.GREEN + "You have given " + ChatColor.BLUE + s.toString() + ChatColor.GREEN + " to yourself");
 			}
@@ -116,93 +117,32 @@ public class SkyrimCmd implements CommandExecutor
 		}
 		else if (command.getName().equalsIgnoreCase("removespell")) 
 		{
-			if (player == null)
+			if(!sender.hasPermission("skyrimrpg.removespell"))return msgret(sender, ChatColor.RED + "You do not have permission to do this!");
+			if(args.length != 2 && args.length != 1)
 			{
-				if(args.length != 2)
-				{
-					plugin.log.info("[SkyrimRPG]Usage: /removespell <player> <spell>");
-					return true;
-				}
-				Player spell = sender.getServer().getPlayer(args[0]);
-				if (spell != null) 
-				{
-					Spell s;
-					try
-					{
-						s = Spell.valueOf(args[1].toUpperCase());
-						if(sm.hasSpell(spell, s))
-						{
-							spell.sendMessage(ChatColor.RED + "You had the spell " + s.name() + " removed.");
-							plugin.log.info("[SkrimRPG]You have succesfully removed " + s.name() + " from " + spell.getName());
-							sm.removeSpell(spell, s);
-						}
-						else plugin.log.info("[SkyrimRPG]" + spell.getName() + " has not learned that spell.");
-					}
-					catch(IllegalArgumentException ex)
-					{
-						plugin.log.info("[SkyrimRPG]Invalid Spell.");
-					}
-				} 
-				else 
-				{
-					plugin.log.info("[SkyrimRPG]" + args[0] + " is currently not available or not online.");
-				}
-			} 
-			else if(player.hasPermission("skyrimrpg.removespell"))
-			{
-				switch(args.length)
-				{
-				case 1:
-					Spell s;
-					try
-					{
-						s = Spell.valueOf(args[1].toUpperCase());
-						if(sm.hasSpell(player, s))
-						{
-							player.sendMessage(ChatColor.GREEN + "You had the spell " + s.name() + " removed.");
-							sm.removeSpell(player, s);
-						}
-						else player.sendMessage(ChatColor.RED + "You haven't learned that spell.");
-					}
-					catch(IllegalArgumentException ex)
-					{
-						player.sendMessage(ChatColor.RED + "Invalid Spell.");
-					}
-					return true;
-				case 2:
-					Player spell = sender.getServer().getPlayer(args[0]);
-					if (spell != null) 
-					{
-						Spell s1;
-						try
-						{
-							s1 = Spell.valueOf(args[1].toUpperCase());
-							if(sm.hasSpell(spell, s1))
-							{
-								player.sendMessage(ChatColor.GREEN + "You had the spell " + s1.getDisplayName() + " removed from " + spell.getName());
-								spell.sendMessage(ChatColor.RED + "You had the spell " + s1.getDisplayName() + " taken away from you.");
-								sm.removeSpell(spell, s1);
-							}
-							else player.sendMessage(ChatColor.RED + spell.getName() + " has not learned that spell.");
-						}
-						catch(IllegalArgumentException ex)
-						{
-							player.sendMessage(ChatColor.RED + "Invalid Spell.");
-						}
-					} 
-					else 
-					{
-						player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
-					}
-					return true;
-				default:
-					player.sendMessage(ChatColor.RED + "Usage: /removespell <player> <spell>");
-					return true;
-				}
+				if(player == null)sender.sendMessage(ChatColor.RED + "Usage: /removespell <player> <spell>");
+				else sender.sendMessage(ChatColor.RED + "Usage: /removespell [player] <spell>");
+				return true;
 			}
-			else 
+			if(args.length == 1)
 			{
-				sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+				if(player == null)return noConsole(sender);
+				Spell s = null;
+				try{s = Spell.valueOf(args[0].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[0] + "!");}
+				if(!sm.hasSpell(player, s))return msgret(sender, ChatColor.RED + "You don't have the spell " + s.toString() + "!");
+				sm.removeSpell(player, s);
+				player.sendMessage(ChatColor.GREEN + "You have removed " + ChatColor.BLUE + s.toString() + ChatColor.GREEN + " from yourself");
+			}
+			else if(args.length == 2)
+			{
+				Player t = sender.getServer().getPlayer(args[0]);
+				if(t == null)return msgret(sender, ChatColor.RED + "No such player: " + args[0] + "!");
+				Spell s = null;
+				try{s = Spell.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[1] + "!");}
+				if(!sm.hasSpell(t, s))return msgret(sender, ChatColor.RED + "Doesn't have the spell " + s.toString() + "!");
+				sm.addSpell(t, s);
+				sender.sendMessage(ChatColor.GREEN + t.getName() + " has had the spell " + s.toString() + " taken away");
+				t.sendMessage(ChatColor.GREEN + "You have had the spell " + s.toString() + " removed from you");
 			}
 		}
 		else if (command.getName().equalsIgnoreCase("listspells")) 
