@@ -220,7 +220,7 @@ public class SpellManager
 			bw.newLine();
 			for(Spell x:l)
 			{
-				bw.write(x.toString());
+				bw.write(x.name());
 				bw.newLine();
 			}
 			bw.flush();
@@ -255,8 +255,8 @@ public class SpellManager
 			while((s=br.readLine()) != null)
 			{
 				if(s.startsWith("#"))continue;
-				s.replaceAll(" ", "");
-				l.add(Spell.valueOf(s.toUpperCase()));
+				Spell sp = Spell.get(s);
+				if(sp != null)l.add(sp);
 			}
 			spells.put(p, l);
 		}

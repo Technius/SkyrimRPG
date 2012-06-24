@@ -60,7 +60,7 @@ public class ConfigManager
 				if(l.isEmpty())continue;
 				String[] tokens = l.split("[:]", 2);
 				if(tokens.length != 2)continue;
-				if(tokens[0].equalsIgnoreCase("usespellbooks"))useSpellBooks.data = tokens[1].replaceAll(" ", "").equalsIgnoreCase("false");
+				if(tokens[0].equalsIgnoreCase("usespellbooks"))useSpellBooks.data = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
 				else if(tokens[0].equalsIgnoreCase("enablelockpicking"))
 				{
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableLockpicking = false;

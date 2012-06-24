@@ -14,6 +14,14 @@ public enum Spell
 		this.basecost = basecost;
 		this.partner = partner;
 	}
+	public static Spell get(String spell)
+	{
+		try
+		{
+			return valueOf(spell.toUpperCase().trim().replaceAll(" ", "_"));
+		}catch(IllegalArgumentException iae){}
+		return null;
+	}
 	public int getId(Spell s)
 	{
 		return id;
