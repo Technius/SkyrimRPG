@@ -207,6 +207,11 @@ public class SpellManager
 		File magic = new File(this.p.getDataFolder().getPath() + File.separator + "Magic");
 		if(!magic.exists())magic.mkdir();
 		File sf = new File(magic.getPath() + File.separator + p.getName() + ".txt");
+		if(spells.get(p).isEmpty())
+		{
+			if(sf.exists())sf.delete();
+			return;
+		}
 		try
 		{
 			if(!sf.exists())
