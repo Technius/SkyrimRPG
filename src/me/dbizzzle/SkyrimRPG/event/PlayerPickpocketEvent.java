@@ -2,16 +2,17 @@ package me.dbizzzle.SkyrimRPG.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
-public class PlayerPickpocketEvent extends org.bukkit.event.Event implements org.bukkit.event.Cancellable
+public class PlayerPickpocketEvent extends PlayerEvent implements org.bukkit.event.Cancellable
 {
 	private static final HandlerList handlers = new HandlerList();
 	private Player victim;
-	private Player player;
 	private boolean success;
 	private boolean cancelled;
 	public PlayerPickpocketEvent(Player player, Player victim, boolean success)
 	{
+		super(player);
 		this.victim = victim;
 		this.player = player;
 		this.success = success;
@@ -36,10 +37,6 @@ public class PlayerPickpocketEvent extends org.bukkit.event.Event implements org
 	 * 
 	 * @return The player who is pickpocketing
 	 */
-	public Player getPlayer()
-	{
-		return player;
-	}
 	@Override
 	public HandlerList getHandlers() {
 		return handlers;
