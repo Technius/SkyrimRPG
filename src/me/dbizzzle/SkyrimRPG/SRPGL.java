@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import me.dbizzzle.SkyrimRPG.Skill.Perk;
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
+import me.dbizzzle.SkyrimRPG.event.PlayerLockpickEvent;
 import me.dbizzzle.SkyrimRPG.event.PlayerPickpocketEvent;
 import net.minecraft.server.EntityPlayer;
 
@@ -90,7 +91,11 @@ public class SRPGL implements Listener
 					if(!d.isOpen())
 					{
 						SkillManager sm = plugin.getSkillManager();
-						if(pickLockSuccess(event.getPlayer()))
+						boolean initial = pickLockSuccess(event.getPlayer());
+						PlayerLockpickEvent cevent = new PlayerLockpickEvent(event.getPlayer(), event.getClickedBlock(), initial);
+						event.getPlayer().getServer().getPluginManager().callEvent(cevent);
+						if(cevent.isCancelled())return;
+						if(cevent.isSuccessful())
 						{
 							d.setOpen(true);
 							org.bukkit.block.Block above = event.getClickedBlock().getRelative(BlockFace.UP);
