@@ -27,12 +27,12 @@ public class ConfigManager
 	public static int wand = 0;
 	public static int PickpocketingCooldown = 10;
 	public static int LockpickingCooldown = 10;
-	public static boolean debug = false;
+	public boolean debug = false;
 	public static boolean announceDevBuild = true;
 	public static ArrayList<World> disabledWorlds = new ArrayList<World>();
 	public static ArrayList<Skill> disabledSkills = new ArrayList<Skill>();
 	private ConfigKey<Boolean> spellPerms = new ConfigKey<Boolean>("useSpellPermissions", false);
-	SkyrimRPG a = null;
+	private SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
 		a = s;
