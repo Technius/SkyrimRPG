@@ -22,4 +22,13 @@ public enum Skill
 		}
 		return m;
 	}
+	public static Skill getSkill(String skill)
+	{
+		Skill s = null;
+		try
+		{
+			s = valueOf(skill.toUpperCase().replaceAll(" ", ""));
+		}catch(IllegalArgumentException iae){}
+		return s;
+	}
 }
