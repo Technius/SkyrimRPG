@@ -73,4 +73,13 @@ public enum Perk
 	{
 		return requisite;
 	}
+	public static Perk getPerk(String perk)
+	{
+		Perk p = null;
+		try
+		{
+			p = valueOf(perk.toUpperCase().trim().replaceAll(" ", "_"));
+		}catch(IllegalArgumentException iae){}
+		return p;
+	}
 }
