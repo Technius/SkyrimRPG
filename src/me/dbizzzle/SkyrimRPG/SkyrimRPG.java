@@ -65,15 +65,17 @@ public class SkyrimRPG extends JavaPlugin
 	}
 	public void onEnable() 
 	{
-		getCommand("addspell").setExecutor(new SkyrimCmd(sm, this, cm, sk));
-		getCommand("bindspell").setExecutor(new SkyrimCmd(sm, this, cm, sk));
-		getCommand("addperk").setExecutor(new PerkCmd(this));
-		getCommand("perk").setExecutor(new PerkCmd(this));
-		getCommand("removeperk").setExecutor(new PerkCmd(this));
-		getCommand("removespell").setExecutor(new SkyrimCmd(sm, this, cm, sk));
-		getCommand("listspells").setExecutor(new SkyrimCmd(sm, this, cm, sk));
-		getCommand("skyrimrpg").setExecutor(new SkyrimCmd(sm, this, cm, sk));
-		getCommand("skystats").setExecutor(new SkyrimCmd(sm, this, cm, sk));
+		SkyrimCmd cmd = new SkyrimCmd(sm, this, cm, sk);
+		PerkCmd pcmd = new PerkCmd(this);
+		getCommand("addspell").setExecutor(cmd);
+		getCommand("bindspell").setExecutor(cmd);
+		getCommand("addperk").setExecutor(pcmd);
+		getCommand("perk").setExecutor(pcmd);
+		getCommand("removeperk").setExecutor(pcmd);
+		getCommand("removespell").setExecutor(cmd);
+		getCommand("listspells").setExecutor(cmd);
+		getCommand("skyrimrpg").setExecutor(cmd);
+		getCommand("skystats").setExecutor(cmd);
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(listen, this);
 		if(!checkFiles())cm.refreshConfig();
