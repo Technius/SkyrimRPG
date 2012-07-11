@@ -17,23 +17,23 @@ public class PerkCmd implements CommandExecutor
 	{
 		this.plugin = plugin;
 	}
-	public void menu(Player player)
+	public void menu(CommandSender sender)
 	{
-		if(player != null)
+		if(sender instanceof Player)
 		{
-			player.sendMessage(ChatColor.GOLD + "Perk Menu");
-			player.sendMessage(ChatColor.GOLD + "Available Perk Points: " + ChatColor.BLUE + plugin.getPerkManager().getPoints(player));
-			player.sendMessage(ChatColor.YELLOW + "<Required>" + ChatColor.GOLD + "[Optional]");
-			player.sendMessage(ChatColor.GREEN + "/perk unlock <perk> [level] " + ChatColor.RED + "- Unlocks a perk, if all requirements have been met");
-			player.sendMessage(ChatColor.GREEN + "/perk list [page number] " + ChatColor.RED + "- Lists your perks");
-			player.sendMessage(ChatColor.GREEN + "/perk all [skill] " + ChatColor.RED + "- Lists all the requirements about the perks of that skill");
-			if(player.hasPermission("skyrimrpg.addperk"))player.sendMessage(ChatColor.GREEN + "/addperk [player] <perk> <level> " + ChatColor.RED + "- Adds a perk to specified player");
-			if(player.hasPermission("skyrimrpg.removeperk"))player.sendMessage(ChatColor.GREEN + "/removeperk <player> <perk> " + ChatColor.RED + "- Removes a perk from specified player");
+			sender.sendMessage(ChatColor.GOLD + "Perk Menu");
+			sender.sendMessage(ChatColor.GOLD + "Available Perk Points: " + ChatColor.BLUE + plugin.getPerkManager().getPoints((Player)sender));
+			sender.sendMessage(ChatColor.YELLOW + "<Required>" + ChatColor.GOLD + "[Optional]");
+			sender.sendMessage(ChatColor.GREEN + "/perk unlock <perk> [level] " + ChatColor.RED + "- Unlocks a perk, if all requirements have been met");
+			sender.sendMessage(ChatColor.GREEN + "/perk list [page number] " + ChatColor.RED + "- Lists your perks");
+			sender.sendMessage(ChatColor.GREEN + "/perk all [skill] " + ChatColor.RED + "- Lists all the requirements about the perks of that skill");
+			if(sender.hasPermission("skyrimrpg.addperk"))sender.sendMessage(ChatColor.GREEN + "/addperk [player] <perk> <level> " + ChatColor.RED + "- Adds a perk to specified player");
+			if(sender.hasPermission("skyrimrpg.removeperk"))sender.sendMessage(ChatColor.GREEN + "/removeperk <player> <perk> " + ChatColor.RED + "- Removes a perk from specified player");
 		}
 		else
 		{
-			plugin.log.info("[SkyrimRPG]/addperk <player> <perk> <level> - Adds a perk to specified player");
-			plugin.log.info("[SkyrimRPG]/removeperk <player> <perk> - Removes a perk from specified player");
+			sender.sendMessage("/addperk <player> <perk> <level> - Adds a perk to specified player");
+			sender.sendMessage("/removeperk <player> <perk> - Removes a perk from specified player");
 		}
 	}
 	public boolean onCommand(CommandSender sender, Command command, String label,
@@ -43,21 +43,27 @@ public class PerkCmd implements CommandExecutor
 		PerkManager pm = plugin.getPerkManager();
 		if(command.getName().equalsIgnoreCase("perk"))
 		{
-			if(player == null)
+			if(args.length >= 1)
 			{
-				menu(player);
-				return true;
-			}
-			switch(args.length)
-			{
-			case 1:
 				if(args[0].equalsIgnoreCase("list"))
 				{
+					if(args.length != 1 && args.length != 2)return usage(sender, "perk list [player]");
+					Player t = null;
+					if(args.length == 1)
+					{
+						if(player == null)return usage(sender, "perk list <player>");
+						else t = player;
+					}
+					else
+					{
+						t = sender.getServer().getPlayer(args[1]);
+						if(t == null)return msg(sender, ChatColor.RED + "No such player: " + args[1]);
+					}
 					int ct = 0;
-					Perk[] ps = pm.getPerks(player);
+					Perk[] ps = pm.getPerks(t);
 					int pg = ps.length/10;
 					if(pg < (double)ps.length/10)pg++;
-					player.sendMessage(ChatColor.GOLD + "Perks list " + ChatColor.RED + "1" + ChatColor.GOLD + " of " + ChatColor.GREEN + pg);
+					sender.sendMessage(ChatColor.GOLD + (t == player ? "Your"  : t.getName() + "'s") + " perks (" + ChatColor.RED + "1" + ChatColor.GOLD + "/" + ChatColor.GREEN + pg + ")");
 					for(Perk p:ps)
 					{
 						if(ct == 9)break;
@@ -75,52 +81,53 @@ public class PerkCmd implements CommandExecutor
 						else player.sendMessage(c + p.getName() + " " + ChatColor.GOLD + "(" + l + "/" + p.getMaxLevel() + ")");
 						ct++;
 					}
-					return true;
 				}
 				else if(args[0].equalsIgnoreCase("unlock"))
 				{
-					player.sendMessage(ChatColor.RED + "Usage: /perk unlock <perk> [level]");
-					return true;
-				}
-				else
-				{
-					menu(player);
-					return true;
-				}
-			case 2:
-				if(args[0].equalsIgnoreCase("unlock"))
-				{
-					Perk p;
-					try
+					if(player == null)return noConsole(sender);
+					if(args.length != 2 && args.length != 3)return usage(sender, "perk unlock <perk> [level]");
+					Perk p = Perk.getPerk(args[1]);
+					if(p == null)return msg(sender, ChatColor.RED + "No such perk: " + args[1]);
+					if(args.length == 2)
 					{
-						p = Perk.valueOf(args[1].toUpperCase());
-					}
-					catch(IllegalArgumentException iae)
-					{
-						player.sendMessage(ChatColor.RED + "No such perk: " + args[1]);
-						return true;
-					}
-					if(pm.hasPerk(player, p))
-					{
-						player.sendMessage(ChatColor.RED + "Use /perk unlock <perk> <level>!");
-						return true;
-					}
-					else if(pm.hasEnough(player))
-					{
-						if(pm.canUnlock(player, p, 1))
+						if(pm.hasPerk(player, p))return msg(player, ChatColor.RED + "Use " + ChatColor.YELLOW + "/perk unlock <perk> <level>" + ChatColor.RED + " for this perk!");
+						else if(pm.hasEnough(player))
 						{
-							pm.unlock(player, p, 1);
-							player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
+							if(pm.canUnlock(player, p, 1))
+							{
+								pm.unlock(player, p, 1);
+								player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
+							}
+							else player.sendMessage(ChatColor.RED + "You have not met the requirements to unlock this perk.");
 						}
-						else player.sendMessage(ChatColor.RED + "You have not met the requirements to unlock this perk.");
+						else player.sendMessage(ChatColor.RED + "You don't have enough perk points!");
 					}
-					else player.sendMessage(ChatColor.RED + "You don't have enough perk points!");
-					return true;
+					else if(args.length == 3)
+					{
+						int level;
+						try{ level = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){player.sendMessage("Not a number: " + args[2]);return true;}
+						if(!pm.hasPerk(player, p))return msg(player, ChatColor.RED + "Use /perk unlock <perk>!");
+						else if(pm.getPerkLevel(player, p) >= level)return msg(player, ChatColor.RED + "You already unlocked level " + level + "!");
+						else if(level - pm.getPerkLevel(player, p) != 1)return msg(player, ChatColor.RED + "You must first unlock level " + (pm.getPerkLevel(player, p) + 1));
+						else if(pm.hasEnough(player))
+						{
+							if(pm.canUnlock(player, p, level))
+							{
+								pm.unlock(player, p, level);
+								player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
+							}
+							else player.sendMessage(ChatColor.RED + "You have not met the requirements to unlock this perk.");
+						}
+						else player.sendMessage(ChatColor.RED + "You don't have enough perk points!");
+					}
+					
 				}
 				else if(args[0].equalsIgnoreCase("all"))
 				{
+					if(player == null)return noConsole(sender);
 					Skill s;
-					try{s = Skill.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){player.sendMessage(ChatColor.RED + "No such skill: " + args[1]);return true;}
+					s = Skill.getSkill(args[1]);
+					if(s == null)return msg(player, ChatColor.RED + "No such skill: " + args[1]);
 					player.sendMessage(ChatColor.RED + s.getName() + " Perks" + ChatColor.GOLD +" - Required Skill Level - Max Level");
 					for(Perk p:pm.getPerksBySkill(s))
 					{
@@ -130,69 +137,16 @@ public class PerkCmd implements CommandExecutor
 						if(pm.hasPerk(player, p))player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + rsl + " - " + p.getMaxLevel());
 						else player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + p.getRequiredSkillLevels()[0] + " - " + p.getMaxLevel());
 					}
-					return true;
 				}
-				else
-				{
-					menu(player);
-					return true;
-				}
-			case 3:
-				if(args[0].equalsIgnoreCase("unlock"))
-				{
-					Perk p;
-					try
-					{
-						p = Perk.valueOf(args[1].toUpperCase());
-					}
-					catch(IllegalArgumentException iae)
-					{
-						player.sendMessage(ChatColor.RED + "No such perk: " + args[1]);
-						return true;
-					}
-					int level;
-					try{ level = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){player.sendMessage("Not a number: " + args[2]);return true;}
-					if(!pm.hasPerk(player, p))
-					{
-						player.sendMessage(ChatColor.RED + "Use /perk unlock <perk>!");
-						return true;
-					}
-					else if(pm.getPerkLevel(player, p) >= level)
-					{
-						player.sendMessage(ChatColor.RED + "You already unlocked level " + level + "!");
-						return true;
-					}
-					else if(level - pm.getPerkLevel(player, p) != 1)
-					{
-						player.sendMessage(ChatColor.RED + "You must first unlock level " + (pm.getPerkLevel(player, p) + 1));
-						return true;
-					}
-					else if(pm.hasEnough(player))
-					{
-						if(pm.canUnlock(player, p, level))
-						{
-							pm.unlock(player, p, level);
-							player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
-						}
-						else player.sendMessage(ChatColor.RED + "You have not met the requirements to unlock this perk.");
-					}
-					else player.sendMessage(ChatColor.RED + "You don't have enough perk points!");
-					return true;
-				}
-				else
-				{
-					menu(player);
-					return true;
-				}
-			default:
-				menu(player);
-				return true;
+				else sender.sendMessage(ChatColor.RED + "Unrecognized command: " + args[0]);
 			}
+			else menu(sender);
 		}
 		else if(command.getName().equalsIgnoreCase("addperk"))
 		{
 			if(sender.hasPermission("skyrimrpg.addperk"))
 			{
+				if(args.length != 2)return usage(sender, "addperk <player> <perk>");
 				Player t = plugin.getServer().getPlayer(args[0]);
 				if(t == null)
 				{
@@ -237,8 +191,7 @@ public class PerkCmd implements CommandExecutor
 			{
 				if(args.length != 2)
 				{
-					sender.sendMessage(ChatColor.RED + "Usage: /removeperk <player> <perk>");
-					return true;
+					return usage(sender, "/removeperk <player> <perk>");
 				}
 				Perk p;
 				try
@@ -264,5 +217,19 @@ public class PerkCmd implements CommandExecutor
 		}
 		return true;
 	}
-
+	private boolean msg(CommandSender sender, String msg)
+	{
+		sender.sendMessage(msg);
+		return true;
+	}
+	private boolean noConsole(CommandSender sender)
+	{
+		sender.sendMessage(ChatColor.RED + "Console cannot use this command!");
+		return true;
+	}
+	private boolean usage(CommandSender sender, String command)
+	{
+		sender.sendMessage(ChatColor.RED + "Usage: " + (sender instanceof Player ? "/" : "") + command);
+		return true;
+	}
 }
