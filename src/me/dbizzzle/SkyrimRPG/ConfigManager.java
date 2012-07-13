@@ -22,8 +22,8 @@ public class ConfigManager
 	public static boolean enablePickpocketing = true;
 	public static boolean enablePickpocketingChance = false;
 	public static boolean enableSneakMessage = false;
-	public static boolean enableLpCd = true;
-	public static boolean enablePpCd = true;
+	public boolean enableLockpickingCooldown = true;
+	public boolean enablePickpocketingCooldown = true;
 	public static int wand = 0;
 	public static int PickpocketingCooldown = 10;
 	public static int LockpickingCooldown = 10;
@@ -66,8 +66,8 @@ public class ConfigManager
 				}
 				else if(tokens[0].equalsIgnoreCase("enablelockpickingcooldown"))
 				{
-					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableLpCd = false;
-					else enableLpCd = true;
+					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableLockpickingCooldown = false;
+					else enableLockpickingCooldown = true;
 				}
 				else if(tokens[0].equalsIgnoreCase("announcedevbuild"))
 				{
@@ -75,8 +75,7 @@ public class ConfigManager
 				}
 				else if(tokens[0].equalsIgnoreCase("enablepickpocketingcooldown"))
 				{
-					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enablePpCd = false;
-					else enablePpCd = true;
+					enablePickpocketingCooldown = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
 				}
 				else if(tokens[0].equalsIgnoreCase("enablepickpocketingchance"))
 				{
@@ -173,9 +172,9 @@ public class ConfigManager
 			bw.newLine();
 			bw.write("#Enable/disable pickpocketing and lockpicking cooldowns");
 			bw.newLine();
-			bw.write("enablePickpocketingCooldown: " + (enablePpCd ? "true" : "false"));
+			bw.write("enablePickpocketingCooldown: " + enablePickpocketingCooldown);
 			bw.newLine();
-			bw.write("enableLockpickingCooldown: " + (enableLpCd ? "true" : "false"));
+			bw.write("enableLockpickingCooldown: " + enableLockpickingCooldown);
 			bw.newLine();
 			bw.write("#Item id of the casting tool(the item used for bindspell, default hands)");
 			bw.newLine();

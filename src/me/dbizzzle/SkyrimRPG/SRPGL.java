@@ -82,7 +82,7 @@ public class SRPGL implements Listener
 				Material btype = event.getClickedBlock().getType();
 				if (btype == Material.IRON_DOOR_BLOCK || (btype == Material.WOOD_DOOR && event.isCancelled()))
 				{
-					if(lpcd.contains(event.getPlayer()) && ConfigManager.enableLpCd)
+					if(lpcd.contains(event.getPlayer()) && plugin.getConfigManager().enableLockpickingCooldown)
 					{
 						event.getPlayer().sendMessage(ChatColor.RED + "You don't feel comfortable attempting to pick locks right now");
 						return;
@@ -183,7 +183,7 @@ public class SRPGL implements Listener
 				{
 					if(event.isCancelled())
 					{
-						if(lpcd.contains(event.getPlayer()) && ConfigManager.enableLpCd)
+						if(lpcd.contains(event.getPlayer()) && plugin.getConfigManager().enableLockpickingCooldown)
 						{
 							event.getPlayer().sendMessage(ChatColor.RED + "You don't feel comfortable attempting to pick locks right now");
 							return;
@@ -281,7 +281,7 @@ public class SRPGL implements Listener
 			Entity ent = event.getRightClicked();
 			if (ent instanceof Player) {
 				final Player victim = (Player) ent;
-				if(ppcd.contains(se) && ConfigManager.enablePpCd)
+				if(ppcd.contains(se) && plugin.getConfigManager().enablePickpocketingCooldown)
 				{
 					se.sendMessage(ChatColor.RED + "You are too afraid to pickpocket someone right now");
 					plugin.debug("Pickpocketing: result=cooldown, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
