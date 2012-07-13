@@ -229,7 +229,7 @@ public class SRPGL implements Listener
 				Spell s = plugin.getSpellManager().getBoundLeft(event.getPlayer());
 				if(s != null)
 				{
-					if((Boolean) plugin.getConfigManager().getValue("useSpellPermissions") && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
+					if(plugin.getConfigManager().useSpellPermissions && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
 					{
 						if(!event.getPlayer().hasPermission("skyrimrpg.spells." + s.getDisplayName()))
 						{
@@ -244,7 +244,7 @@ public class SRPGL implements Listener
 				Spell s = plugin.getSpellManager().getBoundRight(event.getPlayer());
 				if(s != null)
 				{
-					if((Boolean) plugin.getConfigManager().getValue("useSpellPermissions") && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
+					if(plugin.getConfigManager().useSpellPermissions && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
 					{
 						if(!event.getPlayer().hasPermission("skyrimrpg.spells." + s.getDisplayName()))
 						{
@@ -257,7 +257,7 @@ public class SRPGL implements Listener
 		}
 		else if(event.getPlayer().getItemInHand().getType() == Material.BOOK)
 		{
-			if(!(Boolean)plugin.getConfigManager().getValue("useSpellBooks"))return;
+			if(plugin.getConfigManager().useSpellBooks)return;
 			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				ItemStack b = event.getPlayer().getItemInHand();

@@ -59,7 +59,7 @@ public class SkyrimCmd implements CommandExecutor
 						player.sendMessage(ChatColor.RED + "You have not yet learned this spell!");
 						return true;
 					}
-					if((Boolean) plugin.getConfigManager().getValue("useSpellPermissions") && !player.hasPermission("skyrimrpg.spells.*"))
+					if(plugin.getConfigManager().useSpellPermissions && !player.hasPermission("skyrimrpg.spells.*"))
 					{
 						if(!player.hasPermission("skyrimrpg.spells." + s.getDisplayName()))
 						{

@@ -16,8 +16,8 @@ import org.bukkit.World;
 
 public class ConfigManager 
 {
-	private ConfigKey<Integer> skillLevelCap = new ConfigKey<Integer>("skillLevelCap", 0);
-	private ConfigKey<Boolean> useSpellBooks = new ConfigKey<Boolean>("useSpellBooks", true);
+	public int skillLevelCap = 0;
+	public boolean useSpellBooks = true;
 	public static boolean enableLockpicking = true;
 	public static boolean enablePickpocketing = true;
 	public static boolean enablePickpocketingChance = false;
@@ -31,18 +31,11 @@ public class ConfigManager
 	public static boolean announceDevBuild = true;
 	public static ArrayList<World> disabledWorlds = new ArrayList<World>();
 	public static ArrayList<Skill> disabledSkills = new ArrayList<Skill>();
-	private ConfigKey<Boolean> spellPerms = new ConfigKey<Boolean>("useSpellPermissions", false);
+	public  boolean useSpellPermissions = false;
 	private SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
 		a = s;
-	}
-	public Object getValue(String key)
-	{
-		if(key.equalsIgnoreCase(spellPerms.getKey()))return spellPerms.getValue();
-		else if(key.equalsIgnoreCase(skillLevelCap.getKey()))return skillLevelCap.getValue();
-		else if(key.equalsIgnoreCase(useSpellBooks.getKey()))return useSpellBooks.getValue();
-		return null;
 	}
 	public void loadConfig()
 	{
@@ -60,7 +53,7 @@ public class ConfigManager
 				if(l.isEmpty())continue;
 				String[] tokens = l.split("[:]", 2);
 				if(tokens.length != 2)continue;
-				if(tokens[0].equalsIgnoreCase("usespellbooks"))useSpellBooks.data = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
+				if(tokens[0].equalsIgnoreCase("usespellbooks"))useSpellBooks = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
 				else if(tokens[0].equalsIgnoreCase("enablelockpicking"))
 				{
 					if(tokens[1].replaceAll(" ", "").equalsIgnoreCase("false"))enableLockpicking = false;
@@ -106,7 +99,7 @@ public class ConfigManager
 				else if(tokens[0].equalsIgnoreCase("debugmode"))debug = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
 				else if(tokens[0].equalsIgnoreCase("skilllevelcap"))
 				{
-					try{skillLevelCap.data = Integer.parseInt(tokens[1].replaceAll(" ", ""));}catch(NumberFormatException nfe){skillLevelCap.data = 0;}
+					try{skillLevelCap = Integer.parseInt(tokens[1].replaceAll(" ", ""));}catch(NumberFormatException nfe){skillLevelCap = 0;}
 				}
 				else if(tokens[0].equalsIgnoreCase("castingtool"))
 				{
@@ -131,7 +124,7 @@ public class ConfigManager
 						if(!disabledSkills.contains(s))disabledSkills.add(s);
 					}
 				}
-				else if(tokens[0].equalsIgnoreCase("useSpellPermissions"))spellPerms.data = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
+				else if(tokens[0].equalsIgnoreCase("useSpellPermissions"))useSpellPermissions = tokens[1].replaceAll(" ", "").equalsIgnoreCase("true");
 			}
 			br.close();
 		}
@@ -160,7 +153,7 @@ public class ConfigManager
 			bw.newLine();
 			bw.write("#Enable this if you want to use spellbooks");
 			bw.newLine();
-			bw.write("useSpellbooks: " + (useSpellBooks.data ? "true" : "false"));
+			bw.write("useSpellbooks: " + useSpellBooks);
 			bw.newLine();
 			bw.write("#Disable these if you don't like thievery");
 			bw.newLine();
@@ -236,24 +229,6 @@ public class ConfigManager
 		catch(IOException ioe)
 		{
 			return false;
-		}
-	}
-	private class ConfigKey<T>
-	{
-		private String key;
-		private T data;
-		public ConfigKey(String key, T data)
-		{
-			this.key = key;
-			this.data = data;
-		}
-		public String getKey()
-		{
-			return key;
-		}
-		public T getValue()
-		{
-			return data;
 		}
 	}
 }

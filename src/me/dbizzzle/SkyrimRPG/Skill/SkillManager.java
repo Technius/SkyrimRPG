@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import me.dbizzzle.SkyrimRPG.ConfigManager;
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 
 import org.bukkit.ChatColor;
@@ -301,7 +300,7 @@ public class SkillManager
 	public boolean processExperience(Player player, Skill skill)
 	{
 		int alevel = getSkillLevel(skill, player);
-		int scap = (Integer)p.getConfigManager().getValue("skillLevelCap");
+		int scap = p.getConfigManager().skillLevelCap;
 		if(alevel >= scap && scap > 0)return false;
 		int pro = getProgress(skill, player);
 		int t = 5;
