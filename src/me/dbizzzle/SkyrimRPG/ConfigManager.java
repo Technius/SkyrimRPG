@@ -18,20 +18,20 @@ public class ConfigManager
 {
 	public int skillLevelCap = 0;
 	public boolean useSpellBooks = true;
-	public static boolean enableLockpicking = true;
-	public static boolean enablePickpocketing = true;
-	public static boolean enablePickpocketingChance = false;
-	public static boolean enableSneakMessage = false;
+	public boolean enableLockpicking = true;
+	public boolean enablePickpocketing = true;
+	public boolean enablePickpocketingChance = false;
+	public boolean enableSneakMessage = false;
 	public boolean enableLockpickingCooldown = true;
 	public boolean enablePickpocketingCooldown = true;
-	public static int wand = 0;
-	public static int PickpocketingCooldown = 10;
-	public static int LockpickingCooldown = 10;
+	public int wand = 0;
+	public int PickpocketingCooldown = 10;
+	public int LockpickingCooldown = 10;
 	public boolean debug = false;
-	public static boolean announceDevBuild = true;
-	public static ArrayList<World> disabledWorlds = new ArrayList<World>();
-	public static ArrayList<Skill> disabledSkills = new ArrayList<Skill>();
-	public  boolean useSpellPermissions = false;
+	public boolean announceDevBuild = true;
+	public ArrayList<World> disabledWorlds = new ArrayList<World>();
+	public ArrayList<Skill> disabledSkills = new ArrayList<Skill>();
+	public boolean useSpellPermissions = false;
 	private SkyrimRPG a = null;
 	public ConfigManager(SkyrimRPG s)
 	{
@@ -229,5 +229,10 @@ public class ConfigManager
 		{
 			return false;
 		}
+	}
+	public void clearData()
+	{
+		disabledWorlds.clear();
+		disabledSkills.clear();
 	}
 }

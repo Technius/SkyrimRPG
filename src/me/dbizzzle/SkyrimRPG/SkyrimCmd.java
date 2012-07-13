@@ -218,7 +218,7 @@ public class SkyrimCmd implements CommandExecutor
 					player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
 					if(plugin.getVersionManager().compareVersion(plugin.latestversion, plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))
 					{
-						if(plugin.latestversion.indexOf("DEV") > -1 && !ConfigManager.announceDevBuild);
+						if(plugin.latestversion.indexOf("DEV") > -1 && !cm.announceDevBuild);
 						else player.sendMessage(ChatColor.RED + "!!!!" + ChatColor.GOLD + "A new " + (plugin.latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 
 								+ " is available: " + plugin.latestversion + ChatColor.RED + "!!!!");
 					}

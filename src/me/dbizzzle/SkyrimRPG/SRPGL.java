@@ -74,8 +74,8 @@ public class SRPGL implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		if(ConfigManager.disabledWorlds.contains(event.getPlayer().getWorld()))return;
-		if(event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON && ConfigManager.enableLockpicking)
+		if(plugin.getConfigManager().disabledWorlds.contains(event.getPlayer().getWorld()))return;
+		if(event.getPlayer().getItemInHand().getType() == Material.REDSTONE_TORCH_ON && plugin.getConfigManager().enableLockpicking)
 		{
 			if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
@@ -141,7 +141,7 @@ public class SRPGL implements Listener
 						}
 						sm.calculateLevel(event.getPlayer(), Skill.LOCKPICKING);
 					}
-					event.getPlayer().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.LOCKPICKING, event.getPlayer(), false), ConfigManager.LockpickingCooldown);
+					event.getPlayer().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.LOCKPICKING, event.getPlayer(), false), plugin.getConfigManager().LockpickingCooldown);
 				}
 				else if(btype == Material.TRAP_DOOR)
 				{
@@ -222,7 +222,7 @@ public class SRPGL implements Listener
 				return;
 			}
 		}
-		else if(event.getPlayer().getItemInHand().getType().getId() == ConfigManager.wand)
+		else if(event.getPlayer().getItemInHand().getType().getId() == plugin.getConfigManager().wand)
 		{
 			if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
 			{
@@ -274,10 +274,10 @@ public class SRPGL implements Listener
 	}
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-		if(ConfigManager.disabledWorlds.contains(event.getPlayer().getWorld()))return;
+		if(plugin.getConfigManager().disabledWorlds.contains(event.getPlayer().getWorld()))return;
 		Player se = event.getPlayer();
 		final EntityPlayer s = ((CraftPlayer)se).getHandle();
-		if (s.isSneaking() && ConfigManager.enablePickpocketing) {
+		if (s.isSneaking() && plugin.getConfigManager().enablePickpocketing) {
 			Entity ent = event.getRightClicked();
 			if (ent instanceof Player) {
 				final Player victim = (Player) ent;
@@ -300,14 +300,14 @@ public class SRPGL implements Listener
 				if(plugin.getPerkManager().hasPerk(se, Perk.LIGHT_FINGERS))mul = mul + (0.2*plugin.getPerkManager().getPerkLevel(se, Perk.LIGHT_FINGERS));
 				mul = mul - (0.25*plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, victim));
 				c = c * mul;
-				if(c > plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, se)&& ConfigManager.enablePickpocketingChance)
+				if(c > plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, se)&& plugin.getConfigManager().enablePickpocketingChance)
 				{
 					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + victim.getName() + "!");
 					victim.sendMessage(ChatColor.RED + se.getName() + " tried to pickpocket you!");
 					SkillManager sm = plugin.getSkillManager();
 					sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
 					plugin.debug("Pickpocketing: result=fail, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
-					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), ConfigManager.PickpocketingCooldown);
+					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), plugin.getConfigManager().PickpocketingCooldown);
 					se.getServer().getPluginManager().callEvent(new PlayerPickpocketEvent(event.getPlayer(), victim, false));
 					return;
 				}
@@ -328,7 +328,7 @@ public class SRPGL implements Listener
 						s.closeInventory();
 					}
 				}, delay);
-				se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), ConfigManager.PickpocketingCooldown);
+				se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), plugin.getConfigManager().PickpocketingCooldown);
 				return;
 			}
 		}
@@ -401,7 +401,7 @@ public class SRPGL implements Listener
 	public void sneakSkill(PlayerToggleSneakEvent event)
 	{
 		if(event.isCancelled())return;
-		if(ConfigManager.disabledWorlds.contains(event.getPlayer().getWorld()))return;
+		if(plugin.getConfigManager().disabledWorlds.contains(event.getPlayer().getWorld()))return;
 		Player player = event.getPlayer();
 		boolean detect = false;
 		if(event.isSneaking() && !sneak.contains(player))
@@ -433,13 +433,13 @@ public class SRPGL implements Listener
 					sneak.add(player);
 				}
 			}
-			if(!detect && ConfigManager.enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Hidden");
-			else if(detect && a.size() != 0 && ConfigManager.enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Detected");
-			else if(ConfigManager.enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Hidden");
+			if(!detect && plugin.getConfigManager().enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Hidden");
+			else if(detect && a.size() != 0 && plugin.getConfigManager().enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Detected");
+			else if(plugin.getConfigManager().enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Hidden");
 		}
 		else if(!event.isSneaking() && sneak.contains(player))
 		{
-			if(ConfigManager.enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Now visible");
+			if(plugin.getConfigManager().enableSneakMessage)player.sendMessage(ChatColor.YELLOW + "Now visible");
 			for(Player p:player.getServer().getOnlinePlayers())
 			{
 				if(!p.canSee(player))
@@ -455,12 +455,12 @@ public class SRPGL implements Listener
 	public void onEntityDamage(EntityDamageEvent event)
 	{
 		if(event.isCancelled())return;
-		if(ConfigManager.disabledWorlds.contains(event.getEntity().getWorld()))return;
+		if(plugin.getConfigManager().disabledWorlds.contains(event.getEntity().getWorld()))return;
 		if(event instanceof EntityDamageByEntityEvent)
 		{
 			EntityDamageByEntityEvent e = (EntityDamageByEntityEvent)event;
 			if(e.getDamager() instanceof Player && e.getEntity() instanceof Player && !event.getEntity().getWorld().getPVP())return;
-			if((e.getDamager() instanceof Arrow) && !ConfigManager.disabledSkills.contains(Skill.ARCHERY))
+			if((e.getDamager() instanceof Arrow) && !plugin.getConfigManager().disabledSkills.contains(Skill.ARCHERY))
 			{
 				Arrow a = (Arrow)e.getDamager();
 				if(a.getShooter() instanceof Player)
@@ -502,7 +502,7 @@ public class SRPGL implements Listener
 				}
 				String t = ToolComparer.getType(player.getItemInHand());
 				if(t == null) return;
-				if(t.equalsIgnoreCase("Sword") && !ConfigManager.disabledSkills.contains(Skill.SWORDSMANSHIP))
+				if(t.equalsIgnoreCase("Sword") && !plugin.getConfigManager().disabledSkills.contains(Skill.SWORDSMANSHIP))
 				{
 					int alevel = plugin.getSkillManager().getSkillLevel(Skill.SWORDSMANSHIP, player);
 					double perkm = 1;
@@ -518,7 +518,7 @@ public class SRPGL implements Listener
 					e.setDamage((int)(e.getDamage() + (alevel/10)*perkm));
 					sm.calculateLevel(player, Skill.SWORDSMANSHIP);
 				}
-				else if(t.equalsIgnoreCase("Axe") && !ConfigManager.disabledSkills.contains(Skill.AXECRAFT))
+				else if(t.equalsIgnoreCase("Axe") && !plugin.getConfigManager().disabledSkills.contains(Skill.AXECRAFT))
 				{
 					int alevel = plugin.getSkillManager().getSkillLevel(Skill.AXECRAFT, player);
 					int crit = new Random().nextInt(99);
@@ -575,7 +575,7 @@ public class SRPGL implements Listener
 			{
 				Player player = (Player)e.getEntity();
 				SkillManager sm = plugin.getSkillManager();
-				if(player.isBlocking() && ToolComparer.getType(player.getItemInHand()).equalsIgnoreCase("Sword") && !ConfigManager.disabledSkills.contains(Skill.BLOCKING))
+				if(player.isBlocking() && ToolComparer.getType(player.getItemInHand()).equalsIgnoreCase("Sword") && !plugin.getConfigManager().disabledSkills.contains(Skill.BLOCKING))
 				{
 					int alevel = plugin.getSkillManager().getSkillLevel(Skill.BLOCKING, player);
 					double perkm = 1.0;
@@ -593,7 +593,7 @@ public class SRPGL implements Listener
 					sm.calculateLevel(player, Skill.BLOCKING);
 				}
 				double red;
-				if((red = getDamageReduced(player)) > 0 && !ConfigManager.disabledSkills.contains(Skill.ARMOR))
+				if((red = getDamageReduced(player)) > 0 && !plugin.getConfigManager().disabledSkills.contains(Skill.ARMOR))
 				{
 					int a = armorCount(player);
 					int i = 0;
@@ -678,12 +678,12 @@ public class SRPGL implements Listener
 				if(skill == Skill.PICKPOCKETING)
 				{
 					ppcd.add(p);
-					cd = ConfigManager.PickpocketingCooldown;
+					cd = plugin.getConfigManager().PickpocketingCooldown;
 				}
 				else if(skill == Skill.LOCKPICKING)
 				{
 					lpcd.add(p);
-					cd = ConfigManager.LockpickingCooldown;
+					cd = plugin.getConfigManager().LockpickingCooldown;
 				}
 				p.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(skill, p, true), cd);
 			}
