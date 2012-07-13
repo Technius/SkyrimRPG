@@ -39,6 +39,11 @@ public class SkyrimRPG extends JavaPlugin
 	private ConfigManager cm = new ConfigManager(this);
 	private VersionManager vm = new VersionManager();
 	String latestversion;
+	private String versionmessage = null;
+	public String getVersionMessage()
+	{
+		return versionmessage;
+	}
 	public PerkManager getPerkManager()
 	{
 		return pm;
@@ -95,6 +100,7 @@ public class SkyrimRPG extends JavaPlugin
 		sm.clearData();
 		pm.clearData();
 		listen.clearData();
+		cm.clearData();
 	}
 	public boolean checkFiles()
 	{
@@ -138,9 +144,10 @@ public class SkyrimRPG extends JavaPlugin
 				if(latestversion == null)log.info("[SkyrimRPG]Could not find new version");
 				else if(vm.compareVersion(latestversion, s.getDescription().getVersion()))
 				{
+					versionmessage = "New " + (latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 
+							+ " is available: " + latestversion;
 					s.getServer().getScheduler().scheduleSyncDelayedTask(s, 
-							new VC("New " + (latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 
-									+ " is available: " + latestversion), 0L);
+							new VC(versionmessage), 0L);
 				}
 			}
 			catch(MalformedURLException mue)
@@ -152,6 +159,6 @@ public class SkyrimRPG extends JavaPlugin
 	}
 	public void debug(String message)
 	{
-		if(cm.debug)log.info("[SkyrimRPG] [DEBUG] " + message);
+		if(cm.debug)getLogger().info("[DEBUG] " + message);
 	}
 }

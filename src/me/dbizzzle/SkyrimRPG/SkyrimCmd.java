@@ -219,8 +219,7 @@ public class SkyrimCmd implements CommandExecutor
 					if(plugin.getVersionManager().compareVersion(plugin.latestversion, plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))
 					{
 						if(plugin.latestversion.indexOf("DEV") > -1 && !cm.announceDevBuild);
-						else player.sendMessage(ChatColor.RED + "!!!!" + ChatColor.GOLD + "A new " + (plugin.latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 
-								+ " is available: " + plugin.latestversion + ChatColor.RED + "!!!!");
+						else player.sendMessage(ChatColor.RED + "!!!!" + ChatColor.GOLD + plugin.getVersionMessage() +  ChatColor.RED + "!!!!");
 					}
 					player.sendMessage("========================");
 					player.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
