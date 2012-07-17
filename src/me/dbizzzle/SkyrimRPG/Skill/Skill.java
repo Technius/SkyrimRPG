@@ -7,9 +7,17 @@ package me.dbizzzle.SkyrimRPG.Skill;
  */
 public enum Skill 
 {
-	ARCHERY, SWORDSMANSHIP, AXECRAFT,  BLOCKING, ARMOR,
-	PICKPOCKETING, LOCKPICKING, SNEAK,
-	CONJURATION, DESTRUCTION, RESTORATION, ENCHANTING;
+	ARCHERY(1), SWORDSMANSHIP(1), AXECRAFT(1),  BLOCKING(1), ARMOR(1),
+	PICKPOCKETING(3), LOCKPICKING(3), SNEAK(3),
+	CONJURATION(2), DESTRUCTION(2), RESTORATION(2), ENCHANTING(2);
+	private Skill(int mode)
+	{
+		this.mode = mode;
+	}
+	private int mode;
+	public static final int COMBAT = 1;
+	public static final int MAGIC = 2;
+	public static final int THIEF = 3;
 	public String getName()
 	{
 		String sl = toString().toLowerCase().replaceAll("_", " ");
@@ -21,6 +29,18 @@ public enum Skill
 			m = m + " " + Character.toUpperCase(x.charAt(0)) + x.substring(1);
 		}
 		return m;
+	}
+	public boolean isCombat()
+	{
+		return mode == 1;
+	}
+	public boolean isMagic()
+	{
+		return mode == 2;
+	}
+	public boolean isThief()
+	{
+		return mode == 3;
 	}
 	public static Skill getSkill(String skill)
 	{
