@@ -68,14 +68,10 @@ public class PerkCmd implements CommandExecutor
 					{
 						if(ct == 9)break;
 						ChatColor c;
-						switch(p.getSkill())
-						{
-						case ARCHERY: c = ChatColor.DARK_RED; break;
-						case SWORDSMANSHIP: c = ChatColor.DARK_RED; break;
-						case BLOCKING: c = ChatColor.DARK_RED; break;
-						case SNEAK: c = ChatColor.GRAY; break;
-						default: c = ChatColor.WHITE; break;
-						}
+						if(p.getSkill().isCombat())c = ChatColor.DARK_RED;
+						else if(p.getSkill().isMagic())c = ChatColor.BLUE;
+						else if(p.getSkill().isThief())c = ChatColor.GRAY;
+						else c = ChatColor.WHITE;
 						int l = pm.getPerkLevel(player, p);
 						if(p.getMaxLevel() == 1)player.sendMessage(c + p.getName());
 						else player.sendMessage(c + p.getName() + " " + ChatColor.GOLD + "(" + l + "/" + p.getMaxLevel() + ")");
