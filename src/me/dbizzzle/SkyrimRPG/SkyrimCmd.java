@@ -189,15 +189,15 @@ public class SkyrimCmd implements CommandExecutor
 				if(args[0].equalsIgnoreCase("setlevel"))
 				{
 					if(args.length != 3 && args.length != 4)return msgret(sender, ChatColor.RED + "Usage: /srpg setlevel <skill> <level> [player]");
-					if(!sender.hasPermission("skyrimrpg.setlevel"))noPerm(sender);
+					if(!sender.hasPermission("skyrimrpg.setlevel"))return noPerm(sender);
 					Skill skill = Skill.getSkill(args[1]);
 					if(skill == null)msgret(sender, ChatColor.RED + "No such skill: " + args[1]);
-					int l = plugin.getSkillManager().getSkillLevel(skill, player);
+					int l;
 					try{ l = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){sender.sendMessage(ChatColor.RED + "That is not a valid number."); return true;}
 					Player target = null;
 					if(args.length == 3)
 					{
-						if(player ==  null)msgret(sender, ChatColor.RED + "Usage: /srpg setlevel <skill> <level> <player>");
+						if(player ==  null)return msgret(sender, ChatColor.RED + "Usage: /srpg setlevel <skill> <level> <player>");
 						else target = player;
 					}
 					else if(args.length == 4)
