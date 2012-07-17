@@ -61,7 +61,7 @@ permissions:
       Children:
           skyrimrpg.cheats.spells: true
           skyrimrpg.cheats.perks: true
-          skyrimrpg.setlevel: true
+          skyrimrpg.setlevel.other: true
           skyrimrpg.spells.*: true
    skyrimrpg.cheats.spells:
       Description: Allows you to add and remove spells
@@ -98,4 +98,7 @@ permissions:
       Description: Removes a perk
    skyrimrpg.addperk:
       Description: Adds a perk
-   
+   skyrimrpg.setlevel.other:
+      Description: Allows a player to set skill levels
+      Children:
+          skyrimrpg.setlevel: true

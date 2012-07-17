@@ -147,135 +147,80 @@ public class SkyrimCmd implements CommandExecutor
 		}
 		else if (command.getName().equalsIgnoreCase("listspells")) 
 		{
-			if (player == null) 
+			if(args.length != 0 && args.length != 1)
 			{
-				if (args.length == 0) 
-				{
-					sender.sendMessage("You don't have any spells");
-				} 
-				else if (args.length > 0) 
-				{
-					Player spell = plugin.getServer().getPlayer(args[0]);
-					if (spell != null) 
-					{
-						plugin.log.info("[SkyrimRPG]Spells " + spell.getName() + " know");
-						for(Spell s:sm.getSpells(spell))
-						{
-							plugin.log.info("[SkyrimRPG]" + s.getDisplayName());
-						}
-					} 
-					else 
-					{
-						sender.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
-					}
-				}
-			} 
-			else if(player.hasPermission("skyrimrpg.listspells"))
-			{
-				if (args.length == 0) 
-				{
-					player.sendMessage(ChatColor.BLUE + "Spells you know");
-					for(Spell s:sm.getSpells(player))
-					{
-						player.sendMessage(ChatColor.GREEN + s.getDisplayName());
-					}
-				} 
-				else if (args.length > 0) 
-				{
-					Player spell = player.getServer().getPlayer(args[0]);
-					if (spell != null) 
-					{
-						player.sendMessage(ChatColor.BLUE + "Spells " + spell.getName() + " knows");
-						for(Spell s:sm.getSpells(spell))
-						{
-							player.sendMessage(ChatColor.GREEN + s.getDisplayName());
-						}
-					} 
-					else 
-					{
-						player.sendMessage(ChatColor.RED + args[0] + " is currently not available or not online.");
-					}
-				}
-			} 
-			else
-			{
-				player.sendMessage(ChatColor.RED + "You don't have permissions to use this command.");
+				if(player == null)return msgret(sender, ChatColor.RED + "Usage: /listspells [player]");
+				else return msgret(sender, ChatColor.RED + "Usage: /listspells <player>");
 			}
+			Player target = null;
+			if(args.length == 0)
+			{
+				if(player != null)target = player;
+				else return msgret(sender, ChatColor.RED + "Usage: /listspells <player>");
+			}
+			else if(args.length == 1)
+			{
+				target = sender.getServer().getPlayer(args[0]);
+				if(target == null)msgret(sender, ChatColor.RED + "No such player: " + args[0]);
+			}
+			sender.sendMessage(ChatColor.BLUE + target.getName() + "'s spells");
+			for(Spell s:sm.getSpells(target))sender.sendMessage(s.getDisplayName());
 		}
 		else if(command.getName().equalsIgnoreCase("skyrimrpg") || label.equalsIgnoreCase("srpg"))
 		{
-			if(player == null)
+			if(args.length == 0)
 			{
-				System.out.println("[SkyrimRPG]SkyrimRPG version " + plugin.getDescription().getVersion());
-				System.out.println("[SkyrimRPG]Made by dbizzle, ThatBox and Technius");
-			}
-			else
-			{
-				switch(args.length)
+				sender.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + plugin.getDescription().getVersion());
+				sender.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
+				if(plugin.getVersionManager().compareVersion(plugin.getLatestVersion(), plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))
 				{
-				case 0:
-					player.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + plugin.getDescription().getVersion());
-					player.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
-					if(plugin.getVersionManager().compareVersion(plugin.latestversion, plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))
+					if(plugin.getVersionMessage().indexOf("DEV") > -1 && !cm.announceDevBuild);
+					else if(sender.hasPermission("skyrimrpg.newversion"))sender.sendMessage(ChatColor.RED + "!!!!" + ChatColor.GOLD + plugin.getVersionMessage() +  ChatColor.RED + "!!!!");
+				}
+				sender.sendMessage("========================");
+				sender.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
+				if(sender.hasPermission("skyrimrpg.setlevel"))player.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level> [player]" + ChatColor.YELLOW + " - sets the level of the specified skill");
+				if(sender.hasPermission("skyrimrpg.reload"))player.sendMessage(ChatColor.RED + "/skyrimrpg reload" + ChatColor.YELLOW + " - reloads the configuration file");
+				if(sender.hasPermission("skyrimrpg.refresh"))player.sendMessage(ChatColor.RED + "/skyrimrpg refresh" + ChatColor.YELLOW + " - refreshes the configuration file by adding new values, useful when updating");
+				sender.sendMessage(ChatColor.RED + "/perk" + ChatColor.YELLOW + " - shows the perk menu");
+			}
+			else if(args.length >= 1)
+			{
+				if(args[0].equalsIgnoreCase("setlevel"))
+				{
+					if(args.length != 3 && args.length != 4)return msgret(sender, ChatColor.RED + "Usage: /srpg setlevel <skill> <level> [player]");
+					if(!sender.hasPermission("skyrimrpg.setlevel"))noPerm(sender);
+					Skill skill = Skill.getSkill(args[1]);
+					if(skill == null)msgret(sender, ChatColor.RED + "No such skill: " + args[1]);
+					int l = plugin.getSkillManager().getSkillLevel(skill, player);
+					try{ l = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){sender.sendMessage(ChatColor.RED + "That is not a valid number."); return true;}
+					Player target = null;
+					if(args.length == 3)
 					{
-						if(plugin.latestversion.indexOf("DEV") > -1 && !cm.announceDevBuild);
-						else player.sendMessage(ChatColor.RED + "!!!!" + ChatColor.GOLD + plugin.getVersionMessage() +  ChatColor.RED + "!!!!");
+						if(player ==  null)msgret(sender, ChatColor.RED + "Usage: /srpg setlevel <skill> <level> <player>");
+						else target = player;
 					}
-					player.sendMessage("========================");
-					player.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
-					if(player.hasPermission("skyrimrpg.setlevel"))player.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level>" + ChatColor.YELLOW + " - sets the level of the specified skill");
-					if(player.hasPermission("skyrimrpg.reload"))player.sendMessage(ChatColor.RED + "/skyrimrpg reload" + ChatColor.YELLOW + " - reloads the configuration file");
-					if(player.hasPermission("skyrimrpg.refresh"))player.sendMessage(ChatColor.RED + "/skyrimrpg refresh" + ChatColor.YELLOW + " - refreshes the configuration file by adding new values, useful when updating");
-					player.sendMessage(ChatColor.RED + "/perk" + ChatColor.YELLOW + " - shows the perk menu");
-					break;
-				case 3:
-					if(args[0].equalsIgnoreCase("setlevel"))
+					else if(args.length == 4)
 					{
-						if(!player.hasPermission("skyrimrpg.setlevel"))
-						{
-							player.sendMessage(ChatColor.RED + "You don't have permission to do this");
-							return true;
-						}
-						Skill skill;
-						try
-						{
-							skill = Skill.valueOf(args[1].toUpperCase());
-						}
-						catch(IllegalArgumentException iae)
-						{
-							player.sendMessage(ChatColor.RED + "No such skill!");
-							return true;
-						}
-						int l = plugin.getSkillManager().getSkillLevel(skill, player);
-						try{ l = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){sender.sendMessage(ChatColor.RED + "That is not a valid number."); return true;}
-						sk.setLevel(skill, player, l);
-						player.sendMessage(ChatColor.GREEN + skill.getName() + " set to level " + l);
-						return true;
+						target = sender.getServer().getPlayer(args[3]);
+						if(target == null)return msgret(sender, ChatColor.RED + "No such player: " + args[3]);
+						if(target != player && !sender.hasPermission("skyrimrpg.setlevel.other"))return noPerm(sender);
 					}
-					break;
-				case 1:
-					if(args[0].equalsIgnoreCase("reload"))
-					{
-						if(!player.hasPermission("skyrimrpg.reload"))
-						{
-							player.sendMessage(ChatColor.RED + "You don't have permission to do this");
-							return true;
-						}
-						if(!plugin.checkFiles())
-						cm.loadConfig();
-						player.sendMessage(ChatColor.GREEN + "Configuration file reloaded successfully.");
-					}
-					else if(args[0].equalsIgnoreCase("refresh"))
-					{
-						if(!player.hasPermission("skyrimrpg.refresh"))
-						{
-							player.sendMessage(ChatColor.RED + "You don't have permission to do this");
-							return true;
-						}
-						cm.refreshConfig();
-						player.sendMessage(ChatColor.GREEN + "Configuration file refreshed successfully.");
-					}
-					break;
+					sk.setLevel(skill, target, l);
+					sender.sendMessage(ChatColor.GREEN + skill.getName() + " set to level " + l);
+					return true;
+				}
+				else if(args[0].equalsIgnoreCase("reload"))
+				{
+					if(!sender.hasPermission("skyrimrpg.reload"))noPerm(sender);
+					cm.loadConfig();
+					sender.sendMessage(ChatColor.GREEN + "Configuration file reloaded successfully.");
+				}
+				else if(args[0].equalsIgnoreCase("refresh"))
+				{
+					if(!sender.hasPermission("skyrimrpg.refresh"))noPerm(sender);
+					cm.refreshConfig();
+					sender.sendMessage(ChatColor.GREEN + "Configuration file refreshed successfully.");
 				}
 			}
 		}
@@ -336,6 +281,11 @@ public class SkyrimCmd implements CommandExecutor
 	private boolean noConsole(CommandSender sender)
 	{
 		sender.sendMessage(ChatColor.RED + "Console cannot use this command!");
+		return true;
+	}
+	private boolean noPerm(CommandSender sender)
+	{
+		sender.sendMessage(ChatColor.RED + "You are not allowed to use this command!");
 		return true;
 	}
 }

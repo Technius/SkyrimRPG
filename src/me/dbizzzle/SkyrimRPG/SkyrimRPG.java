@@ -38,7 +38,7 @@ public class SkyrimRPG extends JavaPlugin
 	private SRPGL listen = new SRPGL(this);
 	private ConfigManager cm = new ConfigManager(this);
 	private VersionManager vm = new VersionManager();
-	String latestversion;
+	private String latestversion;
 	private String versionmessage = null;
 	public String getVersionMessage()
 	{
@@ -67,6 +67,10 @@ public class SkyrimRPG extends JavaPlugin
 	public ConfigManager getConfigManager()
 	{
 		return cm;
+	}
+	public String getLatestVersion()
+	{
+		return latestversion;
 	}
 	public void onEnable() 
 	{
@@ -135,7 +139,6 @@ public class SkyrimRPG extends JavaPlugin
 		{
 			s = i;
 		}
-		@SuppressWarnings("deprecation")
 		public void run()
 		{
 			try
@@ -144,7 +147,7 @@ public class SkyrimRPG extends JavaPlugin
 				if(latestversion == null)log.info("[SkyrimRPG]Could not find new version");
 				else if(vm.compareVersion(latestversion, s.getDescription().getVersion()))
 				{
-					versionmessage = "New " + (latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 
+					versionmessage = "A new " + (latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 
 							+ " is available: " + latestversion;
 					s.getServer().getScheduler().scheduleSyncDelayedTask(s, 
 							new VC(versionmessage), 0L);
@@ -154,7 +157,6 @@ public class SkyrimRPG extends JavaPlugin
 			{
 				log.info("[SkyrimRPG]Could not find new version");
 			}
-			stop();
 		}
 	}
 	public void debug(String message)
