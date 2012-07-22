@@ -43,6 +43,8 @@ public class ConfigManager
 		File file = new File(a.getDataFolder().getPath());
 		if(!file.exists())file.mkdir();
 		File config = new File(file.getPath() + File.separator + "config.txt");
+		disabledSkills.clear();
+		disabledWorlds.clear();
 		try
 		{
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(config)));
@@ -212,6 +214,8 @@ public class ConfigManager
 				else a = a + "," + w.getName();
 			}
 			bw.write("disabledWorlds: " + a);
+			bw.newLine();
+			bw.write("#Skills that should be disabled (Command seperated list)");
 			bw.newLine();
 			a = "";
 			for(Skill s:disabledSkills)
