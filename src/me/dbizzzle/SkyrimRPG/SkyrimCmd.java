@@ -172,16 +172,16 @@ public class SkyrimCmd implements CommandExecutor
 			{
 				sender.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + plugin.getDescription().getVersion());
 				sender.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
-				if(plugin.getVersionManager().compareVersion(plugin.getLatestVersion(), plugin.getDescription().getVersion())&& player.hasPermission("skyrimrpg.newversion"))
+				if(plugin.getVersionManager().compareVersion(plugin.getLatestVersion(), plugin.getDescription().getVersion())&& sender.hasPermission("skyrimrpg.newversion"))
 				{
 					if(plugin.getVersionMessage().indexOf("DEV") > -1 && !cm.announceDevBuild);
 					else if(sender.hasPermission("skyrimrpg.newversion"))sender.sendMessage(ChatColor.RED + "!!!!" + ChatColor.GOLD + plugin.getVersionMessage() +  ChatColor.RED + "!!!!");
 				}
 				sender.sendMessage("========================");
 				sender.sendMessage(ChatColor.RED + "/skystats <page>" + ChatColor.YELLOW + " - displays your stats");
-				if(sender.hasPermission("skyrimrpg.setlevel"))player.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level> [player]" + ChatColor.YELLOW + " - sets the level of the specified skill");
-				if(sender.hasPermission("skyrimrpg.reload"))player.sendMessage(ChatColor.RED + "/skyrimrpg reload" + ChatColor.YELLOW + " - reloads the configuration file");
-				if(sender.hasPermission("skyrimrpg.refresh"))player.sendMessage(ChatColor.RED + "/skyrimrpg refresh" + ChatColor.YELLOW + " - refreshes the configuration file by adding new values, useful when updating");
+				if(sender.hasPermission("skyrimrpg.setlevel"))sender.sendMessage(ChatColor.RED + "/skyrimrpg setlevel <skill> <level> [player]" + ChatColor.YELLOW + " - sets the level of the specified skill");
+				if(sender.hasPermission("skyrimrpg.reload"))sender.sendMessage(ChatColor.RED + "/skyrimrpg reload" + ChatColor.YELLOW + " - reloads the configuration file");
+				if(sender.hasPermission("skyrimrpg.refresh"))sender.sendMessage(ChatColor.RED + "/skyrimrpg refresh" + ChatColor.YELLOW + " - refreshes the configuration file by adding new values, useful when updating");
 				sender.sendMessage(ChatColor.RED + "/perk" + ChatColor.YELLOW + " - shows the perk menu");
 			}
 			else if(args.length >= 1)
@@ -228,7 +228,7 @@ public class SkyrimCmd implements CommandExecutor
 		{
 			if(player == null)
 			{
-				System.out.println("[SkyrimRPG]You don't have stats!");
+				sender.sendMessage(ChatColor.RED + "You don't have stats!");
 			}
 			else
 			{
