@@ -339,7 +339,7 @@ public class SRPGL implements Listener
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
 		plugin.getSkillManager().loadData(event.getPlayer());
-		if(event.getPlayer().hasPermission("skyrimrpg.newversion"))event.getPlayer().sendMessage(ChatColor.GOLD + plugin.getVersionMessage());
+		if(event.getPlayer().hasPermission("skyrimrpg.newversion") && plugin.getVersionMessage() != null)event.getPlayer().sendMessage(ChatColor.GOLD + "[SkyrimRPG]" + plugin.getVersionMessage());
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event)
