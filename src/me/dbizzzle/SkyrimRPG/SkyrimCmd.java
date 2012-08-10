@@ -2,7 +2,9 @@ package me.dbizzzle.SkyrimRPG;
 
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
-import me.dbizzzle.SkyrimRPG.Spell;
+import me.dbizzzle.SkyrimRPG.spell.Spell;
+import me.dbizzzle.SkyrimRPG.spell.SpellManager;
+
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

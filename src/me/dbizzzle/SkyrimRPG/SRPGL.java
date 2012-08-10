@@ -10,6 +10,8 @@ import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import me.dbizzzle.SkyrimRPG.event.PlayerLockpickEvent;
 import me.dbizzzle.SkyrimRPG.event.PlayerPickpocketEvent;
+import me.dbizzzle.SkyrimRPG.spell.Spell;
+import me.dbizzzle.SkyrimRPG.spell.SpellManager;
 import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;

@@ -6,6 +6,10 @@ import java.util.logging.Logger;
 
 import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
+import me.dbizzzle.SkyrimRPG.spell.MagickaTimer;
+import me.dbizzzle.SkyrimRPG.spell.SpellManager;
+import me.dbizzzle.SkyrimRPG.spell.SpellTimer;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
