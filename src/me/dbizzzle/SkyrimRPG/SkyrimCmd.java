@@ -2,7 +2,9 @@ package me.dbizzzle.SkyrimRPG;
 
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
-import me.dbizzzle.SkyrimRPG.Spell;
+import me.dbizzzle.SkyrimRPG.spell.Spell;
+import me.dbizzzle.SkyrimRPG.spell.SpellManager;
+
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -172,7 +174,7 @@ public class SkyrimCmd implements CommandExecutor
 			{
 				sender.sendMessage(ChatColor.YELLOW + "SkyrimRPG version " + plugin.getDescription().getVersion());
 				sender.sendMessage(ChatColor.GREEN + "Made by dbizzle and Technius");
-				if(plugin.getVersionManager().compareVersion(plugin.getLatestVersion(), plugin.getDescription().getVersion())&& sender.hasPermission("skyrimrpg.newversion"))
+				if(plugin.getLatestVersion() != null && plugin.getVersionManager().compareVersion(plugin.getLatestVersion(), plugin.getDescription().getVersion())&& sender.hasPermission("skyrimrpg.newversion"))
 				{
 					if(plugin.getVersionMessage().indexOf("DEV") > -1 && !cm.announceDevBuild);
 					else if(sender.hasPermission("skyrimrpg.newversion"))sender.sendMessage(ChatColor.RED + "!!!!" + ChatColor.GOLD + plugin.getVersionMessage() +  ChatColor.RED + "!!!!");

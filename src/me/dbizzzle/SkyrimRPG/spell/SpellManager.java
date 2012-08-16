@@ -1,4 +1,4 @@
-package me.dbizzzle.SkyrimRPG;
+package me.dbizzzle.SkyrimRPG.spell;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 
 import org.bukkit.ChatColor;

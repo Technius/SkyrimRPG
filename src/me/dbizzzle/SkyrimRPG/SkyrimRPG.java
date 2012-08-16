@@ -6,6 +6,10 @@ import java.util.logging.Logger;
 
 import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
 import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
+import me.dbizzzle.SkyrimRPG.spell.MagickaTimer;
+import me.dbizzzle.SkyrimRPG.spell.SpellManager;
+import me.dbizzzle.SkyrimRPG.spell.SpellTimer;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -144,7 +148,7 @@ public class SkyrimRPG extends JavaPlugin
 			try
 			{
 				latestversion = vm.getLatestVersion();
-				if(latestversion == null)log.info("[SkyrimRPG]Could not find new version");
+				if(latestversion == null)log.info("[SkyrimRPG]Failed to find new version!");
 				else if(vm.compareVersion(latestversion, s.getDescription().getVersion()))
 				{
 					versionmessage = "A new " + (latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 

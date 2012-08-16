@@ -1,11 +1,12 @@
-package me.dbizzzle.SkyrimRPG;
+package me.dbizzzle.SkyrimRPG.spell;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import me.dbizzzle.SkyrimRPG.Spell;
+import me.dbizzzle.SkyrimRPG.SkyrimRPG;
+import me.dbizzzle.SkyrimRPG.spell.Spell;
 
 import org.bukkit.entity.Player;
 
