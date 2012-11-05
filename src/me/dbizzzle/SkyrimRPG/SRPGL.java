@@ -255,6 +255,7 @@ public class SRPGL implements Listener
 					plugin.getSpellManager().castSpell(s, event.getPlayer());
 				}
 			}
+			event.setCancelled(true);
 		}
 		else if(event.getPlayer().getItemInHand().getType() == Material.BOOK)
 		{
