@@ -2,6 +2,7 @@ package me.dbizzzle.SkyrimRPG.spell.executor;
 
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import me.dbizzzle.SkyrimRPG.spell.SpellManager;
@@ -18,7 +19,7 @@ public class ShootFireball extends SpellExecutor
 			direction.getZ()), Fireball.class);
 		fireball.setShooter(player);
 		fireball.setYield(4F*(m/100));
-		sm.ftracker.add(fireball);
+		fireball.setMetadata("fireball", new FixedMetadataValue(sm.getPlugin(), true));
 	}
 	
 }

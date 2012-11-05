@@ -11,7 +11,8 @@ import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import me.dbizzzle.SkyrimRPG.event.PlayerLockpickEvent;
 import me.dbizzzle.SkyrimRPG.event.PlayerPickpocketEvent;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
-import me.dbizzzle.SkyrimRPG.spell.SpellManager;
+import me.dbizzzle.SkyrimRPG.util.MetadataHandler;
+import me.dbizzzle.SkyrimRPG.util.ToolComparer;
 import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;
@@ -48,6 +49,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Door;
 import org.bukkit.material.TrapDoor;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -538,9 +540,10 @@ public class SRPGL implements Listener
 			else if(e.getDamager() instanceof SmallFireball)
 			{
 				SmallFireball sf = (SmallFireball)e.getDamager();
-				if(sf.getShooter() instanceof Player)
+				MetadataValue mv = MetadataHandler.getMetadata(sf, plugin, "flames");
+				if(sf.getShooter() instanceof Player && mv != null)
 				{
-					if(plugin.getSpellManager().flames.contains(sf))
+					if(mv.asBoolean())
 					{
 						Player player = (Player)sf.getShooter();
 						int alevel = plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, player)/20;
@@ -554,9 +557,10 @@ public class SRPGL implements Listener
 			else if(e.getDamager() instanceof Snowball)
 			{
 				Snowball sf = (Snowball)e.getDamager();
-				if(sf.getShooter() instanceof Player)
+				MetadataValue mv = MetadataHandler.getMetadata(sf, plugin, "frostbite");
+				if(sf.getShooter() instanceof Player && mv != null)
 				{
-					if(plugin.getSpellManager().frostbite.contains(sf))
+					if(mv.asBoolean())
 					{
 						Player player = (Player)sf.getShooter();
 						int alevel = plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, player)/30;
@@ -616,30 +620,14 @@ public class SRPGL implements Listener
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onProjectileHit(ProjectileHitEvent event)
-	{
-		if(event.getEntity() instanceof SmallFireball)
-		{
-			if(plugin.getSpellManager().flames.contains(event.getEntity()))
-			{
-				plugin.getSpellManager().flames.remove(event.getEntity());
-			}
-		}
-		else if(event.getEntity() instanceof Snowball)
-		{
-			if(plugin.getSpellManager().frostbite.contains(event.getEntity()))
-			{
-				plugin.getSpellManager().frostbite.remove(event.getEntity());
-			}
-		}
-	}
 	//@EventHandler(priority = EventPriority.HIGHEST)
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if(!(event.getEntity() instanceof Fireball))return;
 		Fireball f = (Fireball)event.getEntity();
-		if(!plugin.getSpellManager().ftracker.contains(f))return;
+		MetadataValue mv = MetadataHandler.getMetadata(f, plugin, "flames");
+		if(mv == null)return;
+		if(!mv.asBoolean())return;
 		if(!(f.getShooter() instanceof Player))return;
 		Player p = (Player)f.getShooter();
 		List<Entity> tod = f.getNearbyEntities(f.getYield(), f.getYield(), f.getYield());
@@ -658,7 +646,6 @@ public class SRPGL implements Listener
 		}
 		SkillManager sm = plugin.getSkillManager();
 		sm.calculateLevel(p, Skill.DESTRUCTION);
-		plugin.getSpellManager().ftracker.remove(f);
 	}
 	private class Cooldown implements Runnable
 	{

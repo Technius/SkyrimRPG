@@ -4,6 +4,7 @@ import me.dbizzzle.SkyrimRPG.spell.SpellManager;
 
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 public class Flames extends SpellExecutor
@@ -18,7 +19,7 @@ public class Flames extends SpellExecutor
 			fireball.setVelocity(direction.multiply(0.25));
 			fireball.setYield(0);
 			fireball.setIsIncendiary(false);
-			sm.flames.add(fireball);
+			fireball.setMetadata("flames", new FixedMetadataValue(sm.getPlugin(), true));
 		}
 	}
 }

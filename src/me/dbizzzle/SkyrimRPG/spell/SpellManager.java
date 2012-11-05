@@ -27,15 +27,12 @@ import org.bukkit.util.Vector;
 
 public class SpellManager 
 {
-	public List<Fireball>ftracker = new ArrayList<Fireball>();
 	public HashMap<Player, Zombie>czombie = new HashMap<Player,Zombie>();
 	public HashMap<Player, LivingEntity>conjured = new HashMap<Player, LivingEntity>();
 	private HashMap<Player, List<Spell>>spells = new HashMap<Player, List<Spell>>();
 	private HashMap<Player, Spell>boundleft = new HashMap<Player,Spell>();
 	private HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
 	private HashMap<Player, Integer>magicka = new HashMap<Player,Integer>();
-	public List<SmallFireball>flames = new ArrayList<SmallFireball>();
-	public List<Snowball>frostbite = new ArrayList<Snowball>();
 	private SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{

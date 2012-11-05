@@ -4,6 +4,7 @@ import me.dbizzzle.SkyrimRPG.spell.SpellManager;
 
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 public class Frostbite extends SpellExecutor
@@ -18,7 +19,7 @@ public class Frostbite extends SpellExecutor
 			Vector v = snowball.getVelocity().multiply(2.5);
 			v.setY(y);
 			snowball.setVelocity(v);
-				sm.frostbite.add(snowball);
+			snowball.setMetadata("frostbite", new FixedMetadataValue(sm.getPlugin(), true));
 		}
 	}
 }
