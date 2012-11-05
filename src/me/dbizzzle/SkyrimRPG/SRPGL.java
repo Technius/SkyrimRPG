@@ -39,7 +39,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -620,27 +619,34 @@ public class SRPGL implements Listener
 			}
 		}
 	}
-	//@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if(!(event.getEntity() instanceof Fireball))return;
 		Fireball f = (Fireball)event.getEntity();
-		MetadataValue mv = MetadataHandler.getMetadata(f, plugin, "flames");
+		MetadataValue mv = MetadataHandler.getMetadata(f, plugin, "fireball");
 		if(mv == null)return;
 		if(!mv.asBoolean())return;
 		if(!(f.getShooter() instanceof Player))return;
 		Player p = (Player)f.getShooter();
-		List<Entity> tod = f.getNearbyEntities(f.getYield(), f.getYield(), f.getYield());
-		event.setCancelled(true);
+		float yield = f.getYield();
+		List<Entity> tod = f.getNearbyEntities(yield, yield, yield);
 		f.setYield(0);
+		event.setCancelled(true);
 		int sp = 0;
 		int alevel = plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, p);
+		event.getEntity().getWorld().createExplosion(event.getEntity().getLocation(), 0F);
 		for(Entity x:tod)
 		{
 			if(!(x instanceof LivingEntity))continue;
 			LivingEntity l = (LivingEntity) x;
-			l.damage(7 + (alevel/10), p);
-			l.getWorld().createExplosion(f.getLocation(), 0);
+			if(!l.hasLineOfSight(f))continue;
+			double dist = event.getEntity().getLocation().distance(x.getLocation());
+			if(dist > 5)continue;
+			double scale = (5 - dist)/5;
+			int damage = (int)(scale*(7 + (alevel/10)));
+			if(damage == 0)continue;
+			l.damage(damage, p);
 			l.setFireTicks(60);
 			sp = sp+1;
 		}

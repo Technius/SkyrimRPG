@@ -18,7 +18,7 @@ public class ShootFireball extends SpellExecutor
 		Fireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), 
 			direction.getZ()), Fireball.class);
 		fireball.setShooter(player);
-		fireball.setYield(4F*(m/100));
+		fireball.setYield(5F);
 		fireball.setMetadata("fireball", new FixedMetadataValue(sm.getPlugin(), true));
 	}
 	
