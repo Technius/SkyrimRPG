@@ -1,18 +1,28 @@
 package me.dbizzzle.SkyrimRPG.spell;
 
+import org.bukkit.entity.Player;
+
+import me.dbizzzle.SkyrimRPG.spell.executor.*;
+
 public enum Spell
 {
-	RAISE_ZOMBIE(2, 90, null),HEALING(4, 20, null),
-	UFIREBALL(10101, 0, null), FIREBALL(1, 100, UFIREBALL),FLAMES(3, 20, null), 
-	CONJURE_FLAME_ATRONACH(5, 100, null), FROSTBITE(6, 25, null);
+	RAISE_ZOMBIE(2, 90, null, new RaiseZombie()),
+	HEALING(4, 20, null, new Healing()),
+	UFIREBALL(10101, 0, null, new ShootFireball()),
+	FIREBALL(1, 100, UFIREBALL, new ChargeFireball()),
+	FLAMES(3, 20, null, new Flames()),
+	CONJURE_FLAME_ATRONACH(5, 100, null, new ConjureFlameAtronach()),
+	FROSTBITE(6, 25, null, new Frostbite());
 	private int id;
 	private int basecost;
 	private Spell partner;
-	private Spell(int id, int basecost, Spell partner)
+	private SpellExecutor executor;
+	private Spell(int id, int basecost, Spell partner, SpellExecutor executor)
 	{
 		this.id = id;
 		this.basecost = basecost;
 		this.partner = partner;
+		this.executor = executor;
 	}
 	public static Spell get(String spell)
 	{
@@ -67,5 +77,9 @@ public enum Spell
 			}
 		}
 		return s1;
+	}
+	public void cast(Player player, SpellManager sm)
+	{
+		if(executor != null)executor.cast(player, sm);
 	}
 }

@@ -72,7 +72,6 @@ public class SRPGL implements Listener
 		lpcd.clear();
 		sneak.clear();
 	}
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
@@ -220,7 +219,6 @@ public class SRPGL implements Listener
 						event.getPlayer().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.LOCKPICKING, event.getPlayer(), false));
 					}
 				}
-				event.getPlayer().updateInventory();
 				return;
 			}
 		}
@@ -361,21 +359,21 @@ public class SRPGL implements Listener
 		if(event.getEntity() instanceof Zombie)
 		{
 			Zombie z = (Zombie)event.getEntity();
-			if(!SpellManager.czombie.containsValue(z))return;
+			if(!plugin.getSpellManager().czombie.containsValue(z))return;
 			if(!(event.getTarget() instanceof Player))return;
 			Player player = (Player)event.getTarget();
-			if(!SpellManager.czombie.containsKey(player))return;
-			if(SpellManager.czombie.get(player) != z)return;
+			if(!plugin.getSpellManager().czombie.containsKey(player))return;
+			if(plugin.getSpellManager().czombie.get(player) != z)return;
 			event.setCancelled(true);
 		}
 		else if(event.getEntity() instanceof Blaze)
 		{
 			Blaze z = (Blaze)event.getEntity();
-			if(!SpellManager.conjured.containsValue(z))return;
+			if(!plugin.getSpellManager().conjured.containsValue(z))return;
 			if(!(event.getTarget() instanceof Player))return;
 			Player player = (Player)event.getTarget();
-			if(!SpellManager.conjured.containsKey(player))return;
-			if(SpellManager.conjured.get(player) != z)return;
+			if(!plugin.getSpellManager().conjured.containsKey(player))return;
+			if(plugin.getSpellManager().conjured.get(player) != z)return;
 			event.setCancelled(true);
 		}
 	}
@@ -385,14 +383,14 @@ public class SRPGL implements Listener
 		if(event.getEntity() instanceof Zombie)
 		{
 			Zombie z = (Zombie)event.getEntity();
-			if(!SpellManager.czombie.containsValue(z))return;
-			SpellManager.czombie.remove(z);
+			if(!plugin.getSpellManager().czombie.containsValue(z))return;
+			plugin.getSpellManager().czombie.remove(z);
 		}
 		else if(event.getEntity() instanceof Blaze)
 		{
 			Blaze z = (Blaze)event.getEntity();
-			if(!SpellManager.conjured.containsValue(z))return;
-			SpellManager.conjured.remove(z);
+			if(!plugin.getSpellManager().conjured.containsValue(z))return;
+			plugin.getSpellManager().conjured.remove(z);
 			event.getDrops().clear();
 		}
 	}
@@ -486,17 +484,17 @@ public class SRPGL implements Listener
 			{
 				SkillManager sm = plugin.getSkillManager();
 				Player player = (Player)e.getDamager();
-				if(SpellManager.czombie.containsKey(player))
+				if(plugin.getSpellManager().czombie.containsKey(player))
 				{
-					Zombie z = SpellManager.czombie.get(player);
+					Zombie z = plugin.getSpellManager().czombie.get(player);
 					if(!z.isDead())
 					{
 						if(e.getEntity() instanceof LivingEntity)z.setTarget((LivingEntity)e.getEntity());
 					}
 				}
-				if(SpellManager.conjured.containsKey(player))
+				if(plugin.getSpellManager().conjured.containsKey(player))
 				{
-					Blaze z = (Blaze)SpellManager.conjured.get(player);
+					Blaze z = (Blaze)plugin.getSpellManager().conjured.get(player);
 					if(!z.isDead())
 					{
 						if(e.getEntity() instanceof LivingEntity)z.setTarget((LivingEntity)e.getEntity());
@@ -542,7 +540,7 @@ public class SRPGL implements Listener
 				SmallFireball sf = (SmallFireball)e.getDamager();
 				if(sf.getShooter() instanceof Player)
 				{
-					if(SpellManager.flames.contains(sf))
+					if(plugin.getSpellManager().flames.contains(sf))
 					{
 						Player player = (Player)sf.getShooter();
 						int alevel = plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, player)/20;
@@ -558,7 +556,7 @@ public class SRPGL implements Listener
 				Snowball sf = (Snowball)e.getDamager();
 				if(sf.getShooter() instanceof Player)
 				{
-					if(SpellManager.frostbite.contains(sf))
+					if(plugin.getSpellManager().frostbite.contains(sf))
 					{
 						Player player = (Player)sf.getShooter();
 						int alevel = plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, player)/30;
@@ -623,16 +621,16 @@ public class SRPGL implements Listener
 	{
 		if(event.getEntity() instanceof SmallFireball)
 		{
-			if(SpellManager.flames.contains(event.getEntity()))
+			if(plugin.getSpellManager().flames.contains(event.getEntity()))
 			{
-				SpellManager.flames.remove(event.getEntity());
+				plugin.getSpellManager().flames.remove(event.getEntity());
 			}
 		}
 		else if(event.getEntity() instanceof Snowball)
 		{
-			if(SpellManager.frostbite.contains(event.getEntity()))
+			if(plugin.getSpellManager().frostbite.contains(event.getEntity()))
 			{
-				SpellManager.frostbite.remove(event.getEntity());
+				plugin.getSpellManager().frostbite.remove(event.getEntity());
 			}
 		}
 	}
@@ -641,7 +639,7 @@ public class SRPGL implements Listener
 	{
 		if(!(event.getEntity() instanceof Fireball))return;
 		Fireball f = (Fireball)event.getEntity();
-		if(!SpellManager.ftracker.contains(f))return;
+		if(!plugin.getSpellManager().ftracker.contains(f))return;
 		if(!(f.getShooter() instanceof Player))return;
 		Player p = (Player)f.getShooter();
 		List<Entity> tod = f.getNearbyEntities(f.getYield(), f.getYield(), f.getYield());
@@ -660,7 +658,7 @@ public class SRPGL implements Listener
 		}
 		SkillManager sm = plugin.getSkillManager();
 		sm.calculateLevel(p, Skill.DESTRUCTION);
-		SpellManager.ftracker.remove(f);
+		plugin.getSpellManager().ftracker.remove(f);
 	}
 	private class Cooldown implements Runnable
 	{

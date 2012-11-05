@@ -31,20 +31,12 @@ public class SpellTimer
 	}
 	public void chargeFireball(Player player)
 	{
-		if(!p.getSpellManager().hasEnough(player, 100))
-		{
-			p.getSpellManager().magickaWarning(player, "Fireball");
-			return;
-		}
-		else
-		{
-			player.sendMessage("Charging Fireball...");
-			p.getSpellManager().subtractMagicka(player, 100);
-			if(fireballcharge.contains(player))return;
-			fireballcharge.add(player);
-			p.getServer().getScheduler().scheduleSyncDelayedTask(p, new SpellRunnable(p.getSpellTimer(),Spell.FIREBALL, player), 50);
-			fballstart.put(player, Integer.valueOf(Calendar.getInstance().get(Calendar.MILLISECOND) + (Calendar.getInstance().get(Calendar.SECOND)*1000)));
-		}
+		player.sendMessage("Charging Fireball...");
+		p.getSpellManager().subtractMagicka(player, 100);
+		if(fireballcharge.contains(player))return;
+		fireballcharge.add(player);
+		p.getServer().getScheduler().scheduleSyncDelayedTask(p, new SpellRunnable(p.getSpellTimer(),Spell.FIREBALL, player), 50);
+		fballstart.put(player, Integer.valueOf(Calendar.getInstance().get(Calendar.MILLISECOND) + (Calendar.getInstance().get(Calendar.SECOND)*1000)));
 	}
 	public int unchargeFireball(Player player)
 	{
