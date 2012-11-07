@@ -230,6 +230,7 @@ public class SRPGL implements Listener
 				Spell s = plugin.getSpellManager().getBoundLeft(event.getPlayer());
 				if(s != null)
 				{
+					event.setCancelled(true);
 					if(plugin.getConfigManager().useSpellPermissions && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
 					{
 						if(!event.getPlayer().hasPermission("skyrimrpg.spells." + s.getDisplayName()))
@@ -245,6 +246,7 @@ public class SRPGL implements Listener
 				Spell s = plugin.getSpellManager().getBoundRight(event.getPlayer());
 				if(s != null)
 				{
+					event.setCancelled(true);
 					if(plugin.getConfigManager().useSpellPermissions && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
 					{
 						if(!event.getPlayer().hasPermission("skyrimrpg.spells." + s.getDisplayName()))
@@ -255,7 +257,6 @@ public class SRPGL implements Listener
 					plugin.getSpellManager().castSpell(s, event.getPlayer());
 				}
 			}
-			event.setCancelled(true);
 		}
 		else if(event.getPlayer().getItemInHand().getType() == Material.BOOK)
 		{
