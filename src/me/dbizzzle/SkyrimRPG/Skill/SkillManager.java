@@ -8,7 +8,10 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
@@ -19,8 +22,7 @@ import org.bukkit.entity.Player;
 public class SkillManager 
 {
 	Logger log = Logger.getLogger("Minecraft");
-	private HashMap<Player, HashMap<Skill, Integer>> skills = new HashMap<Player, HashMap<Skill, Integer>>();
-	private HashMap<Player, HashMap<Skill, Integer>> progress = new HashMap<Player, HashMap<Skill, Integer>>();
+	private ArrayList<SkillData> data = new ArrayList<SkillData>();
 	private HashMap<Player, Integer> level = new HashMap<Player,Integer>();
 	private SkyrimRPG p = null;
 	public SkillManager(SkyrimRPG a)
@@ -35,25 +37,16 @@ public class SkillManager
 	{
 		if (processExperience(player, s)) {
 			incrementLevel(s, player);
-			progress.get(player).put(s, 0);
+			getData(player).setProgress(s, 0);
 			calculateLevel(player);
 		} else {
-			progress.get(player).put(s, progress.get(player).get(s) + 1);
+			SkillData d = getData(player);
+			d.setProgress(s, d.getSkillProgress(s) + 1);
 		}
 	}
 	public int calculateLevel(Player player)
 	{
-		int lvl = 0;
-		int tot = 0;
-		for(Skill s:skills.get(player).keySet())
-		{
-			tot = tot + skills.get(player).get(s).intValue();
-			while(tot >= 8)
-			{
-				lvl = lvl + 1;
-				tot = tot - 8;
-			}
-		}
+		int lvl = getData(player).calculateLevel();
 		if(lvl != level.get(player).intValue())
 		{
 			level.put(player, lvl);
@@ -65,29 +58,30 @@ public class SkillManager
 	{
 		int tot = 0;
 		int cl = level.get(player).intValue();
-		for(Skill s:skills.get(player).keySet())
+		for(Map.Entry<Skill, Integer> k :getData(player).getLevels())
 		{
-			tot = tot + skills.get(player).get(s).intValue();
+			tot = tot + k.getValue();
 		}
 		if(tot > cl * Skill.values().length)return true;
 		return false;
 	}
-	public HashMap<Skill, Integer> getSkills (Player player)
+	public Set<Map.Entry<Skill, Integer>> getSkills (Player player)
 	{
-		return skills.get(player);
+		return getData(player).getLevels();
 	}
 	public int getProgress(Skill skill, Player player)
 	{
-		return progress.get(player).get(skill).intValue();
+		return getData(player).getSkillProgress(skill);
 	}
 	public void setLevel(Skill skill, Player player, int level)
 	{
-		skills.get(player).put(skill, Integer.valueOf(level));
+		getData(player).setSkillLevel(skill, level);
 	}
 	public void incrementLevel(Skill skill, Player player)
 	{
-		int l = skills.get(player).get(skill).intValue() + 1;
-		skills.get(player).put(skill, Integer.valueOf(l));
+		SkillData d = getData(player);
+		int l = d.getSkillLevel(skill) + 1;
+		d.setSkillLevel(skill, l);
 		player.sendMessage(skill.getName() + " increased to level " + l);
 	}
 	public void loadData(Player player)
@@ -98,8 +92,8 @@ public class SkillManager
 	}
 	public void clearData()
 	{
-		skills.clear();
-		progress.clear();
+		for(SkillData d:data)d.cleanup();
+		data.clear();
 		level.clear();
 	}
 	public void loadSkills(Player player)
@@ -118,33 +112,18 @@ public class SkillManager
 		{
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(save)));
 			String l;
-			HashMap<Skill, Integer> pr = new HashMap<Skill, Integer>();
-			HashMap<Skill, Integer> sk = new HashMap<Skill, Integer>();
 			int tl = 1;
 			int m = 0;
 			int pp = 0;
+			ArrayList<String>dat = new ArrayList<String>();
 			while((l=br.readLine())!= null)
 			{
 				if(l.startsWith("#"))continue;
-				String delim = "[:]";
-				String tokens[] = l.split(delim, 2);
-				if(tokens.length != 2) continue;
-				if(l.startsWith("Archery"))loadSkill(tokens, Skill.ARCHERY, pr, sk);
-				else if(l.startsWith("Swordsmanship"))loadSkill(tokens, Skill.SWORDSMANSHIP, pr, sk);
-				else if(l.startsWith("PickPocket") || l.startsWith("Pickpocketing"))loadSkill(tokens, Skill.PICKPOCKETING, pr, sk);
-				else if(l.startsWith("Destruction"))loadSkill(tokens, Skill.DESTRUCTION, pr, sk);
-				else if(l.startsWith("Conjuration"))loadSkill(tokens, Skill.CONJURATION, pr, sk);
-				else if(l.startsWith("Lockpicking"))loadSkill(tokens, Skill.LOCKPICKING, pr, sk);
-				else if(l.startsWith("Axecraft"))loadSkill(tokens, Skill.AXECRAFT, pr, sk);
-				else if(l.startsWith("Blocking"))loadSkill(tokens, Skill.BLOCKING, pr, sk);
-				else if(l.startsWith("Enchanting"))loadSkill(tokens, Skill.ENCHANTING, pr, sk);
-				else if(l.startsWith("Restoration"))loadSkill(tokens, Skill.RESTORATION, pr, sk);
-				else if(l.startsWith("Sneak"))loadSkill(tokens, Skill.SNEAK, pr, sk);
-				else if(l.startsWith("Armor"))loadSkill(tokens, Skill.ARMOR, pr, sk);
-				else if(l.startsWith("Level"))
+				String tokens[] = l.split(":", 2);
+				if(tokens.length != 2)continue;
+				if(tokens[0].equalsIgnoreCase("level"))
 				{
 					if(tokens.length != 2)continue;
-					if(!tokens[0].equalsIgnoreCase("Level"))continue;
 					try
 					{
 						String s = tokens[1].replaceAll(" ", "");
@@ -155,10 +134,9 @@ public class SkillManager
 						tl = 1;
 					}
 				}
-				else if(l.startsWith("Magicka"))
+				else if(tokens[0].equalsIgnoreCase("magicka"))
 				{
 					if(tokens.length != 2)continue;
-					if(!tokens[0].equalsIgnoreCase("Magicka"))continue;
 					try
 					{
 						String s = tokens[1].replaceAll(" ", "");
@@ -169,10 +147,9 @@ public class SkillManager
 						m = 0;
 					}
 				}
-				else if(l.startsWith("Perk Points"))
+				else if(tokens[0].equalsIgnoreCase("perk points"))
 				{
 					if(tokens.length != 2)continue;
-					if(!tokens[0].equalsIgnoreCase("Perk Points"))continue;
 					try
 					{
 						String s = tokens[1].replaceAll(" ", "");
@@ -183,14 +160,11 @@ public class SkillManager
 						pp = 0;
 					}
 				}
+				else dat.add(l);
 			}
-			for(Skill s:Skill.values())
-			{
-				if(!sk.containsKey(s))sk.put(s, 1);
-				if(!pr.containsKey(s))pr.put(s, 0);
-			}
-			skills.put(player, sk);
-			progress.put(player, pr);
+			SkillData d = new SkillData(player);
+			d.load(dat.toArray(new String[dat.size()]));
+			addData(d);
 			level.put(player, tl);
 			p.getPerkManager().setPoints(player, pp);
 			p.getSpellManager().setMagicka(player, m);
@@ -203,7 +177,7 @@ public class SkillManager
 	}
 	public int getSkillLevel(Skill skill, Player player)
 	{
-		return skills.get(player).get(skill).intValue();
+		return getData(player).getSkillLevel(skill);
 	}
 	public void saveSkills(Player player)
 	{
@@ -235,9 +209,10 @@ public class SkillManager
 			bw.newLine();
 			bw.write("#Skill: level, progress");
 			bw.newLine();
-			for(Skill s:Skill.values())
+			for(String s:getData(player).save())
 			{
-				bw.write(s.getName() + ": " + getSkillLevel(s, player) + "," + getProgress(s, player));
+				System.out.println(s);
+				bw.write(s);
 				bw.newLine();
 			}
 			bw.flush();
@@ -256,40 +231,12 @@ public class SkillManager
 	}
 	public void resetSkills(Player player)
 	{
-		HashMap<Skill, Integer> sk = new HashMap<Skill, Integer>();
-		HashMap<Skill, Integer> pr = new HashMap<Skill, Integer>();
-		for(Skill s:Skill.values())
-		{
-			sk.put(s, 1);
-			pr.put(s, 0);
-		}
-		skills.put(player, sk);
-		progress.put(player, pr);
+		for(Map.Entry<Skill,Integer> k:getData(player).getLevels())k.setValue(1);
+		for(Map.Entry<Skill,Integer> k:getData(player).getProgress())k.setValue(0);
 		level.put(player, 1);
 		p.getPerkManager().setPoints(player, 0);
 		p.getPerkManager().defaultPerks(player);
 		p.getSpellManager().setMagicka(player, 0);
-	}
-	private void loadSkill(String[] tokens, Skill skill, HashMap<Skill, Integer> pr, HashMap<Skill, Integer> sk)
-	{
-		if(tokens.length != 2) return;
-		String x = tokens[1].replaceAll(" ", "");
-		String[] sep = x.split("[,]",2);
-		if(sep.length != 2) return;
-		int level = 1;
-		int progress = 0;
-		try
-		{
-			level = Integer.parseInt(sep[0]);
-			progress = Integer.parseInt(sep[1]);
-		}
-		catch(NumberFormatException nfe)
-		{
-			level = 1;
-			progress = 0;
-		}
-		pr.put(skill, Integer.valueOf(progress));
-		sk.put(skill, Integer.valueOf(level));
 	}
 	/**
 	 * Calculates if the player levels up or not
@@ -314,5 +261,25 @@ public class SkillManager
 			return true;
 		}
 		return false;
+	}
+	public SkillData getData(Player player)
+	{
+		for(SkillData s:data)
+		{
+			if(s.getPlayer() == player)return s;
+		}
+		SkillData d = new SkillData(player);
+		addData(d);
+		return d;
+	}
+	public void removeData(Player player)
+	{
+		SkillData d = getData(player);
+		if(d != null)data.remove(d);
+	}
+	public void addData(SkillData d)
+	{
+		if(getData(d.getPlayer()) != null)return;
+		data.add(d);
 	}
 }
