@@ -269,7 +269,7 @@ public class SkillManager
 			if(s.getPlayer() == player)return s;
 		}
 		SkillData d = new SkillData(player);
-		addData(d);
+		data.add(d);
 		return d;
 	}
 	public void removeData(Player player)
