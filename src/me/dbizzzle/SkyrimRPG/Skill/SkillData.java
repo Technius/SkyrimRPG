@@ -66,6 +66,7 @@ public class SkillData
 			}catch(NumberFormatException nfe){continue;}
 			setSkillLevel(sk, lv);
 			setProgress(sk, prog);
+			System.out.println(lv + "," + prog + ";" + getSkillLevel(sk) + "," + getSkillProgress(sk));
 		}
 	}
 	public int calculateLevel()

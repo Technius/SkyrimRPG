@@ -346,8 +346,8 @@ public class SRPGL implements Listener
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
 		plugin.getSkillManager().saveData(event.getPlayer());
+		plugin.getSkillManager().removeData(event.getPlayer());
 	}
-
 	public boolean pickLockSuccess(Player pla)
 	{
 		int alevel = plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, pla);

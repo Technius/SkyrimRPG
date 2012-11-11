@@ -211,7 +211,6 @@ public class SkillManager
 			bw.newLine();
 			for(String s:getData(player).save())
 			{
-				System.out.println(s);
 				bw.write(s);
 				bw.newLine();
 			}
@@ -231,8 +230,10 @@ public class SkillManager
 	}
 	public void resetSkills(Player player)
 	{
-		for(Map.Entry<Skill,Integer> k:getData(player).getLevels())k.setValue(1);
-		for(Map.Entry<Skill,Integer> k:getData(player).getProgress())k.setValue(0);
+		SkillData d = getData(player);
+		if(d == null)addData((d=new SkillData(player)));
+		for(Map.Entry<Skill,Integer> k:d.getLevels())k.setValue(1);
+		for(Map.Entry<Skill,Integer> k:d.getProgress())k.setValue(0);
 		level.put(player, 1);
 		p.getPerkManager().setPoints(player, 0);
 		p.getPerkManager().defaultPerks(player);
@@ -268,9 +269,7 @@ public class SkillManager
 		{
 			if(s.getPlayer() == player)return s;
 		}
-		SkillData d = new SkillData(player);
-		data.add(d);
-		return d;
+		return null;
 	}
 	public void removeData(Player player)
 	{
