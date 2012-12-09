@@ -13,7 +13,6 @@ import me.dbizzzle.SkyrimRPG.event.PlayerPickpocketEvent;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
 import me.dbizzzle.SkyrimRPG.util.MetadataHandler;
 import me.dbizzzle.SkyrimRPG.util.ToolComparer;
-import net.minecraft.server.EntityPlayer;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -278,48 +277,46 @@ public class SRPGL implements Listener
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if(plugin.getConfigManager().disabledWorlds.contains(event.getPlayer().getWorld()))return;
-		Player se = event.getPlayer();
-		final EntityPlayer s = ((CraftPlayer)se).getHandle();
+		final Player s = event.getPlayer();
 		if (s.isSneaking() && plugin.getConfigManager().enablePickpocketing) {
 			Entity ent = event.getRightClicked();
 			if (ent instanceof Player) {
 				final Player victim = (Player) ent;
-				if(ppcd.contains(se) && plugin.getConfigManager().enablePickpocketingCooldown)
+				if(ppcd.contains(s) && plugin.getConfigManager().enablePickpocketingCooldown)
 				{
-					se.sendMessage(ChatColor.RED + "You are too afraid to pickpocket someone right now");
-					plugin.debug("Pickpocketing: result=cooldown, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
+					s.sendMessage(ChatColor.RED + "You are too afraid to pickpocket someone right now");
+					plugin.debug("Pickpocketing: result=cooldown, player=" + s.getName() + ", " + "target= " + ((Player)ent).getName());
 					return;
 				}
 				if(((Player)ent).hasPermission("skyrimrpg.nopickpocket"))
 				{
-					se.sendMessage(ChatColor.RED + "You probably don't want to pickpocket this person.");
-					plugin.debug("Pickpocketing: result=denied, player=" + se.getName() + ", " + "target= " + victim.getName());
+					s.sendMessage(ChatColor.RED + "You probably don't want to pickpocket this person.");
+					plugin.debug("Pickpocketing: result=denied, player=" + s.getName() + ", " + "target= " + victim.getName());
 					return;
 				}
-				EntityPlayer pick = ((CraftPlayer) victim).getHandle();
 				Random r = new Random();
 				double c = r.nextInt(100) + 1;
 				double mul = 1.0;
-				if(plugin.getPerkManager().hasPerk(se, Perk.LIGHT_FINGERS))mul = mul + (0.2*plugin.getPerkManager().getPerkLevel(se, Perk.LIGHT_FINGERS));
+				if(plugin.getPerkManager().hasPerk(s, Perk.LIGHT_FINGERS))mul = mul + (0.2*plugin.getPerkManager().getPerkLevel(s, Perk.LIGHT_FINGERS));
 				mul = mul - (0.25*plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, victim));
 				c = c * mul;
-				if(c > plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, se)&& plugin.getConfigManager().enablePickpocketingChance)
+				if(c > plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, s)&& plugin.getConfigManager().enablePickpocketingChance)
 				{
-					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + victim.getName() + "!");
-					victim.sendMessage(ChatColor.RED + se.getName() + " tried to pickpocket you!");
+					s.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + victim.getName() + "!");
+					victim.sendMessage(ChatColor.RED + s.getName() + " tried to pickpocket you!");
 					SkillManager sm = plugin.getSkillManager();
 					sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
-					plugin.debug("Pickpocketing: result=fail, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
-					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), plugin.getConfigManager().PickpocketingCooldown);
-					se.getServer().getPluginManager().callEvent(new PlayerPickpocketEvent(event.getPlayer(), victim, false));
+					plugin.debug("Pickpocketing: result=fail, player=" + s.getName() + ", " + "target= " + ((Player)ent).getName());
+					s.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, s, false), plugin.getConfigManager().PickpocketingCooldown);
+					s.getServer().getPluginManager().callEvent(new PlayerPickpocketEvent(event.getPlayer(), victim, false));
 					return;
 				}
 				PlayerPickpocketEvent e = new PlayerPickpocketEvent(event.getPlayer(), victim, true);
-				se.getServer().getPluginManager().callEvent(e);
+				s.getServer().getPluginManager().callEvent(e);
 				if(e.isCancelled())return;
-				s.openContainer(pick.inventory);
-				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + victim.getName() + "!");
-				plugin.debug("Pickpocketing: result=success, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
+				s.openInventory(victim.getInventory());
+				s.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + victim.getName() + "!");
+				plugin.debug("Pickpocketing: result=success, player=" + s.getName() + ", " + "target= " + ((Player)ent).getName());
 				SkillManager sm = plugin.getSkillManager();
 				sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
 				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -331,7 +328,7 @@ public class SRPGL implements Listener
 						s.closeInventory();
 					}
 				}, delay);
-				se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), plugin.getConfigManager().PickpocketingCooldown);
+				s.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, s, false), plugin.getConfigManager().PickpocketingCooldown);
 				return;
 			}
 		}
