@@ -19,7 +19,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.Entity;
@@ -192,8 +192,7 @@ public class SRPGL implements Listener
 						SkillManager sm = plugin.getSkillManager();
 						if(pickLockSuccess(event.getPlayer()))
 						{
-							net.minecraft.server.TileEntityChest c = (net.minecraft.server.TileEntityChest)((org.bukkit.craftbukkit.CraftWorld)event.getPlayer().getWorld()).getTileEntityAt(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ());
-							((net.minecraft.server.EntityHuman)((CraftPlayer)event.getPlayer()).getHandle()).openContainer(c);
+							event.getPlayer().openInventory(((Chest)event.getClickedBlock().getState()).getBlockInventory());
 							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
 							if(event.isCancelled())event.setCancelled(false);
 							Location l = event.getClickedBlock().getLocation();
