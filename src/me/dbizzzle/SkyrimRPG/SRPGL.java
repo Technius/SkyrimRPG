@@ -11,15 +11,15 @@ import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import me.dbizzzle.SkyrimRPG.event.PlayerLockpickEvent;
 import me.dbizzzle.SkyrimRPG.event.PlayerPickpocketEvent;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
-import me.dbizzzle.SkyrimRPG.spell.SpellManager;
-import net.minecraft.server.EntityPlayer;
+import me.dbizzzle.SkyrimRPG.util.MetadataHandler;
+import me.dbizzzle.SkyrimRPG.util.ToolComparer;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Blaze;
 import org.bukkit.entity.Entity;
@@ -38,7 +38,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -48,6 +47,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Door;
 import org.bukkit.material.TrapDoor;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -72,7 +72,6 @@ public class SRPGL implements Listener
 		lpcd.clear();
 		sneak.clear();
 	}
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
@@ -193,8 +192,7 @@ public class SRPGL implements Listener
 						SkillManager sm = plugin.getSkillManager();
 						if(pickLockSuccess(event.getPlayer()))
 						{
-							net.minecraft.server.TileEntityChest c = (net.minecraft.server.TileEntityChest)((org.bukkit.craftbukkit.CraftWorld)event.getPlayer().getWorld()).getTileEntityAt(event.getClickedBlock().getX(), event.getClickedBlock().getY(), event.getClickedBlock().getZ());
-							((net.minecraft.server.EntityHuman)((CraftPlayer)event.getPlayer()).getHandle()).openContainer(c);
+							event.getPlayer().openInventory(((Chest)event.getClickedBlock().getState()).getBlockInventory());
 							event.getPlayer().sendMessage(ChatColor.GREEN + "Lockpicking success!");
 							if(event.isCancelled())event.setCancelled(false);
 							Location l = event.getClickedBlock().getLocation();
@@ -220,7 +218,6 @@ public class SRPGL implements Listener
 						event.getPlayer().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.LOCKPICKING, event.getPlayer(), false));
 					}
 				}
-				event.getPlayer().updateInventory();
 				return;
 			}
 		}
@@ -231,6 +228,7 @@ public class SRPGL implements Listener
 				Spell s = plugin.getSpellManager().getBoundLeft(event.getPlayer());
 				if(s != null)
 				{
+					event.setCancelled(true);
 					if(plugin.getConfigManager().useSpellPermissions && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
 					{
 						if(!event.getPlayer().hasPermission("skyrimrpg.spells." + s.getDisplayName()))
@@ -246,6 +244,7 @@ public class SRPGL implements Listener
 				Spell s = plugin.getSpellManager().getBoundRight(event.getPlayer());
 				if(s != null)
 				{
+					event.setCancelled(true);
 					if(plugin.getConfigManager().useSpellPermissions && !event.getPlayer().hasPermission("skyrimrpg.spells.*"))
 					{
 						if(!event.getPlayer().hasPermission("skyrimrpg.spells." + s.getDisplayName()))
@@ -277,48 +276,46 @@ public class SRPGL implements Listener
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if(plugin.getConfigManager().disabledWorlds.contains(event.getPlayer().getWorld()))return;
-		Player se = event.getPlayer();
-		final EntityPlayer s = ((CraftPlayer)se).getHandle();
+		final Player s = event.getPlayer();
 		if (s.isSneaking() && plugin.getConfigManager().enablePickpocketing) {
 			Entity ent = event.getRightClicked();
 			if (ent instanceof Player) {
 				final Player victim = (Player) ent;
-				if(ppcd.contains(se) && plugin.getConfigManager().enablePickpocketingCooldown)
+				if(ppcd.contains(s) && plugin.getConfigManager().enablePickpocketingCooldown)
 				{
-					se.sendMessage(ChatColor.RED + "You are too afraid to pickpocket someone right now");
-					plugin.debug("Pickpocketing: result=cooldown, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
+					s.sendMessage(ChatColor.RED + "You are too afraid to pickpocket someone right now");
+					plugin.debug("Pickpocketing: result=cooldown, player=" + s.getName() + ", " + "target= " + ((Player)ent).getName());
 					return;
 				}
 				if(((Player)ent).hasPermission("skyrimrpg.nopickpocket"))
 				{
-					se.sendMessage(ChatColor.RED + "You probably don't want to pickpocket this person.");
-					plugin.debug("Pickpocketing: result=denied, player=" + se.getName() + ", " + "target= " + victim.getName());
+					s.sendMessage(ChatColor.RED + "You probably don't want to pickpocket this person.");
+					plugin.debug("Pickpocketing: result=denied, player=" + s.getName() + ", " + "target= " + victim.getName());
 					return;
 				}
-				EntityPlayer pick = ((CraftPlayer) victim).getHandle();
 				Random r = new Random();
 				double c = r.nextInt(100) + 1;
 				double mul = 1.0;
-				if(plugin.getPerkManager().hasPerk(se, Perk.LIGHT_FINGERS))mul = mul + (0.2*plugin.getPerkManager().getPerkLevel(se, Perk.LIGHT_FINGERS));
+				if(plugin.getPerkManager().hasPerk(s, Perk.LIGHT_FINGERS))mul = mul + (0.2*plugin.getPerkManager().getPerkLevel(s, Perk.LIGHT_FINGERS));
 				mul = mul - (0.25*plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, victim));
 				c = c * mul;
-				if(c > plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, se)&& plugin.getConfigManager().enablePickpocketingChance)
+				if(c > plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, s)&& plugin.getConfigManager().enablePickpocketingChance)
 				{
-					se.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + victim.getName() + "!");
-					victim.sendMessage(ChatColor.RED + se.getName() + " tried to pickpocket you!");
+					s.sendMessage(ChatColor.RED + "You have unsucessfully pickpocketed " + victim.getName() + "!");
+					victim.sendMessage(ChatColor.RED + s.getName() + " tried to pickpocket you!");
 					SkillManager sm = plugin.getSkillManager();
 					sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
-					plugin.debug("Pickpocketing: result=fail, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
-					se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), plugin.getConfigManager().PickpocketingCooldown);
-					se.getServer().getPluginManager().callEvent(new PlayerPickpocketEvent(event.getPlayer(), victim, false));
+					plugin.debug("Pickpocketing: result=fail, player=" + s.getName() + ", " + "target= " + ((Player)ent).getName());
+					s.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, s, false), plugin.getConfigManager().PickpocketingCooldown);
+					s.getServer().getPluginManager().callEvent(new PlayerPickpocketEvent(event.getPlayer(), victim, false));
 					return;
 				}
 				PlayerPickpocketEvent e = new PlayerPickpocketEvent(event.getPlayer(), victim, true);
-				se.getServer().getPluginManager().callEvent(e);
+				s.getServer().getPluginManager().callEvent(e);
 				if(e.isCancelled())return;
-				s.openContainer(pick.inventory);
-				se.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + victim.getName() + "!");
-				plugin.debug("Pickpocketing: result=success, player=" + se.getName() + ", " + "target= " + ((Player)ent).getName());
+				s.openInventory(victim.getInventory());
+				s.sendMessage(ChatColor.GREEN + "You have succesfully pickpocketed " + victim.getName() + "!");
+				plugin.debug("Pickpocketing: result=success, player=" + s.getName() + ", " + "target= " + ((Player)ent).getName());
 				SkillManager sm = plugin.getSkillManager();
 				sm.calculateLevel(event.getPlayer(), Skill.PICKPOCKETING);
 				plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
@@ -330,7 +327,7 @@ public class SRPGL implements Listener
 						s.closeInventory();
 					}
 				}, delay);
-				se.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, se, false), plugin.getConfigManager().PickpocketingCooldown);
+				s.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Cooldown(Skill.PICKPOCKETING, s, false), plugin.getConfigManager().PickpocketingCooldown);
 				return;
 			}
 		}
@@ -345,8 +342,8 @@ public class SRPGL implements Listener
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
 		plugin.getSkillManager().saveData(event.getPlayer());
+		plugin.getSkillManager().removeData(event.getPlayer());
 	}
-
 	public boolean pickLockSuccess(Player pla)
 	{
 		int alevel = plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, pla);
@@ -361,21 +358,21 @@ public class SRPGL implements Listener
 		if(event.getEntity() instanceof Zombie)
 		{
 			Zombie z = (Zombie)event.getEntity();
-			if(!SpellManager.czombie.containsValue(z))return;
+			if(!plugin.getSpellManager().czombie.containsValue(z))return;
 			if(!(event.getTarget() instanceof Player))return;
 			Player player = (Player)event.getTarget();
-			if(!SpellManager.czombie.containsKey(player))return;
-			if(SpellManager.czombie.get(player) != z)return;
+			if(!plugin.getSpellManager().czombie.containsKey(player))return;
+			if(plugin.getSpellManager().czombie.get(player) != z)return;
 			event.setCancelled(true);
 		}
 		else if(event.getEntity() instanceof Blaze)
 		{
 			Blaze z = (Blaze)event.getEntity();
-			if(!SpellManager.conjured.containsValue(z))return;
+			if(!plugin.getSpellManager().conjured.containsValue(z))return;
 			if(!(event.getTarget() instanceof Player))return;
 			Player player = (Player)event.getTarget();
-			if(!SpellManager.conjured.containsKey(player))return;
-			if(SpellManager.conjured.get(player) != z)return;
+			if(!plugin.getSpellManager().conjured.containsKey(player))return;
+			if(plugin.getSpellManager().conjured.get(player) != z)return;
 			event.setCancelled(true);
 		}
 	}
@@ -385,14 +382,14 @@ public class SRPGL implements Listener
 		if(event.getEntity() instanceof Zombie)
 		{
 			Zombie z = (Zombie)event.getEntity();
-			if(!SpellManager.czombie.containsValue(z))return;
-			SpellManager.czombie.remove(z);
+			if(!plugin.getSpellManager().czombie.containsValue(z))return;
+			plugin.getSpellManager().czombie.remove(z);
 		}
 		else if(event.getEntity() instanceof Blaze)
 		{
 			Blaze z = (Blaze)event.getEntity();
-			if(!SpellManager.conjured.containsValue(z))return;
-			SpellManager.conjured.remove(z);
+			if(!plugin.getSpellManager().conjured.containsValue(z))return;
+			plugin.getSpellManager().conjured.remove(z);
 			event.getDrops().clear();
 		}
 	}
@@ -486,17 +483,17 @@ public class SRPGL implements Listener
 			{
 				SkillManager sm = plugin.getSkillManager();
 				Player player = (Player)e.getDamager();
-				if(SpellManager.czombie.containsKey(player))
+				if(plugin.getSpellManager().czombie.containsKey(player))
 				{
-					Zombie z = SpellManager.czombie.get(player);
+					Zombie z = plugin.getSpellManager().czombie.get(player);
 					if(!z.isDead())
 					{
 						if(e.getEntity() instanceof LivingEntity)z.setTarget((LivingEntity)e.getEntity());
 					}
 				}
-				if(SpellManager.conjured.containsKey(player))
+				if(plugin.getSpellManager().conjured.containsKey(player))
 				{
-					Blaze z = (Blaze)SpellManager.conjured.get(player);
+					Blaze z = (Blaze)plugin.getSpellManager().conjured.get(player);
 					if(!z.isDead())
 					{
 						if(e.getEntity() instanceof LivingEntity)z.setTarget((LivingEntity)e.getEntity());
@@ -540,9 +537,10 @@ public class SRPGL implements Listener
 			else if(e.getDamager() instanceof SmallFireball)
 			{
 				SmallFireball sf = (SmallFireball)e.getDamager();
-				if(sf.getShooter() instanceof Player)
+				MetadataValue mv = MetadataHandler.getMetadata(sf, plugin, "flames");
+				if(sf.getShooter() instanceof Player && mv != null)
 				{
-					if(SpellManager.flames.contains(sf))
+					if(mv.asBoolean())
 					{
 						Player player = (Player)sf.getShooter();
 						int alevel = plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, player)/20;
@@ -556,9 +554,10 @@ public class SRPGL implements Listener
 			else if(e.getDamager() instanceof Snowball)
 			{
 				Snowball sf = (Snowball)e.getDamager();
-				if(sf.getShooter() instanceof Player)
+				MetadataValue mv = MetadataHandler.getMetadata(sf, plugin, "frostbite");
+				if(sf.getShooter() instanceof Player && mv != null)
 				{
-					if(SpellManager.frostbite.contains(sf))
+					if(mv.asBoolean())
 					{
 						Player player = (Player)sf.getShooter();
 						int alevel = plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, player)/30;
@@ -618,49 +617,39 @@ public class SRPGL implements Listener
 			}
 		}
 	}
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onProjectileHit(ProjectileHitEvent event)
-	{
-		if(event.getEntity() instanceof SmallFireball)
-		{
-			if(SpellManager.flames.contains(event.getEntity()))
-			{
-				SpellManager.flames.remove(event.getEntity());
-			}
-		}
-		else if(event.getEntity() instanceof Snowball)
-		{
-			if(SpellManager.frostbite.contains(event.getEntity()))
-			{
-				SpellManager.frostbite.remove(event.getEntity());
-			}
-		}
-	}
-	//@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onExplosionPrime(ExplosionPrimeEvent event)
 	{
 		if(!(event.getEntity() instanceof Fireball))return;
 		Fireball f = (Fireball)event.getEntity();
-		if(!SpellManager.ftracker.contains(f))return;
+		MetadataValue mv = MetadataHandler.getMetadata(f, plugin, "fireball");
+		if(mv == null)return;
+		if(!mv.asBoolean())return;
 		if(!(f.getShooter() instanceof Player))return;
 		Player p = (Player)f.getShooter();
-		List<Entity> tod = f.getNearbyEntities(f.getYield(), f.getYield(), f.getYield());
-		event.setCancelled(true);
+		float yield = f.getYield();
+		List<Entity> tod = f.getNearbyEntities(yield, yield, yield);
 		f.setYield(0);
+		event.setCancelled(true);
 		int sp = 0;
 		int alevel = plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, p);
+		event.getEntity().getWorld().createExplosion(event.getEntity().getLocation(), 0F);
 		for(Entity x:tod)
 		{
 			if(!(x instanceof LivingEntity))continue;
 			LivingEntity l = (LivingEntity) x;
-			l.damage(7 + (alevel/10), p);
-			l.getWorld().createExplosion(f.getLocation(), 0);
+			if(!l.hasLineOfSight(f))continue;
+			double dist = event.getEntity().getLocation().distance(x.getLocation());
+			if(dist > 5)continue;
+			double scale = (5 - dist)/5;
+			int damage = (int)(scale*(7 + (alevel/10)));
+			if(damage == 0)continue;
+			l.damage(damage, p);
 			l.setFireTicks(60);
 			sp = sp+1;
 		}
 		SkillManager sm = plugin.getSkillManager();
 		sm.calculateLevel(p, Skill.DESTRUCTION);
-		SpellManager.ftracker.remove(f);
 	}
 	private class Cooldown implements Runnable
 	{

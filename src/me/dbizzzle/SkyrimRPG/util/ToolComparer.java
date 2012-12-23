@@ -1,4 +1,4 @@
-package me.dbizzzle.SkyrimRPG;
+package me.dbizzzle.SkyrimRPG.util;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

@@ -215,7 +215,7 @@ public class ConfigManager
 			}
 			bw.write("disabledWorlds: " + a);
 			bw.newLine();
-			bw.write("#Skills that should be disabled (Command seperated list)");
+			bw.write("#Skills that should be disabled (Comma seperated list)");
 			bw.newLine();
 			a = "";
 			for(Skill s:disabledSkills)

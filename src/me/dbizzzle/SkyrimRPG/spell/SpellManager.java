@@ -16,7 +16,6 @@ import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Blaze;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
@@ -28,15 +27,12 @@ import org.bukkit.util.Vector;
 
 public class SpellManager 
 {
-	public static List<Fireball>ftracker = new ArrayList<Fireball>();
-	public static HashMap<Player, Zombie>czombie = new HashMap<Player,Zombie>();
-	public static HashMap<Player, LivingEntity>conjured = new HashMap<Player, LivingEntity>();
+	public HashMap<Player, Zombie>czombie = new HashMap<Player,Zombie>();
+	public HashMap<Player, LivingEntity>conjured = new HashMap<Player, LivingEntity>();
 	private HashMap<Player, List<Spell>>spells = new HashMap<Player, List<Spell>>();
 	private HashMap<Player, Spell>boundleft = new HashMap<Player,Spell>();
 	private HashMap<Player, Spell>boundright = new HashMap<Player,Spell>();
 	private HashMap<Player, Integer>magicka = new HashMap<Player,Integer>();
-	public static List<SmallFireball>flames = new ArrayList<SmallFireball>();
-	public static List<Snowball>frostbite = new ArrayList<Snowball>();
 	private SkyrimRPG p;
 	public SpellManager(SkyrimRPG p)
 	{
@@ -55,72 +51,6 @@ public class SpellManager
 		if(this.magicka.get(player) - magicka < 0)this.magicka.put(player, 0);
 		else this.magicka.put(player, this.magicka.get(player) - magicka);
 	}
-	public void cflameatronach(Player player)
-	{
-		magicka.put(player, magicka.get(player) - 100);
-		if(conjured.containsKey(player))conjured.get(player).remove();
-		Blaze blaze = (Blaze)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.BLAZE);
-		int alevel = p.getSkillManager().getSkillLevel(Skill.CONJURATION, player);
-		blaze.setHealth(blaze.getHealth()/2 + alevel/10);
-		conjured.put(player, blaze);
-		player.sendMessage("You conjure up a flame atronach to fight for you");
-	}
-	public void heal(Player p)
-	{
-		magicka.put(p, magicka.get(p) - 20);
-		int health = this.p.getSkillManager().getSkillLevel(Skill.RESTORATION, p)/20 + 2;
-		if(health + p.getHealth() > 20)health = 20 - p.getHealth();
-		p.setHealth(health + p.getHealth());
-		p.sendMessage(ChatColor.GREEN + "You are healed for " + health/2 + " hearts");
-	}
-	public void flames(Player player)
-	{
-		subtractMagicka(player, 20);
-		final Vector direction = player.getEyeLocation().getDirection().multiply(2);
-		for(int i = 0;i < 3; i++)
-		{
-			SmallFireball fireball = player.getWorld().spawn(player.getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), SmallFireball.class);
-			fireball.setShooter(player);
-			fireball.setVelocity(direction.multiply(0.25));
-			fireball.setYield(0);
-			fireball.setIsIncendiary(false);
-			flames.add(fireball);
-		}
-	}
-	public void shootFireball(Player shooter, int multiplier)
-	{
-		shooter.sendMessage("Fireball shot!");
-		final Vector direction = shooter.getEyeLocation().getDirection().multiply(2);
-		Fireball fireball = shooter.getWorld().spawn(shooter.getEyeLocation().add(direction.getX(), direction.getY(), 
-			direction.getZ()), Fireball.class);
-		fireball.setShooter(shooter);
-		fireball.setYield(4F*(multiplier/100));
-		ftracker.add(fireball);
-	}
-	public void frostBite(Player player)
-	{
-		magicka.put(player, magicka.get(player) - 25);
-		for(int i = 0;i < 3; i++)
-		{
-			Snowball snowball = player.launchProjectile(Snowball.class);
-			snowball.setShooter(player);
-			double y = snowball.getVelocity().getY();
-			Vector v = snowball.getVelocity().multiply(2.5);
-			v.setY(y);
-			snowball.setVelocity(v);
-				frostbite.add(snowball);
-		}
-	}
-	public void raiseZombie(Player player)
-	{
-		player.sendMessage("You conjure up a zombie follower to fight for you");
-		magicka.put(player, magicka.get(player) - 60);
-		if(czombie.containsKey(player))czombie.get(player).remove();
-		Zombie zombie = (Zombie)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.ZOMBIE);
-		int alevel = p.getSkillManager().getSkillLevel(Skill.CONJURATION, player);
-		zombie.setHealth(zombie.getHealth()/2 + alevel/10);
-		czombie.put(player,zombie);
-	}
 	public boolean hasSpell(Player player, Spell spell)
 	{
 		return spells.get(player).contains(spell);
@@ -138,36 +68,13 @@ public class SpellManager
 		}
 		return true;
 	}
-	public boolean castSpell(Spell spell, Player player)
+	public void castSpell(Spell spell, Player player)
 	{
-		if(!checkMagicka(player, spell))return true;;
-		switch(spell)
+		if(!checkMagicka(player, spell))return;
+		if(spell != null && player != null)
 		{
-		case FIREBALL:
-			p.getSpellTimer().chargeFireball(player);
-			return true;
-		case RAISE_ZOMBIE:
-			raiseZombie(player);
-			return true;
-		case UFIREBALL:
-			int m = p.getSpellTimer().unchargeFireball(player);
-			if(m == -1) return false;
-			shootFireball(player, m);
-			return true;
-		case FLAMES:
-			flames(player);
-			return true;
-		case CONJURE_FLAME_ATRONACH:
-			cflameatronach(player);
-			return true;
-		case HEALING:
-			heal(player);
-			return true;
-		case FROSTBITE:
-			frostBite(player);
-			return true;
-		default:
-			return false;
+			subtractMagicka(player, spell.getBaseCost());
+			spell.cast(player, this);
 		}
 	}
 	public void magickaWarning(Player p, String s)
@@ -292,5 +199,9 @@ public class SpellManager
 	public Spell[] getSpells(Player player)
 	{
 		return spells.get(player).toArray(new Spell[spells.get(player).size()]);
+	}
+	public SkyrimRPG getPlugin()
+	{
+		return p;
 	}
 }
