@@ -27,6 +27,7 @@
   </dependencies>
   
   <build>
+    <defaultGoal>clean install</defaultGoal>
     <resources>
       <resource>
         <directory>${project.basedir}/resources</directory>
@@ -43,4 +44,13 @@
       </plugin>
     </plugins>
   </build>
+  
+  <reporting>
+    <outputDirectory>${basedir}/target/javadoc</outputDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
