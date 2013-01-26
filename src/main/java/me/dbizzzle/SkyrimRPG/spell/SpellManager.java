@@ -13,17 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
-import me.dbizzzle.SkyrimRPG.Skill.Skill;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.SmallFireball;
-import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Zombie;
-import org.bukkit.util.Vector;
 
 public class SpellManager 
 {
