@@ -3,3 +3,10 @@
 .settings/org.eclipse.jdt.core.prefs
 
 bin/me/dbizzzle/SkyrimRPG/SkyrimRPG.class
+*.bin
+*.class
+*.jar
+*.war
+*.ear
+target
+bin
