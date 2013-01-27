@@ -12,7 +12,7 @@ public class ConjureFlameAtronach extends SpellExecutor
 	public void cast(Player player, SpellManager sm) 
 	{
 		if(sm.conjured.containsKey(player))sm.conjured.get(player).remove();
-		Blaze blaze = (Blaze)player.getWorld().spawnCreature(player.getEyeLocation(), EntityType.BLAZE);
+		Blaze blaze = (Blaze)player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.BLAZE);
 		int alevel = sm.getPlugin().getSkillManager().getSkillLevel(Skill.CONJURATION, player);
 		blaze.setHealth(blaze.getHealth()/2 + alevel/10);
 		sm.conjured.put(player, blaze);
