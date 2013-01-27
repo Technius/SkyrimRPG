@@ -7,6 +7,7 @@ import java.util.Set;
 
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
+import me.dbizzzle.SkyrimRPG.Skill.Perk;
 
 public class PlayerData 
 {
@@ -14,6 +15,7 @@ public class PlayerData
 	private HashMap<Skill, Integer> skills = new HashMap<Skill, Integer>();
 	private HashMap<Skill, Integer> progress = new HashMap<Skill, Integer>();
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
+	private HashMap<Perk, Integer>perks = new HashMap<Perk, Integer>();
 	private int level = 1;
 	public PlayerData(String player)
 	{
@@ -60,6 +62,10 @@ public class PlayerData
 			spellnames.add(s.name());
 		}
 		data.setStringList("spells", spellnames.toArray(new String[spellnames.size()]));
+		for(Map.Entry<Perk, Integer>e:perks.entrySet())
+		{
+			data.setInt("perk-" + e.getKey().name(), e.getValue());
+		}
 		data.setInt("level", level);
 		return data;
 	}
@@ -84,16 +90,18 @@ public class PlayerData
 				if(spell != null)addSpell(spell);
 			}
 		}
-		level = data.getInt("level", 1);
-	}
-	public String[] saveOld()
-	{
-		ArrayList<String> s = new ArrayList<String>();
-		for(Map.Entry<Skill, Integer>e:skills.entrySet())
+		for(Perk perk: Perk.values())
 		{
-			s.add(e.getKey().getName() + ":" + e.getValue() + "," + getSkillProgress(e.getKey()));
+			if(data.hasKey("perk-" + perk.name()))
+			{
+				int i = data.getInt("perk-" + perk.name(), 0);
+				if(i != 0)
+				{
+					try{setPerkLevel(perk, i);}catch(IllegalArgumentException iae){}
+				}
+			}
 		}
-		return s.toArray(new String[s.size()]);
+		level = data.getInt("level", 1);
 	}
 	public void loadOld(String[] data)
 	{
@@ -138,6 +146,39 @@ public class PlayerData
 	{
 		if(s == null)throw new IllegalArgumentException("Spell cannot be null");
 		return spells.contains(s);
+	}
+	public void addPerk(Perk p)
+	{
+		if(p == null)throw new IllegalArgumentException("Perk cannot be null");
+		if(perks.containsKey(p))return;
+		perks.put(p, 1);
+	}
+	public void setPerkLevel(Perk p, int level)
+	{
+		if(p == null)throw new IllegalArgumentException("Perk cannot be null");
+		int pmax = p.getMaxLevel();
+		if(level < 1 || level > pmax)throw new IllegalArgumentException("Perk level must be from 1 to " + pmax);
+		perks.put(p, 1);
+	}
+	public int getPerkLevel(Perk p)
+	{
+		if(p == null)throw new IllegalArgumentException("Perk cannot be null");
+		if(!perks.containsKey(p))return 0;
+		return perks.get(p);
+	}
+	public void removePerk(Perk p)
+	{
+		if(p == null)throw new IllegalArgumentException("Perk cannot be null");
+		perks.remove(p);
+	}
+	public boolean hasPerk(Perk p)
+	{
+		if(p == null)throw new IllegalArgumentException("Perk cannot be null");
+		return perks.containsKey(p);
+	}
+	public Set<Perk> getPerks()
+	{
+		return perks.keySet();
 	}
 	public int getLevel()
 	{

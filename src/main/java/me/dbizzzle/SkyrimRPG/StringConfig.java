@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 public class StringConfig 
 {
@@ -54,7 +55,8 @@ public class StringConfig
 	public void write(String s)
 	{
 		if(pw == null)return;
-		pw.println(s);
+		if(!map.containsKey(s))return;
+		pw.println(s + ":" + map.get(s));
 	}
 	public void writeLine()
 	{
@@ -199,5 +201,15 @@ public class StringConfig
 	public boolean hasKey(String string)
 	{
 		return map.containsKey(string);
+	}
+	public void write() throws IOException
+	{
+		if(pw != null)return;
+		start();
+		for(Map.Entry<String, String>k: map.entrySet())
+		{
+			write(k.getKey());
+		}
+		close();
 	}
 }
