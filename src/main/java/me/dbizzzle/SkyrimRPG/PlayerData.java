@@ -275,12 +275,7 @@ public class PlayerData
 	}
 	public boolean processLevelExperience()
 	{
-		int tot = 0;
-		for(int i :skills.values())
-		{
-			tot = tot + i;
-		}
-		if(tot > level * Skill.values().length)
+		if(levelprogress > level * Skill.values().length)
 		{
 			level = level + 1;
 			levelprogress = 0;
