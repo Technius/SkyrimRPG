@@ -260,20 +260,17 @@ public class PlayerData
 		int alevel = getSkillLevel(s);
 		int scap = plugin.getConfigManager().skillLevelCap;
 		if(alevel >= scap && scap > 0)return false;
-		int pro = getSkillProgress(s);
-		int t = 5;
-		for(int i = 1;i<alevel;i++)
-		{
-			t=t+2;
-		}
+		int pro = getSkillProgress(s) + exp;
+		int t = 5 + ((alevel - 1)*2);
 		if(s == Skill.ARMOR)t *=4;
-		if(pro > t)
+		if(pro >= t)
 		{
 			setSkillLevel(s, alevel + 1);
-			setSkillProgress(s, t - pro);
+			setSkillProgress(s, pro - t);
 			levelprogress = levelprogress + 1;
 			return true;
 		}
+		else setSkillProgress(s, pro);
 		return false;
 	}
 	public boolean processLevelExperience()
