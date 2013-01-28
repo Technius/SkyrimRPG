@@ -284,6 +284,7 @@ public class PlayerData
 		{
 			level = level + 1;
 			levelprogress = 0;
+			perkpoints = perkpoints + 1;
 			return true;
 		}
 		return false;
