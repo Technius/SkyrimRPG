@@ -125,7 +125,29 @@ public class PlayerData
 			String[] t = s.split(":");
 			if(t.length != 2)continue;
 			Skill sk = Skill.getSkill(t[0]);
-			if(sk == null)continue;
+			if(sk == null)
+			{
+				if(t[0].equalsIgnoreCase("level"))
+				{
+					try{level = Integer.parseInt(t[1].replaceAll(" ", ""));}
+					catch(Exception e){level = 1;}
+				}
+				else if(t[0].equalsIgnoreCase("magicka"))
+				{
+					try{magicka = Integer.parseInt(t[1].replaceAll(" ", ""));}
+					catch(Exception e){magicka = 0;}
+				}
+				else if(t[0].equalsIgnoreCase("perk points"))
+				{
+					try
+					{
+						perkpoints = level - Integer.parseInt(t[1].replaceAll(" ", ""));
+						if(perkpoints < 0)perkpoints = 0;
+					}
+					catch(Exception e){perkpoints = 0;}
+				}
+				continue;
+			}
 			String[] ts = t[1].split(",");
 			if(ts.length != 2)continue;
 			int lv;

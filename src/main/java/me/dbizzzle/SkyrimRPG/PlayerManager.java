@@ -81,7 +81,7 @@ public class PlayerManager
 		final int curdata = pdata.size();
 		if(oldplayers.exists())
 		{
-			for(File f:players.listFiles())
+			for(File f:oldplayers.listFiles())
 			{
 				if(!f.getName().endsWith(".txt"))continue;
 				String name = f.getName().substring(0, f.getName().length() - 4);
