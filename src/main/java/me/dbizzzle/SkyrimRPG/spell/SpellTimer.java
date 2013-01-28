@@ -32,7 +32,7 @@ public class SpellTimer
 	public void chargeFireball(Player player)
 	{
 		player.sendMessage("Charging Fireball...");
-		p.getSpellManager().subtractMagicka(player, 100);
+		p.getPlayerManager().getData(player.getName()).subtractMagicka(100);
 		if(fireballcharge.contains(player))return;
 		fireballcharge.add(player);
 		p.getServer().getScheduler().scheduleSyncDelayedTask(p, new SpellRunnable(p.getSpellTimer(),Spell.FIREBALL, player), 50);

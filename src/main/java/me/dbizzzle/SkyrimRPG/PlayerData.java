@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import me.dbizzzle.SkyrimRPG.Skill.Perk;
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
-import me.dbizzzle.SkyrimRPG.Skill.Perk;
 
 public class PlayerData 
 {
@@ -17,6 +17,9 @@ public class PlayerData
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
 	private HashMap<Perk, Integer>perks = new HashMap<Perk, Integer>();
 	private int level = 1;
+	private int perkpoints = 0;
+	private int magicka = 0;
+	private int levelprogress = 0;
 	public PlayerData(String player)
 	{
 		this.player = player;
@@ -45,6 +48,14 @@ public class PlayerData
 		if(progress < 0)throw new IllegalArgumentException("Skill progress cannot be negative");
 		this.progress.put(s, progress);
 	}
+	public void setLevelProgress(int val)
+	{
+		levelprogress = val;
+	}
+	public int getLevelProgress()
+	{
+		return levelprogress;
+	}
 	public String getPlayer()
 	{
 		return player;
@@ -67,6 +78,8 @@ public class PlayerData
 			data.setInt("perk-" + e.getKey().name(), e.getValue());
 		}
 		data.setInt("level", level);
+		data.setInt("levelprogress", levelprogress);
+		data.setInt("magicka", magicka);
 		return data;
 	}
 	public void load(StringConfig data)
@@ -102,6 +115,8 @@ public class PlayerData
 			}
 		}
 		level = data.getInt("level", 1);
+		levelprogress = data.getInt("levelprogress", 0 );
+		magicka = data.getInt("magicka", 0);
 	}
 	public void loadOld(String[] data)
 	{
@@ -147,6 +162,10 @@ public class PlayerData
 		if(s == null)throw new IllegalArgumentException("Spell cannot be null");
 		return spells.contains(s);
 	}
+	public Spell[] getSpells()
+	{
+		return spells.toArray(new Spell[spells.size()]);
+	}
 	public void addPerk(Perk p)
 	{
 		if(p == null)throw new IllegalArgumentException("Perk cannot be null");
@@ -176,9 +195,10 @@ public class PlayerData
 		if(p == null)throw new IllegalArgumentException("Perk cannot be null");
 		return perks.containsKey(p);
 	}
-	public Set<Perk> getPerks()
+	public Perk[] getPerks()
 	{
-		return perks.keySet();
+		Set<Perk>p = perks.keySet();
+		return p.toArray(new Perk[p.size()]);
 	}
 	public int getLevel()
 	{
@@ -189,11 +209,80 @@ public class PlayerData
 		if(level < 0)throw new IllegalArgumentException("Level cannot be negative");
 		this.level = level;
 	}
+	public int getPerkPoints()
+	{
+		return perkpoints;
+	}
+	public void setPerkPoints(int val)
+	{
+		perkpoints = val;
+	}
+	public int getMagicka()
+	{
+		return magicka;
+	}
+	public void setMagicka(int val)
+	{
+		magicka = val;
+	}
+	public boolean canUnlockPerk(Perk p, int level)
+	{
+		if(p == null)throw new IllegalArgumentException("Perk cannot be null");
+		if(level < 1)throw new IllegalArgumentException("Level cannot be less than 1");
+		if(level > p.getMaxLevel())return false;
+		if(!perks.containsKey(p))return level == 1;
+		return perks.get(p) + 1 == level;
+	}
+	public boolean processSkillExperience(Skill s, int exp, SkyrimRPG plugin)
+	{
+		int alevel = getSkillLevel(s);
+		int scap = plugin.getConfigManager().skillLevelCap;
+		if(alevel >= scap && scap > 0)return false;
+		int pro = getSkillProgress(s);
+		int t = 5;
+		for(int i = 1;i<alevel;i++)
+		{
+			t=t+2;
+		}
+		if(s == Skill.ARMOR)t *=4;
+		if(pro > t)
+		{
+			setSkillLevel(s, alevel + 1);
+			setSkillProgress(s, t - pro);
+			levelprogress = levelprogress + 1;
+			return true;
+		}
+		return false;
+	}
+	public boolean processLevelExperience()
+	{
+		int tot = 0;
+		for(int i :skills.values())
+		{
+			tot = tot + i;
+		}
+		if(tot > level * Skill.values().length)
+		{
+			level = level + 1;
+			levelprogress = 0;
+			return true;
+		}
+		return false;
+	}
 	public void cleanup()
 	{
 		player = null;
 		skills.clear();
 		progress.clear();
 		spells.clear();
+	}
+	public void subtractMagicka(int val)
+	{
+		if(magicka - val < 0)magicka = 0;
+		else magicka = magicka - val;
+	}
+	public boolean hasEnoughMagicka(int val)
+	{
+		return magicka >= val;
 	}
 }

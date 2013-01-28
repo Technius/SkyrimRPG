@@ -39,10 +39,10 @@ public class ConfigManager
 	}
 	public void loadConfig()
 	{
-		if(!a.checkFiles())refreshConfig();
 		File file = new File(a.getDataFolder().getPath());
 		if(!file.exists())file.mkdir();
-		File config = new File(file.getPath() + File.separator + "config.txt");
+		File config = new File(file.getPath(), "config.txt");
+		if(!config.exists())refreshConfig();
 		disabledSkills.clear();
 		disabledWorlds.clear();
 		try

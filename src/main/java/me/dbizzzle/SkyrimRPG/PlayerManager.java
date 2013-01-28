@@ -194,7 +194,7 @@ public class PlayerManager
 		}
 		return null;
 	}
-	public void cleanup()
+	public void clearData()
 	{
 		pdata.clear();
 	}

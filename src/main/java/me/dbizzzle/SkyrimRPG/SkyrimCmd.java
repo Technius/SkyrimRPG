@@ -1,28 +1,24 @@
 package me.dbizzzle.SkyrimRPG;
 
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
-import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
-import me.dbizzzle.SkyrimRPG.spell.SpellManager;
 
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SkyrimCmd implements CommandExecutor
 {
-	private SpellManager sm;
 	private SkyrimRPG plugin;
 	private ConfigManager cm;
-	public SkillManager sk;
-	public SkyrimCmd(SpellManager sm, SkyrimRPG plugin, ConfigManager cm, SkillManager sk)
+	private PlayerManager pm;
+	public SkyrimCmd(SkyrimRPG plugin)
 	{
-		this.sm = sm;
-		this.sk = sk;
-		this.cm = cm;
 		this.plugin = plugin;
+		this.pm = plugin.getPlayerManager();
+		this.cm = plugin.getConfigManager();
 	}
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
@@ -56,7 +52,7 @@ public class SkyrimCmd implements CommandExecutor
 					Spell s = null;
 					try{s = Spell.valueOf(args[1].toUpperCase());}
 					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
-					if(!sm.hasSpell(player, s))
+					if(!pm.getData(player.getName()).hasSpell(s))
 					{
 						player.sendMessage(ChatColor.RED + "You have not yet learned this spell!");
 						return true;
@@ -101,8 +97,9 @@ public class SkyrimCmd implements CommandExecutor
 				if(player == null)return noConsole(sender);
 				Spell s = null;
 				try{s = Spell.valueOf(args[0].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[0] + "!");}
-				if(sm.hasSpell(player, s))return msgret(sender, ChatColor.RED + "You already have the spell " + s.toString() + "!");
-				sm.addSpell(player, s);
+				PlayerData pd = pm.getData(player.getName());
+				if(pd.hasSpell(s))return msgret(sender, ChatColor.RED + "You already have the spell " + s.toString() + "!");
+				pd.addSpell(s);
 				player.sendMessage(ChatColor.GREEN + "You have given " + ChatColor.BLUE + s.toString() + ChatColor.GREEN + " to yourself");
 			}
 			else if(args.length == 2)
@@ -111,8 +108,9 @@ public class SkyrimCmd implements CommandExecutor
 				if(t == null)return msgret(sender, ChatColor.RED + "No such player: " + args[0] + "!");
 				Spell s = null;
 				try{s = Spell.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[1] + "!");}
-				if(sm.hasSpell(t, s))return msgret(sender, ChatColor.RED + "\"" + t.getName() + "\" already has the spell " + s.toString() + "!");
-				sm.addSpell(t, s);
+				PlayerData pd = pm.getData(t.getName());
+				if(pd.hasSpell(s))return msgret(sender, ChatColor.RED + "\"" + t.getName() + "\" already has the spell " + s.toString() + "!");
+				pd.addSpell(s);
 				sender.sendMessage(ChatColor.GREEN + t.getName() + " has been given the spell " + s.toString());
 				t.sendMessage(ChatColor.GREEN + "You have been given the spell " + s.toString());
 			}
@@ -131,8 +129,9 @@ public class SkyrimCmd implements CommandExecutor
 				if(player == null)return noConsole(sender);
 				Spell s = null;
 				try{s = Spell.valueOf(args[0].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[0] + "!");}
-				if(!sm.hasSpell(player, s))return msgret(sender, ChatColor.RED + "You don't have the spell " + s.toString() + "!");
-				sm.removeSpell(player, s);
+				PlayerData pd = pm.getData(player.getName());
+				if(!pd.hasSpell(s))return msgret(sender, ChatColor.RED + "You don't have the spell " + s.toString() + "!");
+				pd.removeSpell(s);
 				player.sendMessage(ChatColor.GREEN + "You have removed " + ChatColor.BLUE + s.toString() + ChatColor.GREEN + " from yourself");
 			}
 			else if(args.length == 2)
@@ -141,8 +140,9 @@ public class SkyrimCmd implements CommandExecutor
 				if(t == null)return msgret(sender, ChatColor.RED + "No such player: " + args[0] + "!");
 				Spell s = null;
 				try{s = Spell.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[1] + "!");}
-				if(!sm.hasSpell(t, s))return msgret(sender, ChatColor.RED + "Doesn't have the spell " + s.toString() + "!");
-				sm.addSpell(t, s);
+				PlayerData pd = pm.getData(t.getName());
+				if(!pd.hasSpell(s))return msgret(sender, ChatColor.RED + "Doesn't have the spell " + s.toString() + "!");
+				pd.addSpell(s);
 				sender.sendMessage(ChatColor.GREEN + t.getName() + " has had the spell " + s.toString() + " taken away");
 				t.sendMessage(ChatColor.GREEN + "You have had the spell " + s.toString() + " removed from you");
 			}
@@ -166,7 +166,7 @@ public class SkyrimCmd implements CommandExecutor
 				if(target == null)msgret(sender, ChatColor.RED + "No such player: " + args[0]);
 			}
 			sender.sendMessage(ChatColor.BLUE + target.getName() + "'s spells");
-			for(Spell s:sm.getSpells(target))sender.sendMessage(s.getDisplayName());
+			for(Spell s:pm.getData(target.getName()).getSpells())sender.sendMessage(s.getDisplayName());
 		}
 		else if(command.getName().equalsIgnoreCase("skyrimrpg") || label.equalsIgnoreCase("srpg"))
 		{
@@ -208,7 +208,7 @@ public class SkyrimCmd implements CommandExecutor
 						if(target == null)return msgret(sender, ChatColor.RED + "No such player: " + args[3]);
 						if(target != player && !sender.hasPermission("skyrimrpg.setlevel.other"))return noPerm(sender);
 					}
-					sk.setLevel(skill, target, l);
+					pm.getData(target.getName()).setSkillLevel(skill, l);
 					sender.sendMessage(ChatColor.GREEN + skill.getName() + " set to level " + l);
 					return true;
 				}
@@ -244,28 +244,29 @@ public class SkyrimCmd implements CommandExecutor
 				{
 					try{page = Integer.parseInt(args[0]);}catch(NumberFormatException nfe){page = 1;}
 				}
+				PlayerData pd = pm.getData(player.getName());
 				if(page <= 0)page = 1;
 				switch(page)
 				{
 				case 1:
 					player.sendMessage(ChatColor.GOLD + "Stats Page 1 of 2");
 					player.sendMessage(ChatColor.RED + "Combat" + ChatColor.WHITE + "|" + ChatColor.BLUE + "Magic" + ChatColor.WHITE + "|" + ChatColor.GRAY + "Stealth");
-					player.sendMessage(ChatColor.GREEN + "Level: " + plugin.getSkillManager().getLevel(player));
-					player.sendMessage(ChatColor.BLUE + "Magicka: " + plugin.getSpellManager().getMagicka(player));
-					player.sendMessage(ChatColor.RED + "Archery: Level " + plugin.getSkillManager().getSkillLevel(Skill.ARCHERY, player));
-					player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + plugin.getSkillManager().getSkillLevel(Skill.SWORDSMANSHIP, player));
-					player.sendMessage(ChatColor.RED + "Axecraft: Level " + plugin.getSkillManager().getSkillLevel(Skill.AXECRAFT, player));
-					player.sendMessage(ChatColor.RED + "Blocking: Level " + plugin.getSkillManager().getSkillLevel(Skill.BLOCKING, player));
-					player.sendMessage(ChatColor.RED + "Armor: Level " + plugin.getSkillManager().getSkillLevel(Skill.ARMOR, player));
-					player.sendMessage(ChatColor.BLUE + "Destruction: Level " + plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, player));
+					player.sendMessage(ChatColor.GREEN + "Level: " + pd.getLevel());
+					player.sendMessage(ChatColor.BLUE + "Magicka: " + pd.getMagicka());
+					player.sendMessage(ChatColor.RED + "Archery: Level " + pd.getSkillLevel(Skill.ARCHERY));
+					player.sendMessage(ChatColor.RED + "Swordsmanship: Level " + pd.getSkillLevel(Skill.SWORDSMANSHIP));
+					player.sendMessage(ChatColor.RED + "Axecraft: Level " + pd.getSkillLevel(Skill.AXECRAFT));
+					player.sendMessage(ChatColor.RED + "Blocking: Level " + pd.getSkillLevel(Skill.BLOCKING));
+					player.sendMessage(ChatColor.RED + "Armor: Level " + pd.getSkillLevel(Skill.ARMOR));
+					player.sendMessage(ChatColor.BLUE + "Destruction: Level " + pd.getSkillLevel(Skill.DESTRUCTION));
 					break;
 				case 2:
 					player.sendMessage(ChatColor.GOLD + "Stats Page 2 of 2");
-					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + plugin.getSkillManager().getSkillLevel(Skill.CONJURATION, player));
-					player.sendMessage(ChatColor.BLUE + "Restoration: Level " + plugin.getSkillManager().getSkillLevel(Skill.RESTORATION, player));
-					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + plugin.getSkillManager().getSkillLevel(Skill.PICKPOCKETING, player));
-					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + plugin.getSkillManager().getSkillLevel(Skill.LOCKPICKING, player));
-					player.sendMessage(ChatColor.GRAY + "Sneak: Level " + plugin.getSkillManager().getSkillLevel(Skill.SNEAK, player));
+					player.sendMessage(ChatColor.BLUE + "Conjuration: Level " + pd.getSkillLevel(Skill.CONJURATION));
+					player.sendMessage(ChatColor.BLUE + "Restoration: Level " + pd.getSkillLevel(Skill.RESTORATION));
+					player.sendMessage(ChatColor.GRAY + "Pickpocketing: Level " + pd.getSkillLevel(Skill.PICKPOCKETING));
+					player.sendMessage(ChatColor.GRAY + "Lockpicking: Level " + pd.getSkillLevel(Skill.LOCKPICKING));
+					player.sendMessage(ChatColor.GRAY + "Sneak: Level " + pd.getSkillLevel(Skill.SNEAK));
 					break;
 				default:
 					player.sendMessage(ChatColor.GOLD + "Stats Page " + page + " of 2");

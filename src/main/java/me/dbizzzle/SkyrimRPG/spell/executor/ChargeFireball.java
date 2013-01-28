@@ -1,13 +1,15 @@
 package me.dbizzzle.SkyrimRPG.spell.executor;
 
-import org.bukkit.entity.Player;
+import me.dbizzzle.SkyrimRPG.PlayerData;
+import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 
-import me.dbizzzle.SkyrimRPG.spell.SpellManager;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 public class ChargeFireball extends SpellExecutor
 {
-	public void cast(Player player, SpellManager sm) 
+	public void cast(Player player, Server server, PlayerData pd) 
 	{
-		sm.getPlugin().getSpellTimer().chargeFireball(player);
+		SkyrimRPG.instance().getSpellTimer().chargeFireball(player);
 	}
 }

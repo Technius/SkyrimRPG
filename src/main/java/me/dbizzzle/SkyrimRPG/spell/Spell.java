@@ -1,8 +1,17 @@
 package me.dbizzzle.SkyrimRPG.spell;
 
-import org.bukkit.entity.Player;
+import me.dbizzzle.SkyrimRPG.PlayerData;
+import me.dbizzzle.SkyrimRPG.spell.executor.ChargeFireball;
+import me.dbizzzle.SkyrimRPG.spell.executor.ConjureFlameAtronach;
+import me.dbizzzle.SkyrimRPG.spell.executor.Flames;
+import me.dbizzzle.SkyrimRPG.spell.executor.Frostbite;
+import me.dbizzzle.SkyrimRPG.spell.executor.Healing;
+import me.dbizzzle.SkyrimRPG.spell.executor.RaiseZombie;
+import me.dbizzzle.SkyrimRPG.spell.executor.ShootFireball;
+import me.dbizzzle.SkyrimRPG.spell.executor.SpellExecutor;
 
-import me.dbizzzle.SkyrimRPG.spell.executor.*;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 public enum Spell
 {
@@ -78,8 +87,8 @@ public enum Spell
 		}
 		return s1;
 	}
-	public void cast(Player player, SpellManager sm)
+	public void cast(Player player, Server server, PlayerData pd)
 	{
-		if(executor != null)executor.cast(player, sm);
+		if(executor != null)executor.cast(player, server, pd);
 	}
 }

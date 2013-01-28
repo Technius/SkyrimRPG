@@ -1,7 +1,6 @@
 package me.dbizzzle.SkyrimRPG;
 
 import me.dbizzzle.SkyrimRPG.Skill.Perk;
-import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 
 import org.bukkit.ChatColor;
@@ -22,7 +21,7 @@ public class PerkCmd implements CommandExecutor
 		if(sender instanceof Player)
 		{
 			sender.sendMessage(ChatColor.GOLD + "Perk Menu");
-			sender.sendMessage(ChatColor.GOLD + "Available Perk Points: " + ChatColor.BLUE + plugin.getPerkManager().getPoints((Player)sender));
+			sender.sendMessage(ChatColor.GOLD + "Available Perk Points: " + ChatColor.BLUE + plugin.getPlayerManager().getData(sender.getName()).getPerkPoints());
 			sender.sendMessage(ChatColor.YELLOW + "<Required>" + ChatColor.GOLD + "[Optional]");
 			sender.sendMessage(ChatColor.GREEN + "/perk unlock <perk> [level] " + ChatColor.RED + "- Unlocks a perk, if all requirements have been met");
 			sender.sendMessage(ChatColor.GREEN + "/perk list [page number] " + ChatColor.RED + "- Lists your perks");
@@ -40,7 +39,6 @@ public class PerkCmd implements CommandExecutor
 			String[] args) {
 		Player player = null;
 		if(sender instanceof Player)player = (Player)sender;
-		PerkManager pm = plugin.getPerkManager();
 		if(command.getName().equalsIgnoreCase("perk"))
 		{
 			if(args.length >= 1)
@@ -60,7 +58,8 @@ public class PerkCmd implements CommandExecutor
 						if(t == null)return msg(sender, ChatColor.RED + "No such player: " + args[1]);
 					}
 					int ct = 0;
-					Perk[] ps = pm.getPerks(t);
+					PlayerData pd = plugin.getPlayerManager().getData(t.getName());
+					Perk[] ps = pd.getPerks();
 					int pg = ps.length/10;
 					if(pg < (double)ps.length/10)pg++;
 					sender.sendMessage(ChatColor.GOLD + (t == player ? "Your"  : t.getName() + "'s") + " perks (" + ChatColor.RED + "1" + ChatColor.GOLD + "/" + ChatColor.GREEN + pg + ")");
@@ -72,7 +71,7 @@ public class PerkCmd implements CommandExecutor
 						else if(p.getSkill().isMagic())c = ChatColor.BLUE;
 						else if(p.getSkill().isThief())c = ChatColor.GRAY;
 						else c = ChatColor.WHITE;
-						int l = pm.getPerkLevel(player, p);
+						int l = pd.getPerkLevel(p);
 						if(p.getMaxLevel() == 1)player.sendMessage(c + p.getName());
 						else player.sendMessage(c + p.getName() + " " + ChatColor.GOLD + "(" + l + "/" + p.getMaxLevel() + ")");
 						ct++;
@@ -84,37 +83,34 @@ public class PerkCmd implements CommandExecutor
 					if(args.length != 2 && args.length != 3)return usage(sender, "perk unlock <perk> [level]");
 					Perk p = Perk.getPerk(args[1]);
 					if(p == null)return msg(sender, ChatColor.RED + "No such perk: " + args[1]);
-					if(args.length == 2)
+					PlayerData pd = plugin.getPlayerManager().getData(player.getName());
+					int level = 1;
+					if(args.length == 3)
 					{
-						if(pm.hasPerk(player, p))return msg(player, ChatColor.RED + "Use " + ChatColor.YELLOW + "/perk unlock <perk> <level>" + ChatColor.RED + " for this perk!");
-						else if(pm.hasEnough(player))
-						{
-							if(pm.canUnlock(player, p, 1))
-							{
-								pm.unlock(player, p, 1);
-								player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
-							}
-							else player.sendMessage(ChatColor.RED + "You have not met the requirements to unlock this perk.");
-						}
-						else player.sendMessage(ChatColor.RED + "You don't have enough perk points!");
+						try{level = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){player.sendMessage(ChatColor.RED + "Not a number: " + args[2]);return true;}
 					}
-					else if(args.length == 3)
+					if(pd.getPerkPoints() <= 0)return msg(sender, ChatColor.RED + "You don't have enough perk points!");
+					if(level < 1)return msg(sender, ChatColor.RED + "The level must be greater than 0!");
+					if(level > p.getMaxLevel())return msg(sender, ChatColor.RED + "The maximum level of " + p.getName() + " is " + p.getMaxLevel() + "!");
+					if(level == 1)
 					{
-						int level;
-						try{ level = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){player.sendMessage("Not a number: " + args[2]);return true;}
-						if(!pm.hasPerk(player, p))return msg(player, ChatColor.RED + "Use /perk unlock <perk>!");
-						else if(pm.getPerkLevel(player, p) >= level)return msg(player, ChatColor.RED + "You already unlocked level " + level + "!");
-						else if(level - pm.getPerkLevel(player, p) != 1)return msg(player, ChatColor.RED + "You must first unlock level " + (pm.getPerkLevel(player, p) + 1));
-						else if(pm.hasEnough(player))
-						{
-							if(pm.canUnlock(player, p, level))
-							{
-								pm.unlock(player, p, level);
-								player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
-							}
-							else player.sendMessage(ChatColor.RED + "You have not met the requirements to unlock this perk.");
-						}
-						else player.sendMessage(ChatColor.RED + "You don't have enough perk points!");
+						if(pd.hasPerk(p))
+							return msg(sender, ChatColor.RED + "You already have the perk " + p.getName() + "!");
+						if(!pd.canUnlockPerk(p, level))
+							return msg(sender, ChatColor.RED + "You don't meet the requirements to unlock this perk.");
+						pd.addPerk(p);
+						pd.setPerkPoints(pd.getPerkPoints() - 1);
+						player.sendMessage(ChatColor.GREEN + "You have unlocked " + ChatColor.RED + p.getName() + ChatColor.GREEN + "!");
+					}
+					else
+					{
+						if(!pd.hasPerk(p))
+							return msg(sender, ChatColor.RED + "You don't have the perk " + p.getName() + "!");
+						if(!pd.canUnlockPerk(p, level))
+							return msg(sender, ChatColor.RED + "You don't meet the requirements to unlock this perk.");
+						pd.setPerkPoints(pd.getPerkPoints() - 1);
+						pd.setPerkLevel(p, level);
+						player.sendMessage(ChatColor.GREEN + "Perk " + ChatColor.RED + p.getName() + ChatColor.GREEN + " increased to level " + level + "!");
 					}
 					
 				}
@@ -124,13 +120,14 @@ public class PerkCmd implements CommandExecutor
 					Skill s;
 					s = Skill.getSkill(args[1]);
 					if(s == null)return msg(player, ChatColor.RED + "No such skill: " + args[1]);
+					PlayerData pd = plugin.getPlayerManager().getData(player.getName());
 					player.sendMessage(ChatColor.RED + s.getName() + " Perks" + ChatColor.GOLD +" - Required Skill Level - Max Level");
-					for(Perk p:pm.getPerksBySkill(s))
+					for(Perk p:Perk.getPerksBySkill(s))
 					{
 						String rsl;
-						if(pm.getPerkLevel(player, p) >= p.getRequiredSkillLevels().length)rsl = "MAX";
-						else rsl = "" + p.getRequiredSkillLevels()[pm.getPerkLevel(player, p)];
-						if(pm.hasPerk(player, p))player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + rsl + " - " + p.getMaxLevel());
+						if(pd.getPerkLevel(p) >= p.getRequiredSkillLevels().length)rsl = "MAX";
+						else rsl = "" + p.getRequiredSkillLevels()[pd.getPerkLevel(p)];
+						if(pd.hasPerk(p))player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + rsl + " - " + p.getMaxLevel());
 						else player.sendMessage(ChatColor.RED + p.getName() + ChatColor.GOLD +" - " + p.getRequiredSkillLevels()[0] + " - " + p.getMaxLevel());
 					}
 				}
@@ -146,7 +143,7 @@ public class PerkCmd implements CommandExecutor
 				Player t = plugin.getServer().getPlayer(args[0]);
 				if(t == null)
 				{
-					player.sendMessage(ChatColor.RED + "No such player!");
+					sender.sendMessage(ChatColor.RED + "No such player!");
 					return true;
 				}
 				Perk p;
@@ -156,26 +153,24 @@ public class PerkCmd implements CommandExecutor
 				}
 				catch(IllegalArgumentException iae)
 				{
-					player.sendMessage(ChatColor.RED + "No such perk!");
+					sender.sendMessage(ChatColor.RED + "No such perk: " + args[1]);
 					return true;
 				}
 				int l;
 				try
 				{
 					l = Integer.parseInt(args[2]);
+					if(l < 1)return msg(sender, ChatColor.RED + "Perk level has to be greater than 0");
 					if(l>p.getMaxLevel())
-					{
-						player.sendMessage(ChatColor.RED + p.getName() + " has a max level of " + p.getMaxLevel() +", you entered " + l + "!");
-						return true;
-					}
+						return msg(sender, ChatColor.RED + p.getName() + " has a max level of " + p.getMaxLevel() + "!");
 				}
 				catch(NumberFormatException nfe)
 				{
 					player.sendMessage(ChatColor.RED + "That is not a valid number.");
 					return true;
 				}
-				plugin.getPerkManager().addPerk(t, p, l);
-				player.sendMessage(ChatColor.GREEN + p.getName() + " successfully added to " + t.getName() + " level " + l);
+				plugin.getPlayerManager().getData(t.getName()).setPerkLevel(p, l);
+				sender.sendMessage(ChatColor.GREEN + p.getName() + " successfully added to " + t.getName() + " at level " + l);
 				t.sendMessage(ChatColor.GREEN + "You were given the perk " + p.getName() + " at level " + l);
 			}
 			else sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
@@ -200,12 +195,13 @@ public class PerkCmd implements CommandExecutor
 					sender.sendMessage(ChatColor.RED + "No such player: \"" + args[0] + "\"");
 					return true;
 				}
-				if(!pm.hasPerk(t, p))
+				PlayerData pd = plugin.getPlayerManager().getData(t.getName());
+				if(!pd.hasPerk(p))
 				{
 					sender.sendMessage(ChatColor.RED + args[0] + " doesn't have the perk " + p.getName());
 					return true;
 				}
-				pm.removePerk(t, p);
+				pd.removePerk(p);
 				sender.sendMessage(ChatColor.RED + p.getName() + " removed from " + args[0]);
 				t.sendMessage(ChatColor.GREEN + "The perk " + p.getName() + " has been taken away from you.");
 			}

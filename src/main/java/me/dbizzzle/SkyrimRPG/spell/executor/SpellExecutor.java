@@ -1,10 +1,11 @@
 package me.dbizzzle.SkyrimRPG.spell.executor;
 
-import org.bukkit.entity.Player;
+import me.dbizzzle.SkyrimRPG.PlayerData;
 
-import me.dbizzzle.SkyrimRPG.spell.SpellManager;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 public abstract class SpellExecutor 
 {
-	public abstract void cast(Player player, SpellManager sm);
+	public abstract void cast(Player player, Server server, PlayerData pd);
 }

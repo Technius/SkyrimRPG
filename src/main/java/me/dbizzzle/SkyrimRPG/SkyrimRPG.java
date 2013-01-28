@@ -4,8 +4,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
-import me.dbizzzle.SkyrimRPG.Skill.PerkManager;
-import me.dbizzzle.SkyrimRPG.Skill.SkillManager;
 import me.dbizzzle.SkyrimRPG.spell.MagickaTimer;
 import me.dbizzzle.SkyrimRPG.spell.SpellManager;
 import me.dbizzzle.SkyrimRPG.spell.SpellTimer;
@@ -36,25 +34,21 @@ public class SkyrimRPG extends JavaPlugin
 {
 	public Logger log = Logger.getLogger("Minecraft");
 	private SpellManager sm = new SpellManager(this);
-	private SkillManager sk = new SkillManager(this);
 	private SpellTimer st = new SpellTimer(this);
-	private PerkManager pm = new PerkManager(this);
 	private SRPGL listen = new SRPGL(this);
 	private ConfigManager cm = new ConfigManager(this);
 	private VersionManager vm = new VersionManager();
 	private String latestversion;
 	private String versionmessage = null;
+	private PlayerManager pm;
+	private static SkyrimRPG inst;
 	public String getVersionMessage()
 	{
 		return versionmessage;
 	}
-	public PerkManager getPerkManager()
+	public PlayerManager getPlayerManager()
 	{
 		return pm;
-	}
-	public SkillManager getSkillManager()
-	{
-		return sk;
 	}
 	public SpellManager getSpellManager()
 	{
@@ -78,7 +72,9 @@ public class SkyrimRPG extends JavaPlugin
 	}
 	public void onEnable() 
 	{
-		SkyrimCmd cmd = new SkyrimCmd(sm, this, cm, sk);
+		inst = this;
+		this.pm = new PlayerManager(this);
+		SkyrimCmd cmd = new SkyrimCmd(this);
 		PerkCmd pcmd = new PerkCmd(this);
 		getCommand("addspell").setExecutor(cmd);
 		getCommand("bindspell").setExecutor(cmd);
@@ -91,9 +87,14 @@ public class SkyrimRPG extends JavaPlugin
 		getCommand("skystats").setExecutor(cmd);
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(listen, this);
-		if(!checkFiles())cm.refreshConfig();
+		if(!new File(getDataFolder(), "config.txt").exists())cm.refreshConfig();
 		cm.loadConfig();
-		for(Player p: this.getServer().getOnlinePlayers())sk.loadData(p);
+		this.pm.load();
+		for(Player pl:getServer().getOnlinePlayers())
+		{
+			if(this.pm.getData(pl.getName()) == null)
+				this.pm.addData(new PlayerData(pl.getPlayer().getName()));
+		}
 		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(this), 0, 20);
 		VCThread check = new VCThread(this);
@@ -102,27 +103,12 @@ public class SkyrimRPG extends JavaPlugin
 	
 	public void onDisable() 
 	{
-		for(Player p: this.getServer().getOnlinePlayers())sk.saveData(p);
+		pm.save();
 		log.info("[SkyrimRPG] Plugin disabled.");
-		sk.clearData();
 		sm.clearData();
 		pm.clearData();
 		listen.clearData();
 		cm.clearData();
-	}
-	public boolean checkFiles()
-	{
-		File file = new File(this.getDataFolder().getPath());
-		if(!file.exists())return false;
-		File players = new File(file.getPath() + File.separator + "Players");
-		if(!players.exists())return false;
-		File config = new File(file.getPath() + File.separator + "config.txt");
-		if(!config.exists())return false;
-		File magic = new File(file.getPath() + File.separator + "Magic");
-		if(!magic.exists())return false;
-		File perks = new File(file.getPath() + File.separator + "Perks");
-		if(!perks.exists())return false;
-		return true;
 	}
 	private class VC implements Runnable
 	{
@@ -166,5 +152,9 @@ public class SkyrimRPG extends JavaPlugin
 	public void debug(String message)
 	{
 		if(cm.debug)getLogger().info("[DEBUG] " + message);
+	}
+	public static SkyrimRPG instance()
+	{
+		return inst;
 	}
 }

@@ -1,5 +1,7 @@
 package me.dbizzzle.SkyrimRPG.Skill;
 
+import java.util.ArrayList;
+
 /**
  * Represents a perk
  */
@@ -81,5 +83,11 @@ public enum Perk
 			p = valueOf(perk.toUpperCase().trim().replaceAll(" ", "_"));
 		}catch(IllegalArgumentException iae){}
 		return p;
+	}
+	public static ArrayList<Perk> getPerksBySkill(Skill s)
+	{
+		ArrayList<Perk> l = new ArrayList<Perk>();
+		for(Perk as:values())if(as.getSkill() == s)l.add(as);
+		return l;
 	}
 }

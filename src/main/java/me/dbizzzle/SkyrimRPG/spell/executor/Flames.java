@@ -1,7 +1,9 @@
 package me.dbizzzle.SkyrimRPG.spell.executor;
 
-import me.dbizzzle.SkyrimRPG.spell.SpellManager;
+import me.dbizzzle.SkyrimRPG.PlayerData;
+import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -9,7 +11,7 @@ import org.bukkit.util.Vector;
 
 public class Flames extends SpellExecutor
 {
-	public void cast(Player player, SpellManager sm) 
+	public void cast(Player player, Server server, PlayerData pd) 
 	{
 		final Vector direction = player.getEyeLocation().getDirection().multiply(2);
 		for(int i = 0;i < 3; i++)
@@ -19,7 +21,7 @@ public class Flames extends SpellExecutor
 			fireball.setVelocity(direction.multiply(0.25));
 			fireball.setYield(0);
 			fireball.setIsIncendiary(false);
-			fireball.setMetadata("flames", new FixedMetadataValue(sm.getPlugin(), true));
+			fireball.setMetadata("flames", new FixedMetadataValue(SkyrimRPG.instance(), true));
 		}
 	}
 }

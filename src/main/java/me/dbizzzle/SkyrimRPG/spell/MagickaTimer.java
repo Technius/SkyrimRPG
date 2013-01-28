@@ -1,5 +1,6 @@
 package me.dbizzzle.SkyrimRPG.spell;
 
+import me.dbizzzle.SkyrimRPG.PlayerData;
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
 import me.dbizzzle.SkyrimRPG.Skill.Skill;
 
@@ -16,13 +17,14 @@ public class MagickaTimer implements Runnable
 	{
 		for(Player p:plugin.getServer().getOnlinePlayers())
 		{
-			int clevel = plugin.getSkillManager().getSkillLevel(Skill.CONJURATION, p);
-			int dlevel = plugin.getSkillManager().getSkillLevel(Skill.DESTRUCTION, p);
+			PlayerData pd = plugin.getPlayerManager().getData(p.getName());
+			int clevel = pd.getSkillLevel(Skill.CONJURATION);
+			int dlevel = pd.getSkillLevel(Skill.DESTRUCTION);
 			int cl = clevel/10;
 			int dl = dlevel/10;
-			int newv = 5 + cl + dl + plugin.getSpellManager().getMagicka(p);
-			if(newv > 100) plugin.getSpellManager().setMagicka(p, 100);
-			else plugin.getSpellManager().setMagicka(p, newv);
+			int newv = 5 + cl + dl + pd.getMagicka();
+			if(newv > 100)pd.setMagicka(100);
+			else pd.setMagicka(newv);
 		}
 	}
 
