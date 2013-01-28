@@ -80,6 +80,7 @@ public class PlayerData
 		data.setInt("level", level);
 		data.setInt("levelprogress", levelprogress);
 		data.setInt("magicka", magicka);
+		data.setInt("perkpoints", perkpoints);
 		return data;
 	}
 	public void load(StringConfig data)
@@ -115,8 +116,9 @@ public class PlayerData
 			}
 		}
 		level = data.getInt("level", 1);
-		levelprogress = data.getInt("levelprogress", 0 );
+		levelprogress = data.getInt("levelprogress", 0);
 		magicka = data.getInt("magicka", 0);
+		perkpoints = data.getInt("perkpoints", 0);
 	}
 	public void loadOld(String[] data)
 	{
@@ -275,10 +277,11 @@ public class PlayerData
 	}
 	public boolean processLevelExperience()
 	{
-		if(levelprogress > level * Skill.values().length)
+		int comp = 8 + level*3/2;
+		if(levelprogress > comp)
 		{
 			level = level + 1;
-			levelprogress = 0;
+			levelprogress = levelprogress - comp;
 			perkpoints = perkpoints + 1;
 			return true;
 		}
