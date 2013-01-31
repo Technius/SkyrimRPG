@@ -12,8 +12,9 @@ public class Healing extends SpellExecutor
 	public void cast(Player player, Server server, PlayerData pd) 
 	{
 		int health = pd.getSkillLevel(Skill.RESTORATION)/20 + 2;
-		if(health + player.getHealth() > 20)health = 20;
-		player.setHealth(health + player.getHealth());
-		player.sendMessage(ChatColor.GREEN + "You are healed for " + ((float)health/2) + " hearts");
+		if(health + player.getHealth() > player.getMaxHealth())health = player.getMaxHealth();
+		else health = health + player.getHealth();
+		player.setHealth(health);
+		player.sendMessage(ChatColor.GREEN + "You have been healed " + ((float)health/2) + " hearts");
 	}
 }
