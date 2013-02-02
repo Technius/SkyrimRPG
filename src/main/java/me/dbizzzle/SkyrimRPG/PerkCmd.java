@@ -1,7 +1,7 @@
 package me.dbizzzle.SkyrimRPG;
 
-import me.dbizzzle.SkyrimRPG.Skill.Perk;
-import me.dbizzzle.SkyrimRPG.Skill.Skill;
+import me.dbizzzle.SkyrimRPG.skill.Perk;
+import me.dbizzzle.SkyrimRPG.skill.Skill;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

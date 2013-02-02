@@ -2,7 +2,7 @@ package me.dbizzzle.SkyrimRPG.spell.executor;
 
 import me.dbizzzle.SkyrimRPG.PlayerData;
 import me.dbizzzle.SkyrimRPG.SkyrimRPG;
-import me.dbizzzle.SkyrimRPG.Skill.Skill;
+import me.dbizzzle.SkyrimRPG.skill.Skill;
 import me.dbizzzle.SkyrimRPG.spell.SpellManager;
 
 import org.bukkit.Server;

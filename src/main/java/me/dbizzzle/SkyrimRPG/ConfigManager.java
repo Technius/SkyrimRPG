@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import me.dbizzzle.SkyrimRPG.Skill.Skill;
+import me.dbizzzle.SkyrimRPG.skill.Skill;
 
 import org.bukkit.World;
 

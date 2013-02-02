@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import me.dbizzzle.SkyrimRPG.Skill.Perk;
-import me.dbizzzle.SkyrimRPG.Skill.Skill;
+import me.dbizzzle.SkyrimRPG.skill.Perk;
+import me.dbizzzle.SkyrimRPG.skill.Skill;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
 
 public class PlayerData 

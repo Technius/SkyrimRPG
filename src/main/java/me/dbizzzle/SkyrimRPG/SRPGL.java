@@ -1,16 +1,16 @@
 package me.dbizzzle.SkyrimRPG;
 
-import static me.dbizzzle.SkyrimRPG.Skill.SkillUtil.processExperience;
+import static me.dbizzzle.SkyrimRPG.skill.SkillUtil.processExperience;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import me.dbizzzle.SkyrimRPG.Skill.Perk;
-import me.dbizzzle.SkyrimRPG.Skill.Skill;
 import me.dbizzzle.SkyrimRPG.event.PlayerLockpickEvent;
 import me.dbizzzle.SkyrimRPG.event.PlayerPickpocketEvent;
+import me.dbizzzle.SkyrimRPG.skill.Perk;
+import me.dbizzzle.SkyrimRPG.skill.Skill;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
 import me.dbizzzle.SkyrimRPG.spell.SpellUtil;
 import me.dbizzzle.SkyrimRPG.util.MetadataHandler;

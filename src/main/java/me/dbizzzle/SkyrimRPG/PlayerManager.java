@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import me.dbizzzle.SkyrimRPG.Skill.Perk;
+import me.dbizzzle.SkyrimRPG.skill.Perk;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
 
 public class PlayerManager 

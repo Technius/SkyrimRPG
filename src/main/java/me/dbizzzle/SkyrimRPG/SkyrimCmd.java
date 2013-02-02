@@ -1,6 +1,6 @@
 package me.dbizzzle.SkyrimRPG;
 
-import me.dbizzzle.SkyrimRPG.Skill.Skill;
+import me.dbizzzle.SkyrimRPG.skill.Skill;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
 
 import org.bukkit.ChatColor;

@@ -1,4 +1,4 @@
-package me.dbizzzle.SkyrimRPG.Skill;
+package me.dbizzzle.SkyrimRPG.skill;
 
 import java.util.ArrayList;
 
