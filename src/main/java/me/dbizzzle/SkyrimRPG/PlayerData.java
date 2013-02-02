@@ -19,6 +19,7 @@ public class PlayerData
 	private int level = 1;
 	private int perkpoints = 0;
 	private int magicka = 0;
+	private int maxmagicka = 100;
 	private int levelprogress = 0;
 	public PlayerData(String player)
 	{
@@ -81,6 +82,7 @@ public class PlayerData
 		data.setInt("levelprogress", levelprogress);
 		data.setInt("magicka", magicka);
 		data.setInt("perkpoints", perkpoints);
+		data.setInt("maxmagicka", maxmagicka);
 		return data;
 	}
 	public void load(StringConfig data)
@@ -118,6 +120,7 @@ public class PlayerData
 		level = data.getInt("level", 1);
 		levelprogress = data.getInt("levelprogress", 0);
 		magicka = data.getInt("magicka", 0);
+		maxmagicka = data.getInt("maxmagicka", 100);
 		perkpoints = data.getInt("perkpoints", 0);
 	}
 	public void loadOld(String[] data)
@@ -294,6 +297,11 @@ public class PlayerData
 		progress.clear();
 		spells.clear();
 	}
+	public void addMagicka(int val)
+	{
+		if(val + magicka > maxmagicka)magicka = maxmagicka;
+		else magicka = val + magicka;
+	}
 	public void subtractMagicka(int val)
 	{
 		if(magicka - val < 0)magicka = 0;
@@ -302,5 +310,14 @@ public class PlayerData
 	public boolean hasEnoughMagicka(int val)
 	{
 		return magicka >= val;
+	}
+	public void setMaxMagicka(int val)
+	{
+		if(val < 0)throw new IllegalArgumentException("Max magicka cannot be negative");
+		maxmagicka = val;
+	}
+	public int getMaxMagicka()
+	{
+		return maxmagicka;
 	}
 }

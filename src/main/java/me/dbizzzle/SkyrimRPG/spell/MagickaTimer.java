@@ -22,9 +22,8 @@ public class MagickaTimer implements Runnable
 			int dlevel = pd.getSkillLevel(Skill.DESTRUCTION);
 			int cl = clevel/10;
 			int dl = dlevel/10;
-			int newv = 5 + cl + dl + pd.getMagicka();
-			if(newv > 100)pd.setMagicka(100);
-			else pd.setMagicka(newv);
+			int newv = 5 + cl + dl;
+			pd.addMagicka(newv);
 		}
 	}
 
