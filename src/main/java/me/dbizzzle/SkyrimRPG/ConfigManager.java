@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import me.dbizzzle.SkyrimRPG.skill.Skill;
 
@@ -131,7 +132,7 @@ public class ConfigManager
 		}
 		catch(IOException ioe)
 		{
-			a.log.warning("[SkyrimRPG]Could not load config, using default values.");
+			a.getLogger().log(Level.SEVERE, "Could not load config, using default values.", ioe);
 		}
 	}
 	public boolean refreshConfig()

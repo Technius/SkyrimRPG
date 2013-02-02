@@ -77,7 +77,7 @@ public class PlayerManager
 	}
 	public void importOld()
 	{
-		plugin.log.info("Importing old data...");
+		plugin.getLogger().info("Importing old data...");
 		final int curdata = pdata.size();
 		if(oldplayers.exists())
 		{
@@ -174,7 +174,7 @@ public class PlayerManager
 			}
 		}
 		final int nowdata = pdata.size();
-		plugin.log.info("Impoted " + (nowdata - curdata) + " players.");
+		plugin.getLogger().info("Impoted " + (nowdata - curdata) + " players.");
 	}
 	public void addData(PlayerData data)
 	{

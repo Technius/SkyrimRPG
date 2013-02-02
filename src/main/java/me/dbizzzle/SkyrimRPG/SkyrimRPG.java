@@ -32,7 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SkyrimRPG extends JavaPlugin 
 {
-	public Logger log = Logger.getLogger("Minecraft");
+	private Logger log;
 	private SpellManager sm = new SpellManager(this);
 	private SpellTimer st = new SpellTimer(this);
 	private SRPGL listen = new SRPGL(this);
@@ -73,6 +73,7 @@ public class SkyrimRPG extends JavaPlugin
 	public void onEnable() 
 	{
 		inst = this;
+		log = getLogger();
 		this.pm = new PlayerManager(this);
 		SkyrimCmd cmd = new SkyrimCmd(this);
 		PerkCmd pcmd = new PerkCmd(this);
@@ -95,7 +96,6 @@ public class SkyrimRPG extends JavaPlugin
 			if(this.pm.getData(pl.getName()) == null)
 				this.pm.addData(new PlayerData(pl.getPlayer().getName()));
 		}
-		log.info("[SkyrimRPG]Version " + getDescription().getVersion() + " enabled.");
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new MagickaTimer(this), 0, 20);
 		VCThread check = new VCThread(this);
 		check.start();
@@ -104,7 +104,7 @@ public class SkyrimRPG extends JavaPlugin
 	public void onDisable() 
 	{
 		pm.save();
-		log.info("[SkyrimRPG] Plugin disabled.");
+		log.info("Plugin disabled.");
 		sm.clearData();
 		pm.clearData();
 		listen.clearData();
@@ -118,7 +118,7 @@ public class SkyrimRPG extends JavaPlugin
 		}
 		private String message;
 		public void run() {
-			log.info("[SkyrimRPG]" + message);
+			getLogger().info(message);
 		}
 		
 	}
@@ -134,18 +134,17 @@ public class SkyrimRPG extends JavaPlugin
 			try
 			{
 				latestversion = vm.getLatestVersion();
-				if(latestversion == null)log.info("[SkyrimRPG]Failed to find new version!");
+				if(latestversion == null)log.info("Failed to find new version!");
 				else if(vm.compareVersion(latestversion, s.getDescription().getVersion()))
 				{
-					versionmessage = "A new " + (latestversion.indexOf("DEV") > -1 ? "dev build" : "release") 
-							+ " is available: " + latestversion;
+					versionmessage = "A new release is available: " + latestversion;
 					s.getServer().getScheduler().scheduleSyncDelayedTask(s, 
 							new VC(versionmessage), 0L);
 				}
 			}
 			catch(MalformedURLException mue)
 			{
-				log.info("[SkyrimRPG]Could not find new version");
+				log.info("Could not find new version");
 			}
 		}
 	}
