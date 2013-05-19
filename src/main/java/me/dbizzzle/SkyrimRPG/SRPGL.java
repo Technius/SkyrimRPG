@@ -35,6 +35,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -640,6 +642,20 @@ public class SRPGL implements Listener
 			sp = sp+1;
 		}
 		processExperience(pd, p, Skill.DESTRUCTION, sp, plugin);
+	}
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void blockIgnite(BlockIgniteEvent event)
+	{
+		if(!(event.getIgnitingEntity() instanceof SmallFireball))return;
+		SmallFireball sf = (SmallFireball)event.getIgnitingEntity();
+		MetadataValue mv = MetadataHandler.getMetadata(sf, plugin, "flames");
+		if(sf.getShooter() instanceof Player && mv != null)
+		{
+			if(mv.asBoolean())
+			{
+				event.setCancelled(true);
+			}
+		}
 	}
 	private class Cooldown implements Runnable
 	{
