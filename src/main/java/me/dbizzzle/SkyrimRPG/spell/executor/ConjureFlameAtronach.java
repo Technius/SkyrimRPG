@@ -19,6 +19,8 @@ public class ConjureFlameAtronach extends SpellExecutor
 		Blaze blaze = (Blaze)player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.BLAZE);
 		int alevel = pd.getSkillLevel(Skill.CONJURATION);
 		blaze.setHealth(blaze.getHealth()/2 + alevel/10);
+		blaze.setCustomName(player.getName() + "'s Flame Atronach");
+		blaze.setCustomNameVisible(true);
 		sm.conjured.put(player, blaze);
 		player.sendMessage("You conjure up a flame atronach to fight for you");
 	}

@@ -20,6 +20,8 @@ public class RaiseZombie extends SpellExecutor
 		Zombie zombie = (Zombie)player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.ZOMBIE);
 		int alevel = pd.getSkillLevel(Skill.CONJURATION);
 		zombie.setHealth(zombie.getHealth()/2 + alevel/10);
+		zombie.setCustomName(player.getName() + "'s Zombie");
+		zombie.setCustomNameVisible(true);
 		sm.czombie.put(player,zombie);
 	}
 }
