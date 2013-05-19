@@ -73,17 +73,8 @@ public enum Spell
 		for(String t1: t)
 		{
 			if(!a)a = true;
-			else s1 = s1 + "_";
-			boolean o = false;
-			for(char c:t1.toCharArray())
-			{
-				if(!o)
-				{
-					o = true;
-					s1 = "" + Character.toUpperCase(c);
-				}
-				else s1 = s1 + c;
-			}
+			else s1 = s1 + " ";
+			s1 = s1 + Character.toUpperCase(t1.charAt(0)) + t1.substring(1);
 		}
 		return s1;
 	}

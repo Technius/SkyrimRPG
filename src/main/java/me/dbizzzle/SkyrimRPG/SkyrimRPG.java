@@ -138,8 +138,7 @@ public class SkyrimRPG extends JavaPlugin
 				else if(vm.compareVersion(latestversion, s.getDescription().getVersion()))
 				{
 					versionmessage = "A new release is available: " + latestversion;
-					s.getServer().getScheduler().scheduleSyncDelayedTask(s, 
-							new VC(versionmessage), 0L);
+					s.getServer().getScheduler().scheduleSyncDelayedTask(s, new VC(versionmessage));
 				}
 			}
 			catch(MalformedURLException mue)

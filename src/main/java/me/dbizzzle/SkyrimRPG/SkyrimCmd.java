@@ -31,9 +31,9 @@ public class SkyrimCmd implements CommandExecutor
 			} 
 			else if (player.hasPermission("skyrimrpg.bindspell")) 
 			{
-				if(args.length != 2)
+				if(args.length < 2)
 				{
-					player.sendMessage(ChatColor.RED + "Usage: /bindspell <left/right> <spell>");
+					player.sendMessage(ChatColor.RED + "Usage: /bindspell <left/right/both> <spell>");
 				}
 				else
 				{
@@ -50,7 +50,13 @@ public class SkyrimCmd implements CommandExecutor
 						return true;
 					}
 					Spell s = null;
-					try{s = Spell.valueOf(args[1].toUpperCase());}
+					StringBuffer sb = new StringBuffer();
+					for(int i = 1; i < args.length; i ++)
+					{
+						if(sb.length() == 0)sb.append(args[i]);
+						else sb.append("_" + args[i]);
+					}
+					try{s = Spell.valueOf(sb.toString().toUpperCase());}
 					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
 					if(!pm.getData(player.getName()).hasSpell(s))
 					{
