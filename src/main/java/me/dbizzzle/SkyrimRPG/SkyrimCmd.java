@@ -2,6 +2,7 @@ package me.dbizzzle.SkyrimRPG;
 
 import me.dbizzzle.SkyrimRPG.skill.Skill;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
+import me.dbizzzle.SkyrimRPG.util.SpellbookUtil;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -56,8 +57,8 @@ public class SkyrimCmd implements CommandExecutor
 						if(sb.length() == 0)sb.append(args[i]);
 						else sb.append("_" + args[i]);
 					}
-					try{s = Spell.valueOf(sb.toString().toUpperCase());}
-					catch(IllegalArgumentException iae){if(s == null)sender.sendMessage("No such spell!");return true;}
+					s = Spell.get(sb.toString());
+					if(s == null)return msg(sender, ChatColor.RED + "No such spell!");
 					if(!pm.getData(player.getName()).hasSpell(s))
 					{
 						player.sendMessage(ChatColor.RED + "You have not yet learned this spell!");
@@ -91,7 +92,7 @@ public class SkyrimCmd implements CommandExecutor
 		}
 		else if (command.getName().equalsIgnoreCase("addspell")) 
 		{
-			if(!sender.hasPermission("skyrimrpg.addspell"))return msgret(sender, ChatColor.RED + "You do not have permission to do this!");
+			if(!sender.hasPermission("skyrimrpg.addspell"))return msg(sender, ChatColor.RED + "You do not have permission to do this!");
 			if(args.length != 2 && args.length != 1)
 			{
 				if(player == null)sender.sendMessage(ChatColor.RED + "Usage: /addspell <player> <spell>");
@@ -102,20 +103,20 @@ public class SkyrimCmd implements CommandExecutor
 			{
 				if(player == null)return noConsole(sender);
 				Spell s = null;
-				try{s = Spell.valueOf(args[0].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[0] + "!");}
+				try{s = Spell.valueOf(args[0].toUpperCase());}catch(IllegalArgumentException iae){return msg(sender, ChatColor.RED + "No such spell: " + args[0] + "!");}
 				PlayerData pd = pm.getData(player.getName());
-				if(pd.hasSpell(s))return msgret(sender, ChatColor.RED + "You already have the spell " + s.toString() + "!");
+				if(pd.hasSpell(s))return msg(sender, ChatColor.RED + "You already have the spell " + s.toString() + "!");
 				pd.addSpell(s);
 				player.sendMessage(ChatColor.GREEN + "You have given " + ChatColor.BLUE + s.toString() + ChatColor.GREEN + " to yourself");
 			}
 			else if(args.length == 2)
 			{
 				Player t = sender.getServer().getPlayer(args[0]);
-				if(t == null)return msgret(sender, ChatColor.RED + "No such player: " + args[0] + "!");
+				if(t == null)return msg(sender, ChatColor.RED + "No such player: " + args[0] + "!");
 				Spell s = null;
-				try{s = Spell.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[1] + "!");}
+				try{s = Spell.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){return msg(sender, ChatColor.RED + "No such spell: " + args[1] + "!");}
 				PlayerData pd = pm.getData(t.getName());
-				if(pd.hasSpell(s))return msgret(sender, ChatColor.RED + "\"" + t.getName() + "\" already has the spell " + s.toString() + "!");
+				if(pd.hasSpell(s))return msg(sender, ChatColor.RED + "\"" + t.getName() + "\" already has the spell " + s.toString() + "!");
 				pd.addSpell(s);
 				sender.sendMessage(ChatColor.GREEN + t.getName() + " has been given the spell " + s.toString());
 				t.sendMessage(ChatColor.GREEN + "You have been given the spell " + s.toString());
@@ -123,7 +124,7 @@ public class SkyrimCmd implements CommandExecutor
 		}
 		else if (command.getName().equalsIgnoreCase("removespell")) 
 		{
-			if(!sender.hasPermission("skyrimrpg.removespell"))return msgret(sender, ChatColor.RED + "You do not have permission to do this!");
+			if(!sender.hasPermission("skyrimrpg.removespell"))return msg(sender, ChatColor.RED + "You do not have permission to do this!");
 			if(args.length != 2 && args.length != 1)
 			{
 				if(player == null)sender.sendMessage(ChatColor.RED + "Usage: /removespell <player> <spell>");
@@ -134,20 +135,20 @@ public class SkyrimCmd implements CommandExecutor
 			{
 				if(player == null)return noConsole(sender);
 				Spell s = null;
-				try{s = Spell.valueOf(args[0].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[0] + "!");}
+				try{s = Spell.valueOf(args[0].toUpperCase());}catch(IllegalArgumentException iae){return msg(sender, ChatColor.RED + "No such spell: " + args[0] + "!");}
 				PlayerData pd = pm.getData(player.getName());
-				if(!pd.hasSpell(s))return msgret(sender, ChatColor.RED + "You don't have the spell " + s.toString() + "!");
+				if(!pd.hasSpell(s))return msg(sender, ChatColor.RED + "You don't have the spell " + s.toString() + "!");
 				pd.removeSpell(s);
 				player.sendMessage(ChatColor.GREEN + "You have removed " + ChatColor.BLUE + s.toString() + ChatColor.GREEN + " from yourself");
 			}
 			else if(args.length == 2)
 			{
 				Player t = sender.getServer().getPlayer(args[0]);
-				if(t == null)return msgret(sender, ChatColor.RED + "No such player: " + args[0] + "!");
+				if(t == null)return msg(sender, ChatColor.RED + "No such player: " + args[0] + "!");
 				Spell s = null;
-				try{s = Spell.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){return msgret(sender, ChatColor.RED + "No such spell: " + args[1] + "!");}
+				try{s = Spell.valueOf(args[1].toUpperCase());}catch(IllegalArgumentException iae){return msg(sender, ChatColor.RED + "No such spell: " + args[1] + "!");}
 				PlayerData pd = pm.getData(t.getName());
-				if(!pd.hasSpell(s))return msgret(sender, ChatColor.RED + "Doesn't have the spell " + s.toString() + "!");
+				if(!pd.hasSpell(s))return msg(sender, ChatColor.RED + "Doesn't have the spell " + s.toString() + "!");
 				pd.addSpell(s);
 				sender.sendMessage(ChatColor.GREEN + t.getName() + " has had the spell " + s.toString() + " taken away");
 				t.sendMessage(ChatColor.GREEN + "You have had the spell " + s.toString() + " removed from you");
@@ -157,23 +158,24 @@ public class SkyrimCmd implements CommandExecutor
 		{
 			if(args.length != 0 && args.length != 1)
 			{
-				if(player == null)return msgret(sender, ChatColor.RED + "Usage: /listspells [player]");
-				else return msgret(sender, ChatColor.RED + "Usage: /listspells <player>");
+				if(player == null)return msg(sender, ChatColor.RED + "Usage: /listspells [player]");
+				else return msg(sender, ChatColor.RED + "Usage: /listspells <player>");
 			}
 			Player target = null;
 			if(args.length == 0)
 			{
 				if(player != null)target = player;
-				else return msgret(sender, ChatColor.RED + "Usage: /listspells <player>");
+				else return msg(sender, ChatColor.RED + "Usage: /listspells <player>");
 			}
 			else if(args.length == 1)
 			{
 				target = sender.getServer().getPlayer(args[0]);
-				if(target == null)msgret(sender, ChatColor.RED + "No such player: " + args[0]);
+				if(target == null)msg(sender, ChatColor.RED + "No such player: " + args[0]);
 			}
 			sender.sendMessage(ChatColor.BLUE + target.getName() + "'s spells");
 			for(Spell s:pm.getData(target.getName()).getSpells())sender.sendMessage(s.getDisplayName());
 		}
+		else if(command.getName().equalsIgnoreCase("spellbook"))spellbookCmd(sender, args);
 		else if(command.getName().equalsIgnoreCase("skyrimrpg") || label.equalsIgnoreCase("srpg"))
 		{
 			if(args.length == 0)
@@ -196,22 +198,22 @@ public class SkyrimCmd implements CommandExecutor
 			{
 				if(args[0].equalsIgnoreCase("setlevel"))
 				{
-					if(args.length != 3 && args.length != 4)return msgret(sender, ChatColor.RED + "Usage: /srpg setlevel <skill> <level> [player]");
+					if(args.length != 3 && args.length != 4)return msg(sender, ChatColor.RED + "Usage: /srpg setlevel <skill> <level> [player]");
 					if(!sender.hasPermission("skyrimrpg.setlevel"))return noPerm(sender);
 					Skill skill = Skill.getSkill(args[1]);
-					if(skill == null)msgret(sender, ChatColor.RED + "No such skill: " + args[1]);
+					if(skill == null)msg(sender, ChatColor.RED + "No such skill: " + args[1]);
 					int l;
 					try{ l = Integer.parseInt(args[2]);}catch(NumberFormatException nfe){sender.sendMessage(ChatColor.RED + "That is not a valid number."); return true;}
 					Player target = null;
 					if(args.length == 3)
 					{
-						if(player ==  null)return msgret(sender, ChatColor.RED + "Usage: /srpg setlevel <skill> <level> <player>");
+						if(player ==  null)return msg(sender, ChatColor.RED + "Usage: /srpg setlevel <skill> <level> <player>");
 						else target = player;
 					}
 					else if(args.length == 4)
 					{
 						target = sender.getServer().getPlayer(args[3]);
-						if(target == null)return msgret(sender, ChatColor.RED + "No such player: " + args[3]);
+						if(target == null)return msg(sender, ChatColor.RED + "No such player: " + args[3]);
 						if(target != player && !sender.hasPermission("skyrimrpg.setlevel.other"))return noPerm(sender);
 					}
 					pm.getData(target.getName()).setSkillLevel(skill, l);
@@ -282,7 +284,27 @@ public class SkyrimCmd implements CommandExecutor
 		}
 		return true;
 	}
-	private boolean msgret(CommandSender sender, String message)
+	private boolean spellbookCmd(CommandSender sender, String[] args)
+	{
+		if(!sender.hasPermission("skyrimrpg.spellbook"))return noPerm(sender);
+		if(!(sender instanceof Player))return noConsole(sender);
+		Player player = (Player)sender;
+		if(args.length == 0)return usage(sender, "spellbook <spell>");
+		StringBuffer sb = new StringBuffer();
+		for(int i = 0; i < args.length; i ++)
+		{
+			if(i > 0)sb.append("_");
+			sb.append(args[i]);
+		}
+		Spell s = Spell.get(sb.toString());
+		if(s == null)return msg(sender, ChatColor.RED + "No such spell: " + sb.toString());
+		if(!player.getInventory().addItem(SpellbookUtil.createSpellbook(s)).isEmpty())
+			player.sendMessage(ChatColor.RED + "Your inventory is full.");
+		else player.sendMessage(ChatColor.GREEN + "The " + s.getDisplayName() + 
+			" spellbook has been given to you.");
+		return true;
+	}
+	private boolean msg(CommandSender sender, String message)
 	{
 		sender.sendMessage(message);
 		return true;
@@ -295,6 +317,11 @@ public class SkyrimCmd implements CommandExecutor
 	private boolean noPerm(CommandSender sender)
 	{
 		sender.sendMessage(ChatColor.RED + "You are not allowed to use this command!");
+		return true;
+	}
+	private boolean usage(CommandSender sender, String usage)
+	{
+		sender.sendMessage(ChatColor.RED + "Usage: " + (sender instanceof Player ? "/" : "") + usage);
 		return true;
 	}
 }

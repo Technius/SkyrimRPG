@@ -13,9 +13,13 @@ commands:
       usage: |
           /removespell <player> <spell>
    listspells:
-      description: Lists all your spells
+      description: Lists all of your spells
       usage: |
           /listspells [player]
+   spellbook:
+      description: Gives you the spellbook of the spell
+      usage: |
+          /spellbook <spell>
    skyrimrpg:
       descrption: Displays info about SkyrimRPG
       aliases: srpg
@@ -64,10 +68,11 @@ permissions:
           skyrimrpg.setlevel.other: true
           skyrimrpg.spells.*: true
    skyrimrpg.cheats.spells:
-      Description: Allows you to add and remove spells
+      Description: Allows you to add and remove spells as well as spawn spellbooks
       Children:
          skyrimrpg.addspell: true
          skyrimrpg.removespell: true
+         skyrimrpg.spellbook: true
    skyrimrpg.cheats.perks:
       Description: Allows you to add and remove perks
       Children:
@@ -79,11 +84,13 @@ permissions:
          skyrimrpg.listspells: true
          skyrimrpg.bindspell: true
    skyrimrpg.spells.*:
-      Description: Allows a player to use all spells if spellPermissions is disabled
+      Description: Allows a player to use all spells if spellPermissions is enabled
    skyrimrpg.addspell:
       Description: Give a player a spell.
    skyrimrpg.removespell:
       Description: Take a spell from a player.
+   skyrimrpg.spellbook:
+      description: Allows the spawning of spellbooks
    skyrimrpg.listspells: 
       Description: List spells or find out what spells another person has.
    skyrimrpg.bindspell:

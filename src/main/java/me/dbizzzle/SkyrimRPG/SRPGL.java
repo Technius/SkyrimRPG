@@ -14,6 +14,7 @@ import me.dbizzzle.SkyrimRPG.skill.Skill;
 import me.dbizzzle.SkyrimRPG.spell.Spell;
 import me.dbizzzle.SkyrimRPG.spell.SpellUtil;
 import me.dbizzzle.SkyrimRPG.util.MetadataHandler;
+import me.dbizzzle.SkyrimRPG.util.SpellbookUtil;
 import me.dbizzzle.SkyrimRPG.util.ToolComparer;
 
 import org.bukkit.ChatColor;
@@ -257,16 +258,19 @@ public class SRPGL implements Listener
 				}
 			}
 		}
-		else if(event.getPlayer().getItemInHand().getType() == Material.BOOK)
+		else if(event.getPlayer().getItemInHand().getType() == Material.WRITTEN_BOOK)
 		{
-			if(plugin.getConfigManager().useSpellBooks)return;
+			if(!plugin.getConfigManager().useSpellBooks)return;
 			if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				ItemStack b = event.getPlayer().getItemInHand();
-				if(b.getDurability() != 0)
+				Spell s = SpellbookUtil.getSpellbookSpell(b);
+				if(s != null)
 				{
-					if(SpellUtil.useSpellBook(event.getPlayer(), pd, b.getDurability()))
+					event.setCancelled(true);
+					if(SpellUtil.useSpellBook(event.getPlayer(), pd, s))
 					{
+
 						b.setAmount(b.getAmount() - 1);
 						event.getPlayer().setItemInHand(b);
 					}

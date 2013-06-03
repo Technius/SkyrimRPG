@@ -86,6 +86,7 @@ public class SkyrimRPG extends JavaPlugin
 		getCommand("listspells").setExecutor(cmd);
 		getCommand("skyrimrpg").setExecutor(cmd);
 		getCommand("skystats").setExecutor(cmd);
+		getCommand("spellbook").setExecutor(cmd);
 		PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(listen, this);
 		if(!new File(getDataFolder(), "config.txt").exists())cm.refreshConfig();

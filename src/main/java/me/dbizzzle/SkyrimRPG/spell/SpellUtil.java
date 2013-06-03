@@ -29,10 +29,8 @@ public class SpellUtil
 	{
 		p.sendMessage(ChatColor.RED + "You do not have enough magicka to cast " + s + "!");
 	}
-	public static boolean useSpellBook(Player p, PlayerData data, int id)
+	public static boolean useSpellBook(Player p, PlayerData data, Spell s)
 	{
-		Spell s = Spell.getById(id);
-		if(s == null)return false;
 		if(data.hasSpell(s))
 		{
 			p.sendMessage(ChatColor.RED + "You already know how to cast " + s.toString());
