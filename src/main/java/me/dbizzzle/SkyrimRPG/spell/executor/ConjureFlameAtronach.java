@@ -18,7 +18,9 @@ public class ConjureFlameAtronach extends SpellExecutor
 		if(sm.conjured.containsKey(player))sm.conjured.get(player).remove();
 		Blaze blaze = (Blaze)player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.BLAZE);
 		int alevel = pd.getSkillLevel(Skill.CONJURATION);
-		blaze.setHealth(blaze.getHealth()/2 + alevel/10);
+		double h = blaze.getHealth()/2 + alevel/10;
+		blaze.setMaxHealth(h);
+		blaze.setHealth(h);
 		blaze.setCustomName(player.getName() + "'s Flame Atronach");
 		blaze.setCustomNameVisible(true);
 		sm.conjured.put(player, blaze);

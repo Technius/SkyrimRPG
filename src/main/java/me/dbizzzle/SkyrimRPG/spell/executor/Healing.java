@@ -11,7 +11,7 @@ public class Healing extends SpellExecutor
 {
 	public void cast(Player player, Server server, PlayerData pd) 
 	{
-		int health = pd.getSkillLevel(Skill.RESTORATION)/20 + 2;
+		double health = pd.getSkillLevel(Skill.RESTORATION)/20 + 2;
 		if(health + player.getHealth() > player.getMaxHealth())health = player.getMaxHealth();
 		else health = health + player.getHealth();
 		player.setHealth(health);
